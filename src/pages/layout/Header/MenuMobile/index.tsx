@@ -15,7 +15,7 @@ interface IProp {
 }
 
 const MenuMobile = React.forwardRef(({ onCloseMenu }: IProp, ref: ForwardedRef<HTMLDivElement>) => {
-  const { btcBalance, juiceBalance } = useContext(AssetsContext);
+  const { btcBalance, bvmBalance } = useContext(AssetsContext);
   const isAuthenticated = useSelector(getIsAuthenticatedSelector);
   const navigate = useNavigate();
 
@@ -35,7 +35,7 @@ const MenuMobile = React.forwardRef(({ onCloseMenu }: IProp, ref: ForwardedRef<H
               <div className="balance">
                 <p>{formatBTCPrice(btcBalance)} BTC</p>
                 <span className="divider" />
-                <p>{formatEthPrice(juiceBalance)} TC</p>
+                <p>{formatEthPrice(bvmBalance)} TC</p>
               </div>
               <div className="avatar">
                 <img src={IcAvatarDefault} alt="default avatar" />

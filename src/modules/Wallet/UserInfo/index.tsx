@@ -13,11 +13,12 @@ import Text from '@/components/Text';
 import IconSVG from '@/components/IconSVG';
 import { useContext } from 'react';
 import { AssetsContext } from '@/contexts/assets-context';
-import { formatBTCPrice, formatEthPrice } from '@/utils/format';
 import { CDN_URL } from '@/configs';
 import { WalletContext } from '@/contexts/wallet-context';
 import { useNavigate } from 'react-router-dom';
 import { ROUTE_PATH } from '@/constants/route-path';
+import format from '@/utils/amount';
+import Token from '@/constants/token';
 
 type Props = {
   className?: string;
@@ -26,7 +27,7 @@ type Props = {
 const UserInfo = ({ className }: Props) => {
   const user = useSelector(getUserSelector);
   const { account } = useWeb3React();
-  const { btcBalance, juiceBalance } = useContext(AssetsContext);
+  const { btcBalance, bvmBalance } = useContext(AssetsContext);
   const { onDisconnect } = useContext(WalletContext);
   const navigate = useNavigate();
 
@@ -63,11 +64,15 @@ const UserInfo = ({ className }: Props) => {
               <div className="wallet-address">
                 <h5> {shortenAddress(profileWallet, 4)}</h5>
                 <div className="icCopy" onClick={() => onClickCopy(profileWallet)}>
-                  <img alt="ic-copy" src={IcCopy}></img>
+                  <img alt="ic-copy" src={IcCopy} />
                 </div>
               </div>
               <Text size="medium" color="text2">
-                {formatEthPrice(juiceBalance)} TC
+                {format.shorterAmount({
+                  originalAmount: bvmBalance,
+                  decimals: Token.TRUSTLESS.decimal,
+                })}{' '}
+                {Token.TRUSTLESS.symbol}
               </Text>
             </div>
           </div>
@@ -78,23 +83,21 @@ const UserInfo = ({ className }: Props) => {
                 <div className="wallet-address">
                   <h5> {formatLongAddress(profileBtcWallet)}</h5>
                   <div className="icCopy" onClick={() => onClickCopy(profileBtcWallet)}>
-                    <img alt="ic-copy" src={IcCopy}></img>
+                    <img alt="ic-copy" src={IcCopy} />
                   </div>
                 </div>
                 <Text size="medium" color="text2">
-                  {formatBTCPrice(btcBalance)} BTC
+                  {format.shorterAmount({
+                    originalAmount: btcBalance,
+                    decimals: Token.BITCOIN.decimal,
+                  })}{' '}
+                  {Token.BITCOIN.symbol}
                 </Text>
               </div>
             </div>
-            // <div className="eth_address">
-            //   <h5>BTC address: {formatLongAddress(profileBtcWallet)} </h5>
-            //   <div className="icCopy" onClick={() => onClickCopy(profileBtcWallet)}>
-            //     <img alt="ic-copy" src={IcCopy}></img>
-            //   </div>
-            // </div>
           )}
         </div>
-        <div className="divider mb-24"></div>
+        <div className="divider mb-24" />
         <div className="disconnect-btn" onClick={onClickDisconnect}>
           <img src={`${CDN_URL}/icons/ic-logout.svg`} alt="log out icon" />
           <Text size="medium" color="white" className="font-ibm">
@@ -102,7 +105,7 @@ const UserInfo = ({ className }: Props) => {
           </Text>
         </div>
       </div>
-      <div className="options"></div>
+      <div className="options" />
     </StyledUserInfo>
   );
 };

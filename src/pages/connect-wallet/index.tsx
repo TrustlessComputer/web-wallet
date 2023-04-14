@@ -22,8 +22,7 @@ const ConnectWallet: React.FC = (): React.ReactElement => {
       const address = await onConnect();
       await generateBitcoinKey(address || '');
     } catch (err) {
-      console.log(err);
-      onDisconnect();
+      await onDisconnect();
     } finally {
       setIsConnecting(false);
     }

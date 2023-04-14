@@ -10,7 +10,6 @@ import { DappsTabs } from '@/enums/tabs';
 import { useEffect, useState } from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-
 import { CDN_URL } from '@/configs';
 import { ROUTE_PATH } from '@/constants/route-path';
 import useBatchCompleteUninscribedTransaction from '@/hooks/contract-operations/useBatchCompleteUninscribedTransaction';
