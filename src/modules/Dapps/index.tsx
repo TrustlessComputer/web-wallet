@@ -23,7 +23,7 @@ enum DappsTabs {
 const Dapps = () => {
   const { tab } = queryString.parse(location.search) as { tab: string };
 
-  const [_, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
 
   const [activeTab, setActiveTab] = useState(tab || DappsTabs.NFT);
 
@@ -50,7 +50,7 @@ const Dapps = () => {
             eventKey={DappsTabs.NFT}
             title={
               <div className="tab-item">
-                <IconSVG maxWidth="32" maxHeight="32" src={IcHexagon} color="white" type="stroke"></IconSVG>
+                <IconSVG maxWidth="32" maxHeight="32" src={IcHexagon} color="white" type="stroke" />
                 <Text className="tab-text" size="regular">
                   NFTs
                 </Text>
@@ -63,7 +63,7 @@ const Dapps = () => {
             eventKey={DappsTabs.TOKEN}
             title={
               <div className="tab-item">
-                <IconSVG maxWidth="32" maxHeight="32" src={IcCoinTokens} color="white" type="stroke"></IconSVG>
+                <IconSVG maxWidth="32" maxHeight="32" src={IcCoinTokens} color="white" type="stroke" />
                 <Text className="tab-text" size="regular">
                   Tokens
                 </Text>
@@ -78,7 +78,7 @@ const Dapps = () => {
             // className={tab === 'files' ? 'active' : ''}
             title={
               <div className="tab-item">
-                <IconSVG maxWidth="32" maxHeight="32" src={IcFolderOpen} color="white" type="stroke"></IconSVG>
+                <IconSVG maxWidth="32" maxHeight="32" src={IcFolderOpen} color="white" type="stroke" />
                 <Text className="tab-text" size="regular">
                   Artifacts
                 </Text>
@@ -100,9 +100,6 @@ const Dapps = () => {
           >
             <Names />
           </Tab>
-          {/* <Tab eventKey="store" title="Bitcoin Dapp store"> */}
-          {/* <Add Component Here /> */}
-          {/* </Tab> */}
         </Tabs>
       </TabContainer>
     </DappsContainer>

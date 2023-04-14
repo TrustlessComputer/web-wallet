@@ -9,7 +9,7 @@ import Text from '@/components/Text';
 import { DappsTabs } from '@/enums/tabs';
 import { useEffect, useState } from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { CDN_URL } from '@/configs';
 import { ROUTE_PATH } from '@/constants/route-path';
@@ -34,8 +34,6 @@ const Wallet = () => {
   const navigate = useNavigate();
 
   const { tab } = queryString.parse(location.search) as { tab: string };
-
-  const [_, setSearchParams] = useSearchParams();
 
   const [activeTab, setActiveTab] = useState(tab || DappsTabs.NFT);
   const [processing, setProcessing] = useState(false);
@@ -70,7 +68,7 @@ const Wallet = () => {
   }, [tab]);
 
   useEffect(() => {
-    setSearchParams({ tab: activeTab });
+    // setSearchParams({ tab: activeTab });
   }, [activeTab]);
 
   if (!accessToken) {
@@ -103,7 +101,7 @@ const Wallet = () => {
             eventKey={DappsTabs.NFT}
             title={
               <div className="tab-item">
-                <IconSVG maxWidth="28" maxHeight="28" src={IcHexagon} color="white" type="stroke"></IconSVG>
+                <IconSVG maxWidth="28" maxHeight="28" src={IcHexagon} color="white" type="stroke" />
                 <Text className="tab-text" size="regular">
                   NFTs
                 </Text>
@@ -118,7 +116,7 @@ const Wallet = () => {
             eventKey={DappsTabs.TOKEN}
             title={
               <div className="tab-item">
-                <IconSVG maxWidth="28" maxHeight="28" src={IcCoinTokens} color="white" type="stroke"></IconSVG>
+                <IconSVG maxWidth="28" maxHeight="28" src={IcCoinTokens} color="white" type="stroke" />
                 <Text className="tab-text" size="regular">
                   Tokens
                 </Text>
@@ -130,10 +128,9 @@ const Wallet = () => {
           <Tab
             mountOnEnter
             eventKey={DappsTabs.ARTIFACT}
-            // className={tab === 'files' ? 'active' : ''}
             title={
               <div className="tab-item">
-                <IconSVG maxWidth="28" maxHeight="28" src={IcFolderOpen} color="white" type="stroke"></IconSVG>
+                <IconSVG maxWidth="28" maxHeight="28" src={IcFolderOpen} color="white" type="stroke" />
                 <Text className="tab-text" size="regular">
                   Artifacts
                 </Text>
@@ -184,7 +181,6 @@ const Wallet = () => {
                   <Text className="font-ibm " size="regular">
                     {processing ? 'Processing...' : `Resume all pending`}
                   </Text>
-                  {/* <img src={`${CDN_URL}/icons/ic-arrow-right.svg`} alt="" /> */}
                 </div>
               ) : (
                 <div className="explore-btn" onClick={navigateToDapps}>

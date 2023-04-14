@@ -28,7 +28,7 @@ export interface IWalletContext {
 const initialValue: IWalletContext = {
   onDisconnect: () => new Promise<void>(r => r()),
   onConnect: () => new Promise<null>(r => r(null)),
-  generateBitcoinKey: (walletAddress: string) => new Promise<null>(r => r(null)),
+  generateBitcoinKey: () => new Promise<null>(r => r(null)),
 };
 
 export const WalletContext = React.createContext<IWalletContext>(initialValue);

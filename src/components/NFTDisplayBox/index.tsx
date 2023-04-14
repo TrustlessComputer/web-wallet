@@ -1,5 +1,3 @@
-/* eslint-disable react/no-unknown-property */
-/* eslint-disable jsx-a11y/iframe-has-title */
 import { CDN_URL } from '@/configs';
 import { getURLContent, getImageURLContent } from '@/lib';
 import React, { useEffect, useRef, useState } from 'react';
@@ -51,7 +49,7 @@ const NFTDisplayBox = ({
     serIsLoaded(true);
   };
 
-  const [HTMLContentRender, setHTMLContentRender] = useState<JSX.Element>();
+  const [HTMLContentRender, setHTMLContentRender] = useState<React.ReactNode>();
   const imgRef = useRef<HTMLImageElement>(null);
 
   const defaultImage = CDN_URL + '/images/default_thumbnail.png';
@@ -202,7 +200,12 @@ const NFTDisplayBox = ({
     }
   }, [collectionID, tokenID, src, isErrorLinkHttp]);
 
-  return <div className={cs(s.wrapper, className)}>{HTMLContentRender && HTMLContentRender}</div>;
+  return (
+    <div className={cs(s.wrapper, className)}>
+      {HTMLContentRender && HTMLContentRender}
+      {!isLoaded && !isError && renderLoading()}
+    </div>
+  );
 };
 
 export default React.memo(NFTDisplayBox);

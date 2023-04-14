@@ -1,7 +1,6 @@
 import ClientOnly from '@/components/Utils/ClientOnly';
 import React, { ForwardedRef, useImperativeHandle, useRef } from 'react';
 import { StyledIFramePreview } from './IFramePreview.styled';
-import s from './styles.module.scss';
 
 interface IRef {
   reloadIframe: () => void;

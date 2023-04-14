@@ -1,4 +1,4 @@
-import styled, { DefaultTheme } from 'styled-components';
+import styled from 'styled-components';
 import px2rem from '@/utils/px2rem';
 
 const Container = styled.div`

@@ -1,5 +1,3 @@
-import px2rem from '@/utils/px2rem';
-import { IconSVGProps } from './index';
 import styled, { DefaultTheme, css } from 'styled-components';
 
 export const StyledIconSVG = styled.div<any>`
