@@ -5,7 +5,6 @@ import IcCloseModal from '@/assets/icons/ic-close.svg';
 import { WrapInput } from '@/pages/collection/ModalEdit/ModalMint.styled';
 import { Formik } from 'formik';
 import Text from '@/components/Text';
-import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import IcCopy from '@/assets/icons/ic-copy-outline.svg';
 import copy from 'copy-to-clipboard';
@@ -21,10 +20,8 @@ type IFormValue = {
 
 const BNSTransferModal = (props: Props) => {
   const { show, handleClose } = props;
-
-  const [isProcessing, setIsProcessing] = useState(false);
-
-  const feeEsitmate = '0.0001';
+  const isProcessing = false;
+  const feeEstimate = '0.0001';
 
   const validateForm = (values: IFormValue): Record<string, string> => {
     const errors: Record<string, string> = {};
@@ -84,17 +81,17 @@ const BNSTransferModal = (props: Props) => {
                 />
                 {errors.address && touched.address && <p className="error">{errors.address}</p>}
               </WrapInput>
-              <div className="divider"></div>
+              <div className="divider" />
               <div className="est-fee">
                 <Text size="large" fontWeight="medium" className="est-fee-text" color="bg1">
                   Estimated fee
                 </Text>
                 <div className="est-fee-value">
-                  <div className="icCopy" onClick={() => onClickCopy(feeEsitmate)}>
-                    <IconSVG src={IcCopy} color="bg2" type="stroke"></IconSVG>
+                  <div className="icCopy" onClick={() => onClickCopy(feeEstimate)}>
+                    <IconSVG src={IcCopy} color="bg2" type="stroke" />
                   </div>
                   <Text size="large" fontWeight="medium" color="bg2">
-                    {feeEsitmate} TC
+                    {feeEstimate} TC
                   </Text>
                 </div>
               </div>

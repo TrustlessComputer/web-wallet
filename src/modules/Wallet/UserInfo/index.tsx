@@ -44,8 +44,9 @@ const UserInfo = ({ className }: Props) => {
   };
 
   const onClickDisconnect = () => {
-    onDisconnect();
-    navigate(ROUTE_PATH.HOME);
+    onDisconnect().then(() => {
+      navigate(ROUTE_PATH.WALLET);
+    });
   };
 
   return (

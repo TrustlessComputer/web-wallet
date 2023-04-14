@@ -1,16 +1,16 @@
 import IcOpenMenu from '@/assets/icons/ic_hambuger.svg';
 import IcLogo from '@/assets/icons/logo.svg';
-import { MENU_HEADER } from '@/constants/header';
+// import { MENU_HEADER } from '@/constants/header';
 import { AssetsContext } from '@/contexts/assets-context';
-import { WalletContext } from '@/contexts/wallet-context';
-import { shortenAddress } from '@/utils';
+// import { WalletContext } from '@/contexts/wallet-context';
+// import { shortenAddress } from '@/utils';
 import { formatBTCPrice, formatEthPrice } from '@/utils/format';
 import { useWeb3React } from '@web3-react/core';
 import { gsap } from 'gsap';
 import { useContext, useEffect, useRef, useState } from 'react';
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Anchor, ConnectWalletButton, StyledLink, WalletBalance, Wrapper } from './Header.styled';
+import { Link, useNavigate } from 'react-router-dom';
+import { ConnectWalletButton, WalletBalance, Wrapper } from './Header.styled';
 import MenuMobile from './MenuMobile';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticatedSelector } from '@/state/user/selector';
@@ -20,12 +20,12 @@ const Header = ({ height }: { height: number }) => {
   const { account } = useWeb3React();
   const navigate = useNavigate();
   const isAuthenticated = useSelector(getIsAuthenticatedSelector);
-  const { onDisconnect } = useContext(WalletContext);
+  // const { onDisconnect } = useContext(WalletContext);
   const { btcBalance, juiceBalance } = useContext(AssetsContext);
   const refMenu = useRef<HTMLDivElement | null>(null);
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
-  const location = useLocation();
-  const activePath = location.pathname.split('/')[1];
+  // const location = useLocation();
+  // const activePath = location.pathname.split('/')[1];
 
   const goToConnectWalletPage = async () => {
     navigate(`${ROUTE_PATH.CONNECT_WALLET}?next=${window.location.href}`);
@@ -52,13 +52,13 @@ const Header = ({ height }: { height: number }) => {
         <img alt="logo" src={IcLogo} />
       </Link>
       <div className="rowLink">
-        {MENU_HEADER.map(item => {
-          return (
-            <StyledLink active={activePath === item.activePath} to={item.route} key={item.id}>
-              {item.name}
-            </StyledLink>
-          );
-        })}
+        {/*{MENU_HEADER.map(item => {*/}
+        {/*  return (*/}
+        {/*    <StyledLink active={activePath === item.activePath} to={item.route} key={item.id}>*/}
+        {/*      {item.name}*/}
+        {/*    </StyledLink>*/}
+        {/*  );*/}
+        {/*})}*/}
       </div>
       <MenuMobile ref={refMenu} onCloseMenu={() => setIsOpenMenu(false)} />
       <div className="rightContainer">
@@ -68,7 +68,7 @@ const Header = ({ height }: { height: number }) => {
               <WalletBalance>
                 <div className="balance">
                   <p>{formatBTCPrice(btcBalance)} BTC</p>
-                  <span className="divider"></span>
+                  <span className="divider" />
                   <p>{formatEthPrice(juiceBalance)} TC</p>
                 </div>
                 <div className="avatar">

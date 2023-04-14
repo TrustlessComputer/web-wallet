@@ -103,7 +103,7 @@ export const generateBitcoinTaprootKey = async (address: string) => {
     if (isMetamaskAuthError && !!store && !!store.dispatch) {
       clearAccessTokenStorage();
       store.dispatch(resetUser());
-      location.replace(ROUTE_PATH.HOME);
+      location.replace(ROUTE_PATH.WALLET);
     }
     throw error;
   }
