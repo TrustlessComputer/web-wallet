@@ -1,4 +1,3 @@
-import IcBitcoinCloud from '@/assets/icons/ic-bitcoin-cloud.svg';
 import Button from '@/components/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import Table from '@/components/Table';
@@ -20,7 +19,7 @@ const Tokens = () => {
   const TABLE_HEADINGS = ['Token number', 'Name', 'Symbol', 'Supply', 'Creator'];
 
   const [showModal, setShowModal] = useState(false);
-  const { data, error, isLoading } = useSWR(getApiKey(getTokens), getTokens);
+  const { data, isLoading } = useSWR(getApiKey(getTokens), getTokens);
 
   const tokenDatas =
     data &&

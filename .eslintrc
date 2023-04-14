@@ -31,5 +31,8 @@
         "jest": true
       }
     }
-  ]
+  ],
+  "globals": {
+    "globalThis": false
+  }
 }
