@@ -18,7 +18,7 @@ import { toast } from 'react-hot-toast';
 import { FileUploader } from 'react-drag-drop-files';
 import { BLOCK_CHAIN_FILE_LIMIT, ERC721_SUPPORTED_EXTENSIONS, ZIP_EXTENSION } from '@/constants/file';
 import { Buffer } from 'buffer';
-import { fileToBase64, getFileExtensionByFileName, isERC721SupportedExt, readFileAsBuffer, unzipFile } from '@/utils';
+import { fileToBase64, getFileExtensionByFileName, isERC721SupportedExt, unzipFile } from '@/utils';
 
 interface ICollectionHeader {
   collection?: ICollection;

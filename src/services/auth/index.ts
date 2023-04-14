@@ -1,14 +1,6 @@
-import moduleName from 'module';
 import { API_URL } from '@/configs';
-import { ICollection } from '@/interfaces/api/collection';
-import { IInscription } from '@/interfaces/api/inscription';
 import { swrFetcher } from '@/utils/swr';
-import {
-  IGenerativeNonceMessagePayload,
-  IGenerativeNonceMessageResponse,
-  IVerifyNonceMessagePayload,
-  IVerifyNonceMessageResponse,
-} from '@/interfaces/api/auth';
+import { IGenerativeNonceMessagePayload, IVerifyNonceMessagePayload } from '@/interfaces/api/auth';
 
 const API_PATH = API_URL + '/auth';
 

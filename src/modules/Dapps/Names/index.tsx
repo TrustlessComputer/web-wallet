@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Text from '@/components/Text';
 import NamesList from './NamesList';
 import { NamesContainer, FormContainer, SubmitButton } from './Names.styled';

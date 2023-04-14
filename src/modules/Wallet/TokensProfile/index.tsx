@@ -18,7 +18,7 @@ const TokensProfile = () => {
 
   const TABLE_HEADINGS = ['Token number', 'Name', 'Symbol', 'Supply', ''];
 
-  const { data, error, isLoading } = useSWR(getApiKey(getTokensByWallet, { key: profileWallet }), () =>
+  const { data, isLoading } = useSWR(getApiKey(getTokensByWallet, { key: profileWallet }), () =>
     getTokensByWallet({ key: profileWallet }),
   );
 

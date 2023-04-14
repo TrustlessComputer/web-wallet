@@ -5,7 +5,6 @@ import IcDiscord from '@/assets/icons/ic_discord.svg';
 import IcTwitter from '@/assets/icons/ic_twitter.svg';
 import IcGithub from '@/assets/icons/ic_github.svg';
 import { StyledLink } from '../Header/Header.styled';
-import { ROUTE_PATH } from '@/constants/route-path';
 import { CDN_URL } from '@/configs';
 
 const Wrapper = styled.div`
@@ -91,11 +90,11 @@ const Footer = ({ height }: { height: number }) => {
     <Wrapper style={{ height }}>
       <p className="text">Open-source software. Made with ❤️ on Bitcoin.</p>
       <div className="footer-right">
-        <StyledLink active={false} to={ROUTE_PATH.FAUCET}>
+        <StyledLink active={false} to="https://trustless.computer/faucet" target="_blank">
           Faucet
           <img className="arrow-icon" src={`${CDN_URL}/icons/ic-arrow-outward.svg`} />
         </StyledLink>
-        <StyledLink active={false} to={'https://explorer.trustless.computer'} target="_blank">
+        <StyledLink active={false} to="https://explorer.trustless.computer" target="_blank">
           Explorer
           <img className="arrow-icon" src={`${CDN_URL}/icons/ic-arrow-outward.svg`} />
         </StyledLink>

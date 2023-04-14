@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import NFTDisplayBox from '@/components/NFTDisplayBox';
 import { IInscription } from '@/interfaces/api/inscription';
 import { getNFTDetail } from '@/services/nft-explorer';

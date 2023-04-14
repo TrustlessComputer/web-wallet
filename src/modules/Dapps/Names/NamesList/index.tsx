@@ -1,33 +1,18 @@
-import { getBnsByWallet, getCollectionsBns } from '@/services/bns-explorer';
+import { getCollectionsBns } from '@/services/bns-explorer';
 import { shortenAddress } from '@/utils';
-import { getApiKey } from '@/utils/swr';
 import { debounce } from 'lodash';
 import { useEffect, useState } from 'react';
 import { Spinner } from 'react-bootstrap';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
-import useSWR from 'swr';
-import { useSelector } from 'react-redux';
-import { getUserSelector } from '@/state/user/selector';
-import { useParams } from 'react-router-dom';
 import { Container } from './NamesList.styled';
 
 const LIMIT_PAGE = 12;
 
 const NameList = () => {
-  const user = useSelector(getUserSelector);
-
-  // const { profileWallet: paramsWallet } = useParams<{ profileWallet: string }>();
-
-  // const profileWallet = paramsWallet || user?.walletAddress || '';
-  const [pageSize, setpageSize] = useState(LIMIT_PAGE);
+  const pageSize = LIMIT_PAGE;
   const [isFetching, setIsFetching] = useState(false);
   const [collections, setCollections] = useState<any>();
-
-  // const { data: collection, isLoading } = useSWR(
-  //   getApiKey(getBnsByWallet, { limit: pageSize, page: page, walletAddress: profileWallet }),
-  //   () => getBnsByWallet({ limit: pageSize, page: page, walletAddress: profileWallet }),
-  // );
 
   const fetchNames = async (page = 1, isFetchMore = false) => {
     try {
@@ -39,6 +24,7 @@ const NameList = () => {
         setCollections(data);
       }
     } catch (error) {
+      // handle error
     } finally {
       setIsFetching(false);
     }

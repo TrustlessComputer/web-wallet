@@ -1,5 +1,4 @@
 import { getBnsByWallet } from '@/services/bns-explorer';
-import { shortenAddress } from '@/utils';
 import { useWeb3React } from '@web3-react/core';
 import { debounce } from 'lodash';
 import { useEffect, useState } from 'react';
@@ -8,31 +7,19 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 
 import { Container } from './NameProfile.styled';
-import { AnyIfEmpty } from 'react-redux';
 import Empty from '@/components/Empty';
 import { IBNS } from '@/interfaces/bns';
 import BNSCard from '@/components/BNS/Card';
 
 const LIMIT_PAGE = 12;
 
-interface ICollection {
-  name: string;
-  id: string;
-  owner: string;
-}
-
 const NamesProfile = () => {
   const { account } = useWeb3React();
 
   const profileWallet = account;
-  const [pageSize, setpageSize] = useState(LIMIT_PAGE);
+  const pageSize = LIMIT_PAGE;
   const [isFetching, setIsFetching] = useState(false);
   const [collections, setCollections] = useState<IBNS[]>([]);
-
-  // const { data: collection, isLoading } = useSWR(
-  //   getApiKey(getBnsByWallet, { limit: pageSize, page: page, walletAddress: profileWallet }),
-  //   () => getBnsByWallet({ limit: pageSize, page: page, walletAddress: profileWallet }),
-  // );
 
   const fetchNames = async (page = 1, isFetchMore = false) => {
     if (account && profileWallet) {
@@ -45,6 +32,7 @@ const NamesProfile = () => {
           setCollections(data);
         }
       } catch (error) {
+        // handle error
       } finally {
         setIsFetching(false);
       }

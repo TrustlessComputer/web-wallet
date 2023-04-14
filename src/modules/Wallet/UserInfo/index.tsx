@@ -15,7 +15,6 @@ import { useContext } from 'react';
 import { AssetsContext } from '@/contexts/assets-context';
 import { formatBTCPrice, formatEthPrice } from '@/utils/format';
 import { CDN_URL } from '@/configs';
-import SVG from 'react-inlinesvg';
 import { WalletContext } from '@/contexts/wallet-context';
 import { useNavigate } from 'react-router-dom';
 import { ROUTE_PATH } from '@/constants/route-path';

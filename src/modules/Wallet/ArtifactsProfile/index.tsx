@@ -1,14 +1,10 @@
-import NFTDisplayBox from '@/components/NFTDisplayBox';
-import { getCollectionNfts, getNFTsByWalletAddress } from '@/services/nft-explorer';
+import { getCollectionNfts } from '@/services/nft-explorer';
 import { shortenAddress } from '@/utils';
-import { getApiKey } from '@/utils/swr';
 import { useWeb3React } from '@web3-react/core';
 import { debounce } from 'lodash';
 import { useEffect, useState } from 'react';
 import { Spinner } from 'react-bootstrap';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
-import useSWR from 'swr';
 import { Container } from './ArtifactsProfile.styled';
 import { ARTIFACT_CONTRACT } from '@/configs';
 import Empty from '@/components/Empty';
@@ -22,9 +18,8 @@ const ArtifactsProfile = () => {
   const { account } = useWeb3React();
 
   const profileWallet = account;
+  const pageSize = LIMIT_PAGE;
 
-  // const [page, setpage] = useState(1);
-  const [pageSize, setpageSize] = useState(LIMIT_PAGE);
   const [isFetching, setIsFetching] = useState(false);
   const [inscriptions, setInscriptions] = useState<IInscription[]>([]);
 
@@ -43,6 +38,7 @@ const ArtifactsProfile = () => {
         setInscriptions(data);
       }
     } catch (error) {
+      // handle error
     } finally {
       setIsFetching(false);
     }

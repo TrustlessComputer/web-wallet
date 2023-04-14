@@ -10,7 +10,6 @@ import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useNavigate } from 'react-router-dom';
 import { Container, Grid } from './Collection.styled';
-import { useWeb3React } from '@web3-react/core';
 import CollectionHeader from './CollectionHeader';
 import ModalEdit from './ModalEdit';
 
@@ -18,7 +17,6 @@ const LIMIT = 32;
 
 const Collection = () => {
   const navigate = useNavigate();
-  const { account } = useWeb3React();
 
   const { contract, owner } = queryString.parse(location.search) as { contract: string; owner?: string };
   console.log('🚀 ~ Collection ~ owner:', owner);
@@ -54,6 +52,7 @@ const Collection = () => {
         setInscriptions(data);
       }
     } catch (error) {
+      // handle error
     } finally {
       setIsFetching(false);
     }

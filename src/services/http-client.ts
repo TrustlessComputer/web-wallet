@@ -1,6 +1,5 @@
 import { getAccessToken } from '@/utils/auth-storage';
 import axios from 'axios';
-import { config } from 'process';
 
 const TIMEOUT = 5 * 60000;
 

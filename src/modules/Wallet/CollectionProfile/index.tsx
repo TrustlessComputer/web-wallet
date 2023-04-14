@@ -14,11 +14,9 @@ import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import useSWR from 'swr';
 import { Container } from '../NftsProfile/NftsProfile.styled';
 
-type Props = {};
-
 const LIMIT_PAGE = 20;
 
-const CollectionProfile = (props: Props) => {
+const CollectionProfile = () => {
   const { account } = useWeb3React();
 
   const profileWallet = account || '';

@@ -4,8 +4,6 @@ import { WalletContext } from '@/contexts/wallet-context';
 import { useSelector } from 'react-redux';
 import { getIsAuthenticatedSelector, getUserSelector } from '@/state/user/selector';
 import { CDN_URL } from '@/configs';
-import { Anchor } from '../layout/Header/Header.styled';
-import { MENU_HEADER } from '@/constants/header';
 import { Container } from '../layout';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ROUTE_PATH } from '@/constants/route-path';

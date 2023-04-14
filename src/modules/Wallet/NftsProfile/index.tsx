@@ -1,5 +1,4 @@
 import Empty from '@/components/Empty';
-import NFTDisplayBox from '@/components/NFTDisplayBox';
 import { ICollection } from '@/interfaces/api/collection';
 import { getCollectionsByItemsOwned } from '@/services/profile';
 import { shortenAddress } from '@/utils';
@@ -12,33 +11,16 @@ import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { Container } from './NftsProfile.styled';
 import NFTCard from '@/components/NFTCard';
 
-// type Props = {};
 const LIMIT_PAGE = 32;
 
 const NftsProfile = () => {
   const { account } = useWeb3React();
 
   const profileWallet = account || '';
+  const pageSize = LIMIT_PAGE;
 
-  // const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(LIMIT_PAGE);
   const [isFetching, setIsFetching] = useState(false);
   const [collections, setCollections] = useState<ICollection[]>([]);
-
-  // const fetchInscriptions = async (page = 1, isFetchMore = false) => {
-  //   try {
-  //     setIsFetching(true);
-  //     const data = await getNFTsByWalletAddress({ walletAddress: profileWallet, limit: pageSize, page: page });
-  //     if (isFetchMore) {
-  //       setCollections(prev => [...prev, ...data]);
-  //     } else {
-  //       setCollections(data);
-  //     }
-  //   } catch (error) {
-  //   } finally {
-  //     setIsFetching(false);
-  //   }
-  // };
 
   const fetchCollections = async (page = 1, isFetchMore = false) => {
     try {
@@ -50,6 +32,7 @@ const NftsProfile = () => {
         setCollections(data);
       }
     } catch (error) {
+      // handle error
     } finally {
       setIsFetching(false);
     }

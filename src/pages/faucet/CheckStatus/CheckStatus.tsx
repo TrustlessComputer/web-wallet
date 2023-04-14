@@ -25,6 +25,7 @@ const CheckStatus = () => {
       const data = await requestGetFaucetStatus(address);
       setStatus(data);
     } catch (error) {
+      // handle error
     } finally {
       setLoading(false);
     }
@@ -95,7 +96,7 @@ const CheckStatus = () => {
     status.length > 0 &&
     status.map(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (status: IFaucetStatusResp, index: number) => {
+      (status: IFaucetStatusResp) => {
         return {
           id: `token-${status.id}}`,
           render: {

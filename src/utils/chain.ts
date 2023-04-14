@@ -1,10 +1,6 @@
-import { MetamaskConnection } from '@/connection';
 import { SupportedChainId, TRUSTLESS_COMPUTER_CHAIN_INFO } from '@/constants/chains';
 import { IResourceChain } from '@/interfaces/chain';
-import { Connector } from '@web3-react/types';
 import Web3 from 'web3';
-import { ethers } from 'ethers';
-import { error } from 'console';
 
 const API_PATH = 'https://chainid.network/chains.json';
 

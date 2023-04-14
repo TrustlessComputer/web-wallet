@@ -52,8 +52,6 @@ export const getTransactionsByWallet = async ({
 
 export const getCollectionsByItemsOwned = async ({
   walletAddress,
-  limit,
-  page,
 }: { walletAddress: string } & IPagingParams): Promise<any> => {
   try {
     const res = await apiClient.get(`${API_PATH}/wallet/${walletAddress}/collections`);
