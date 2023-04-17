@@ -26,16 +26,9 @@ const userSlice = createSlice({
     updateSelectedWallet(state, { payload: { wallet } }) {
       state.selectedWallet = wallet;
     },
-    updateBVMWallet(state, { payload }) {
-      state.walletAddress = payload;
-    },
-    updateTaprootWallet(state, { payload }) {
-      state.walletAddressBtcTaproot = payload;
-    },
     resetUser(state) {
       state.selectedWallet = undefined;
-      state.walletAddress = undefined;
-      state.walletAddressBtcTaproot = undefined;
+      state.account = undefined;
     },
     updateUser(state, { payload: { tpAddress, tcAddress } }) {
       const address = tcAddress.toLowerCase();
@@ -51,5 +44,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { updateSelectedWallet, resetUser, updateTaprootWallet, updateBVMWallet, updateUser } = userSlice.actions;
+export const { updateSelectedWallet, resetUser, updateUser } = userSlice.actions;
 export default userSlice.reducer;

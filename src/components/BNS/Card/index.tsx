@@ -14,7 +14,6 @@ type Props = {
 };
 
 const BNSCard = ({ item }: Props) => {
-  // const user = useSelector(getUserSelector);
   const user = useCurrentUser();
   const [showModal, setShowModal] = useState(false);
 

@@ -7,11 +7,7 @@ const useCurrentUser = () => {
   const user = useSelector(getUserSelector);
   const accountState = user?.account;
   if (!accountState || !account || !accountState[account.toLowerCase()]) return undefined;
-  const { walletAddressBtcTaproot, walletAddress } = accountState[account.toLowerCase()];
-  return {
-    walletAddressBtcTaproot,
-    walletAddress,
-  };
+  return accountState[account.toLowerCase()];
 };
 
 export { useCurrentUser };

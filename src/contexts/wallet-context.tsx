@@ -4,7 +4,6 @@ import { useAppDispatch } from '@/state/hooks';
 import { resetUser, updateSelectedWallet } from '@/state/user/reducer';
 import { getConnection } from '@/connection';
 import { generateBitcoinTaprootKey } from '@/utils/derive-key';
-import bitcoinStorage from '@/utils/bitcoin-storage';
 import { switchChain } from '@/utils';
 import { SupportedChainId } from '@/constants/chains';
 import { useCurrentUser } from '@/state/user/hooks';
@@ -39,9 +38,6 @@ export const WalletProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
 
   const disconnect = React.useCallback(async () => {
     console.info('disconnecting...');
-    if (user?.walletAddress) {
-      bitcoinStorage.removeUserTaprootAddress(user?.walletAddress);
-    }
     if (connector && connector.deactivate) {
       await connector.deactivate();
     }
@@ -69,14 +65,8 @@ export const WalletProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
   const onDeriveBitcoinKey = React.useCallback(
     async (evmWalletAddress: string) => {
       if (evmWalletAddress) {
-        // const existedWallet = bitcoinStorage.getUserTaprootAddress(evmWalletAddress);
-        // if (existedWallet) {
-        //   dispatch(updateTaprootWallet(existedWallet));
-        //   return existedWallet;
-        // }
         const { address: taprootAddress } = await generateBitcoinTaprootKey(evmWalletAddress);
         if (taprootAddress) {
-          // dispatch(updateTaprootWallet(taprootAddress));
           return taprootAddress;
         }
       }

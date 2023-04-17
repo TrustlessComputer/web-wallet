@@ -1,30 +1,23 @@
 import IcOpenMenu from '@/assets/icons/ic_hambuger.svg';
 import IcLogo from '@/assets/icons/logo.svg';
 import { AssetsContext } from '@/contexts/assets-context';
-import { useWeb3React } from '@web3-react/core';
 import { gsap, Power3 } from 'gsap';
 import { useContext, useEffect, useRef, useState } from 'react';
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import { Link, useNavigate } from 'react-router-dom';
-import { ConnectWalletButton, WalletBalance, Wrapper } from './Header.styled';
+import { WalletBalance, Wrapper } from './Header.styled';
 import MenuMobile from './MenuMobile';
-import { useSelector } from 'react-redux';
-import { getIsAuthenticatedSelector } from '@/state/user/selector';
 import { ROUTE_PATH } from '@/constants/route-path';
 import format from '@/utils/amount';
 import Token from '@/constants/token';
+import { useCurrentUser } from '@/state/user/hooks';
 
 const Header = ({ height }: { height: number }) => {
-  const { account } = useWeb3React();
+  const user = useCurrentUser();
   const navigate = useNavigate();
-  const isAuthenticated = useSelector(getIsAuthenticatedSelector);
   const { btcBalance, bvmBalance } = useContext(AssetsContext);
   const refMenu = useRef<HTMLDivElement | null>(null);
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
-
-  const goToConnectWalletPage = async () => {
-    navigate(`${ROUTE_PATH.CONNECT_WALLET}?next=${window.location.href}`);
-  };
 
   useEffect(() => {
     if (refMenu.current) {
@@ -49,7 +42,7 @@ const Header = ({ height }: { height: number }) => {
       <div className="rowLink" />
       <MenuMobile ref={refMenu} onCloseMenu={() => setIsOpenMenu(false)} />
       <div className="rightContainer">
-        {account && isAuthenticated ? (
+        {user && (
           <>
             <div className="wallet" onClick={() => navigate(ROUTE_PATH.HOME)}>
               <WalletBalance>
@@ -71,13 +64,11 @@ const Header = ({ height }: { height: number }) => {
                   </p>
                 </div>
                 <div className="avatar">
-                  <Jazzicon diameter={32} seed={jsNumberForAddress(account)} />
+                  <Jazzicon diameter={32} seed={jsNumberForAddress(user.walletAddress)} />
                 </div>
               </WalletBalance>
             </div>
           </>
-        ) : (
-          <ConnectWalletButton onClick={goToConnectWalletPage}>Connect wallet</ConnectWalletButton>
         )}
         <button className="btnMenuMobile" onClick={() => setIsOpenMenu(true)}>
           <img src={IcOpenMenu} alt="" />
