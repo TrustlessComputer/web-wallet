@@ -6,6 +6,7 @@ import { resetUser, updateUser } from '@/state/user/reducer';
 import WError, { ERROR_CODE } from '@/utils/error';
 import { useWeb3React } from '@web3-react/core';
 import { Methods } from '@/constants/method';
+import { AssetsContext } from '@/contexts/assets-context';
 
 export interface IConnectContext {
   onConnect: () => Promise<unknown>;
@@ -19,6 +20,7 @@ export const ConnectContext = React.createContext<IConnectContext>(initialValue)
 
 export const ConnectProvider: React.FC<PropsWithChildren> = ({ children }: PropsWithChildren): React.ReactElement => {
   const { provider } = useWeb3React();
+  const { clearAssets } = useContext(AssetsContext);
   const {
     onConnect: connectMetamask,
     onDeriveBitcoinKey,
@@ -28,12 +30,9 @@ export const ConnectProvider: React.FC<PropsWithChildren> = ({ children }: Props
 
   const onConnectMetamask = async () => {
     try {
-      console.log('SANG TEST: 111');
       const tcAddress = await connectMetamask();
-      console.log('SANG TEST: 222');
       if (tcAddress) {
         const tpAddress = await onDeriveBitcoinKey(tcAddress || '');
-        console.log('SANG TEST: 333');
         dispatch(
           updateUser({
             tpAddress,
@@ -42,7 +41,6 @@ export const ConnectProvider: React.FC<PropsWithChildren> = ({ children }: Props
         );
       }
     } catch (e) {
-      console.log('SANG TEST: 444');
       console.error('Connect metamask error: ', e);
       toast.error('Can not connect metamask.');
       await disconnectMetamask();
@@ -56,12 +54,12 @@ export const ConnectProvider: React.FC<PropsWithChildren> = ({ children }: Props
 
   const handleAccountChange = () => {
     dispatch(resetUser());
-    window.location.reload();
+    clearAssets();
   };
 
   const handleDisconnected = () => {
     dispatch(resetUser());
-    window.location.reload();
+    clearAssets();
   };
 
   React.useEffect(() => {

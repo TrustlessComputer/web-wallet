@@ -22,6 +22,7 @@ export interface IAssetsContext {
   debounceFetchData: () => void;
   fetchFeeRate: () => Promise<IFeeRate | undefined>;
   getAvailableAssetsCreateTx: () => Promise<ICollectedUTXOResp | undefined>;
+  clearAssets: () => void;
 }
 
 const initialValue: IAssetsContext = {
@@ -43,6 +44,7 @@ const initialValue: IAssetsContext = {
   debounceFetchData: () => new Promise<void>(r => r()),
   fetchFeeRate: () => new Promise<IFeeRate | undefined>(() => null),
   getAvailableAssetsCreateTx: () => new Promise<ICollectedUTXOResp | undefined>(() => null),
+  clearAssets: () => null,
 };
 
 export const AssetsContext = React.createContext<IAssetsContext>(initialValue);
@@ -189,6 +191,17 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
     }
   };
 
+  const clearAssets = () => {
+    setIsLoadingAssets(false);
+    setIsLoadingAssets(false);
+
+    setCurrentAssets(undefined);
+    setcomingAmount(0);
+    setBvmBalance('0');
+
+    setHistory([]);
+  };
+
   useEffect(() => {
     if (currentAddress) {
       debounceFetchData();
@@ -225,6 +238,7 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
       fetchAssets,
       fetchFeeRate,
       getAvailableAssetsCreateTx,
+      clearAssets,
     };
   }, [
     bvmBalance,
@@ -241,6 +255,7 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
     fetchAssets,
     fetchFeeRate,
     getAvailableAssetsCreateTx,
+    clearAssets,
   ]);
 
   return <AssetsContext.Provider value={contextValues}>{children}</AssetsContext.Provider>;
