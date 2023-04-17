@@ -43,6 +43,11 @@ const commonTheme = {
     a: '#FFE899',
     b: '#F9D03F',
   },
+
+  orange: {
+    linearGradient: 'linear-gradient(90deg, #ff8008 0%, #ffc837 100%)',
+  },
+
   red: '#FF4747',
 };
 
@@ -54,6 +59,7 @@ export const darkTheme = {
   bg3: '#404040',
   bg4: '#cecece',
   bg5: '#f2f2f2',
+  bg6: commonTheme.orange.linearGradient,
 
   // Text
   text1: '#F5F5F5',
@@ -90,6 +96,7 @@ export const lightTheme = {
   bg3: '#F8F8F8',
   bg4: '#cecece',
   bg5: '#f2f2f2',
+  bg6: commonTheme.orange.linearGradient,
 
   // Text
   text1: commonTheme.black,

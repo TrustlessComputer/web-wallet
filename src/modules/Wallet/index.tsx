@@ -22,6 +22,7 @@ import TokensProfile from './TokensProfile';
 import TransactionsProfile from './TransactionsProfile';
 import UserInfo from './UserInfo';
 import { useCurrentUser } from '@/state/user/hooks';
+import Button from '@/components/Button';
 
 const Wallet = () => {
   const { tab } = queryString.parse(location.search) as { tab: string };
@@ -29,7 +30,6 @@ const Wallet = () => {
   const [activeTab, setActiveTab] = useState(tab || DappsTabs.NFT);
   const [processing, setProcessing] = useState(false);
 
-  // const user = useSelector(getUserSelector);
   const user = useCurrentUser();
   const { getUnInscribedTransactionDetailByAddress } = useBitcoin();
   const { run, transactionConfirmed } = useBatchCompleteUninscribedTransaction({});
@@ -49,16 +49,6 @@ const Wallet = () => {
     }
   };
 
-  useEffect(() => {
-    if (user) fetchTransactions();
-  }, [user]);
-
-  useEffect(() => {
-    if (tab) {
-      setActiveTab(tab);
-    }
-  }, [tab]);
-
   const navigateToDapps = () => {
     // navigate(`${ROUTE_PATH.DAPPS}?tab=${activeTab}`);
   };
@@ -73,6 +63,16 @@ const Wallet = () => {
       setProcessing(false);
     }
   };
+
+  useEffect(() => {
+    if (user) fetchTransactions();
+  }, [user]);
+
+  useEffect(() => {
+    if (tab) {
+      setActiveTab(tab);
+    }
+  }, [tab]);
 
   return (
     <StyledProfile className="row">
@@ -155,7 +155,7 @@ const Wallet = () => {
             mountOnEnter
             title={
               activeTab === DappsTabs.TRANSACTION ? (
-                <div
+                <Button
                   className={`explore-btn resume-btn ${
                     transactions.length === 0 || transactionConfirmed ? 'disable' : ''
                   }`}
@@ -164,14 +164,14 @@ const Wallet = () => {
                   <Text className="font-ibm " size="regular">
                     {processing ? 'Processing...' : `Resume all pending`}
                   </Text>
-                </div>
+                </Button>
               ) : (
-                <div className="explore-btn" onClick={navigateToDapps}>
+                <Button className="explore-btn" onClick={navigateToDapps}>
                   <Text className="font-ibm" size="regular">
                     Explore Dapp Store
                   </Text>
                   <img src={`${CDN_URL}/icons/ic-arrow-right.svg`} alt="" />
-                </div>
+                </Button>
               )
             }
           >
