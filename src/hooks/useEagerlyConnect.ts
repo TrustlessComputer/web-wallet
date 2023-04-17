@@ -35,5 +35,5 @@ export default function useEagerlyConnect() {
     if (selectedConnection) {
       connect(selectedConnection.connector);
     } // The dependency list is empty so this is only run once on mount
-  }, []);
+  }, [selectedConnection]);
 }

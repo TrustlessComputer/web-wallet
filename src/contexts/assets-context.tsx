@@ -1,12 +1,11 @@
 import React, { PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import { ICollectedUTXOResp, ITxHistory, IFeeRate } from '@/interfaces/api/bitcoin';
-import { useAppSelector } from '@/state/hooks';
-import { getUserSelector } from '@/state/user/selector';
 import { getCollectedUTXO, getFeeRate, getPendingUTXOs, getTokenRate } from '@/services/bitcoin';
 import { comingAmountBuilder, currentAssetsBuilder } from '@/utils/utxo';
 import debounce from 'lodash/debounce';
 import { useWeb3React } from '@web3-react/core';
 import * as TC_SDK from 'trustless-computer-sdk';
+import { useCurrentUser } from '@/state/user/hooks';
 
 export interface IAssetsContext {
   btcBalance: string;
@@ -49,7 +48,7 @@ const initialValue: IAssetsContext = {
 export const AssetsContext = React.createContext<IAssetsContext>(initialValue);
 
 export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsWithChildren): React.ReactElement => {
-  const user = useAppSelector(getUserSelector);
+  const user = useCurrentUser();
   const currentAddress = React.useMemo(() => {
     return user?.walletAddressBtcTaproot || '';
   }, [user?.walletAddressBtcTaproot]);
@@ -188,12 +187,6 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
     } catch (err) {
       console.log(err);
     }
-
-    // try {
-    //   fetchBTCBalance();
-    // } catch (err) {
-    //   console.log(err);
-    // }
   };
 
   useEffect(() => {
