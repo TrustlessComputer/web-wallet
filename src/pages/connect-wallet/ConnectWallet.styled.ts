@@ -1,23 +1,9 @@
 import styled from 'styled-components';
 import px2rem from '@/utils/px2rem';
+import Button from '@/components/Button';
 
 export const Wrapper = styled.div`
-  .header {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding-top: 27px;
-    padding-bottom: 27px;
-
-    .socialContainer {
-      margin-left: ${px2rem(24)};
-      display: flex;
-      align-items: center;
-      gap: ${px2rem(12)};
-    }
-  }
-
-  .mainContent {
+  .content {
     min-height: calc(100vh - 82px);
     display: flex;
     flex-direction: column;
@@ -40,18 +26,9 @@ export const Wrapper = styled.div`
   }
 `;
 
-export const ConnectWalletButton = styled.button`
-  background: #4f43e2;
+export const ConnectWalletButton = styled(Button)`
+  background: ${({ theme }) => theme.bg6};
   padding: ${px2rem(15)} ${px2rem(24)};
-  color: #fff;
-  font-size: ${px2rem(16)};
-  line-height: ${px2rem(26)};
-  font-weight: 400;
-  border-radius: 2px;
-  position: relative;
-
-  :disabled {
-    background: #4f43e2;
-    opacity: 0.8;
-  }
+  color: ${({ theme }) => theme.text1};
+  min-width: ${px2rem(230)};
 `;

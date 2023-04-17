@@ -22,17 +22,7 @@ const ConnectWallet: React.FC = (): React.ReactElement => {
   return (
     <Container>
       <Wrapper>
-        <div className="header">
-          <div className="socialContainer">
-            <a href="https://discord.com/channels/1052411011036090458/1094649301210239086" target="_blank">
-              <img alt="icon" className="icon" src={`${CDN_URL}/icons/ic-discord-18x18.svg`} />
-            </a>
-            <a href="https://twitter.com/DappsOnBitcoin" target="_blank">
-              <img alt="icon" className="icon" src={`${CDN_URL}/icons/ic-twitter-18x18.svg`} />
-            </a>
-          </div>
-        </div>
-        <div className="mainContent">
+        <div className="content">
           <img
             width={292}
             height={118}
