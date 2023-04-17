@@ -17,7 +17,7 @@ interface IParams {
 const useBatchCompleteUninscribedTransaction = (args: IParams) => {
   const { chainId = SupportedChainId.TRUSTLESS_COMPUTER } = args;
   const { feeRate, getAvailableAssetsCreateTx } = useContext(AssetsContext);
-  const { chainId: walletChainId, connector } = useWeb3React();
+  const { chainId: walletChainId } = useWeb3React();
   const { onConnect: onConnectMetamask } = useContext(WalletContext);
   const user = useSelector(getUserSelector);
   const { createBatchInscribeTxs, getUnInscribedTransactionDetailByAddress } = useBitcoin();

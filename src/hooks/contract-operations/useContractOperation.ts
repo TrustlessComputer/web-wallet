@@ -1,5 +1,4 @@
 import { SupportedChainId } from '@/constants/chains';
-import { WalletContext } from '@/contexts/wallet-context';
 import { ContractOperationHook } from '@/interfaces/contract-operation';
 import { capitalizeFirstLetter, switchChain } from '@/utils';
 import { useWeb3React } from '@web3-react/core';
@@ -10,7 +9,7 @@ import { getIsAuthenticatedSelector, getUserSelector } from '@/state/user/select
 import { AssetsContext } from '@/contexts/assets-context';
 import { useNavigate } from 'react-router-dom';
 import { ROUTE_PATH } from '@/constants/route-path';
-import { createTransactionHistory, getTransactionsByWallet } from '@/services/profile';
+import { createTransactionHistory } from '@/services/profile';
 import moment from 'moment';
 import { TransactionEventType } from '@/enums/transaction';
 import { ICreateTransactionPayload } from '@/interfaces/transaction';

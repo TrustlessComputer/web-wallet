@@ -1,4 +1,3 @@
-import icNoData from '@/assets/icons/ic-no-data.svg';
 import { StyledEmpty } from './Empty.styled';
 import { CDN_URL } from '@/configs';
 

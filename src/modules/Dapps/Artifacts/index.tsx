@@ -8,9 +8,7 @@ import ModalUpload from './ModalUpload';
 import { BLOCK_CHAIN_FILE_LIMIT } from '@/constants/file';
 import toast from 'react-hot-toast';
 
-type Props = {};
-
-const Artifacts: React.FC<Props> = (props: Props) => {
+const Artifacts = React.memo(() => {
   const [file, setFile] = useState<File | null>(null);
   const [showUploadModal, setShowUploadModal] = useState(false);
 
@@ -57,6 +55,8 @@ const Artifacts: React.FC<Props> = (props: Props) => {
       <ModalUpload show={showUploadModal} handleClose={() => setShowUploadModal(false)} file={file} setFile={setFile} />
     </>
   );
-};
+});
+
+Artifacts.displayName = 'Artifacts';
 
 export default Artifacts;

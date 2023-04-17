@@ -2,11 +2,7 @@ import React, { PropsWithChildren, useCallback, useMemo, useState } from 'react'
 import { Address, getAddress, GetAddressOptions } from 'sats-connect';
 import isEmpty from 'lodash/isEmpty';
 import { AddressPurposes } from 'sats-connect/dist/src/address/types';
-import {
-  removeXverseWallet,
-  setXverseWallet as setXverseWalletStorage,
-  getXverseWallet,
-} from '@/utils/xverse-wallet-storage';
+import { removeXverseWallet, setXverseWallet as setXverseWalletStorage } from '@/utils/xverse-wallet-storage';
 import { XVERSE_DOWNLOAD_URL } from '@/constants/url';
 import { XverseWallet } from '@/interfaces/xverse-wallet';
 

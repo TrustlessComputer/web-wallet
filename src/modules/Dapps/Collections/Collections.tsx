@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import IcBitcoinCloud from '@/assets/icons/ic-bitcoin-721.svg';
 import Button from '@/components/Button';
 import Text from '@/components/Text';
 import React, { useState } from 'react';

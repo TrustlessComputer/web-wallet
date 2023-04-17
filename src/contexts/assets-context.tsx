@@ -5,14 +5,12 @@ import { getUserSelector } from '@/state/user/selector';
 import { getCollectedUTXO, getFeeRate, getPendingUTXOs, getTokenRate } from '@/services/bitcoin';
 import { comingAmountBuilder, currentAssetsBuilder } from '@/utils/utxo';
 import debounce from 'lodash/debounce';
-import { getBtcBalance } from '@/services/quicknode';
 import { useWeb3React } from '@web3-react/core';
-import BigNumber from 'bignumber.js';
 import * as TC_SDK from 'trustless-computer-sdk';
 
 export interface IAssetsContext {
   btcBalance: string;
-  juiceBalance: string;
+  bvmBalance: string;
   currentAssets: ICollectedUTXOResp | undefined;
   assets: ICollectedUTXOResp | undefined;
   isLoadingAssets: boolean;
@@ -29,7 +27,7 @@ export interface IAssetsContext {
 
 const initialValue: IAssetsContext = {
   btcBalance: '0',
-  juiceBalance: '0',
+  bvmBalance: '0',
   currentAssets: undefined,
   assets: undefined,
   isLoadingAssets: false,
@@ -62,8 +60,7 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
   const [currentAssets, setCurrentAssets] = useState<ICollectedUTXOResp | undefined>();
   const [isLoadingAssets, setIsLoadingAssets] = useState<boolean>(false);
   const [isLoadedAssets, setIsLoadedAssets] = useState<boolean>(false);
-  // const [btcBalance, setBtcBalance] = useState('0');
-  const [juiceBalance, setJuiceBalance] = useState('0');
+  const [bvmBalance, setBvmBalance] = useState('0');
 
   // History
   const [history, setHistory] = useState<ITxHistory[]>([]);
@@ -74,6 +71,7 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
     halfHourFee: 20,
     hourFee: 15,
   });
+
   const [comingAmount, setcomingAmount] = useState<number>(0);
   const [eth2btcRate, setEth2BtcRate] = useState<number>(0);
 
@@ -141,34 +139,10 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
     return '0';
   }, [currentAddress, currentAssets]);
 
-  const fetchBTCBalance = async () => {
-    // try {
-    //   if (currentAddress) {
-    //     // const utxos = await getBtcBalance(currentAddress);
-    //     const balance = TC_SDK.getBTCBalance({
-    //       utxos: currentAssets?.txrefs || [],
-    //       inscriptions: currentAssets?.inscriptions_by_outputs || {},
-    //     });
-    //     console.log('🚀 ~ fetchBTCBalance ~ currentAssets:', currentAssets);
-    //     console.log('🚀 ~ fetchBTCBalance ~ balance:', balance);
-    //     // const balance = currentAssets.reduce((prev, cur) => {
-    //     //   if (!cur.isOrdinal) {
-    //     //     return prev.plus(cur.value);
-    //     //   }
-    //     //   return prev;
-    //     // }, new BigNumber(0));
-    //     setBtcBalance(balance.toString());
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    //   setBtcBalance('0');
-    // }
-  };
-
-  const fetchJuiceBalance = async () => {
+  const fetchBvmBalance = async () => {
     if (user?.walletAddress && provider) {
       const balance = await provider.getBalance(user.walletAddress);
-      setJuiceBalance(balance.toString());
+      setBvmBalance(balance.toString());
     }
   };
 
@@ -210,7 +184,7 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
     }
 
     try {
-      fetchJuiceBalance();
+      fetchBvmBalance();
     } catch (err) {
       console.log(err);
     }
@@ -254,13 +228,13 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
       comingAmount,
       debounceFetchData,
       eth2btcRate,
-      juiceBalance,
+      bvmBalance,
       fetchAssets,
       fetchFeeRate,
       getAvailableAssetsCreateTx,
     };
   }, [
-    juiceBalance,
+    bvmBalance,
     btcBalance,
     currentAssets,
     assets,

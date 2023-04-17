@@ -1,7 +1,7 @@
 import { ContractOperationHook, DAppType, DeployContractResponse } from '@/interfaces/contract-operation';
 import ERC721ABIJson from '@/abis/erc721.json';
 import { useWeb3React } from '@web3-react/core';
-import { useCallback, useContext } from 'react';
+import { useContext } from 'react';
 import { ContractFactory } from 'ethers';
 import { BFS_ADDRESS } from '@/configs';
 import { AssetsContext } from '@/contexts/assets-context';

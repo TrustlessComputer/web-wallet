@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { TEmpty } from '.';
 
 export const StyledEmpty = styled.div<{ isTable: boolean }>`
   &.notFound {

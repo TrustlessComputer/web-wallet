@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import IconSVG from '@/components/IconSVG';
 import NFTCard from '@/components/NFTCard';
 import { ARTIFACT_CONTRACT } from '@/configs';
