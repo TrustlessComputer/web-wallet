@@ -7,6 +7,7 @@ import WError, { ERROR_CODE } from '@/utils/error';
 import { useWeb3React } from '@web3-react/core';
 import { Methods } from '@/constants/method';
 import { AssetsContext } from '@/contexts/assets-context';
+import LoadingContainer from '@/components/Loader';
 
 export interface IConnectContext {
   onConnect: () => Promise<unknown>;
@@ -21,6 +22,8 @@ export const ConnectContext = React.createContext<IConnectContext>(initialValue)
 export const ConnectProvider: React.FC<PropsWithChildren> = ({ children }: PropsWithChildren): React.ReactElement => {
   const { provider } = useWeb3React();
   const { clearAssets } = useContext(AssetsContext);
+  const [mounted, setMounted] = React.useState(false);
+
   const {
     onConnect: connectMetamask,
     onDeriveBitcoinKey,
@@ -67,11 +70,22 @@ export const ConnectProvider: React.FC<PropsWithChildren> = ({ children }: Props
     provider?.on(Methods.DISCONNECT, handleDisconnected);
   }, [provider]);
 
+  React.useEffect(() => {
+    setTimeout(() => {
+      setMounted(true);
+    }, 300);
+  }, []);
+
   const contextValues = useMemo((): IConnectContext => {
     return {
       onConnect: connect,
     };
   }, [connect]);
 
-  return <ConnectContext.Provider value={contextValues}>{children}</ConnectContext.Provider>;
+  return (
+    <ConnectContext.Provider value={contextValues}>
+      {children}
+      <LoadingContainer loaded={mounted} />
+    </ConnectContext.Provider>
+  );
 };
