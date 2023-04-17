@@ -8,8 +8,6 @@ import React, { useState } from 'react';
 import { Container } from './CollectionHeader.styled';
 import { CDN_URL } from '@/configs';
 import { TC_EXPLORER } from '@/constants/url';
-import { useSelector } from 'react-redux';
-import { getUserSelector } from '@/state/user/selector';
 import useMintChunks, { IMintChunksParams } from '@/hooks/contract-operations/nft/useMintChunks';
 import useMintBatchChunks, { IMintBatchChunksParams } from '@/hooks/contract-operations/nft/useMintBatchChunks';
 import useContractOperation from '@/hooks/contract-operations/useContractOperation';
@@ -19,6 +17,7 @@ import { FileUploader } from 'react-drag-drop-files';
 import { BLOCK_CHAIN_FILE_LIMIT, ERC721_SUPPORTED_EXTENSIONS, ZIP_EXTENSION } from '@/constants/file';
 import { Buffer } from 'buffer';
 import { fileToBase64, getFileExtensionByFileName, isERC721SupportedExt, unzipFile } from '@/utils';
+import { useCurrentUser } from '@/state/user/hooks';
 
 interface ICollectionHeader {
   collection?: ICollection;
@@ -27,7 +26,7 @@ interface ICollectionHeader {
 
 const CollectionHeader = (props: ICollectionHeader) => {
   const { collection, onClickEdit } = props;
-  const user = useSelector(getUserSelector);
+  const user = useCurrentUser();
   const [isMinting, setIsMinting] = useState(false);
   const { run: mintSingle } = useContractOperation<IMintChunksParams, Promise<Transaction | null>>({
     operation: useMintChunks,

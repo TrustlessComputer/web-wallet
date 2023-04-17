@@ -12,10 +12,8 @@ import { Tab, Tabs } from 'react-bootstrap';
 import { CDN_URL } from '@/configs';
 import useBatchCompleteUninscribedTransaction from '@/hooks/contract-operations/useBatchCompleteUninscribedTransaction';
 import useBitcoin from '@/hooks/useBitcoin';
-import { getUserSelector } from '@/state/user/selector';
 import queryString from 'query-string';
 import { toast } from 'react-hot-toast';
-import { useSelector } from 'react-redux';
 import ArtifactsProfile from './ArtifactsProfile';
 import NamesProfile from './NamesProfile';
 import NftsProfile from './NftsProfile';
@@ -23,6 +21,7 @@ import { StyledProfile, TabContainer } from './Profile.styled';
 import TokensProfile from './TokensProfile';
 import TransactionsProfile from './TransactionsProfile';
 import UserInfo from './UserInfo';
+import { useCurrentUser } from '@/state/user/hooks';
 
 const Wallet = () => {
   const { tab } = queryString.parse(location.search) as { tab: string };
@@ -30,7 +29,8 @@ const Wallet = () => {
   const [activeTab, setActiveTab] = useState(tab || DappsTabs.NFT);
   const [processing, setProcessing] = useState(false);
 
-  const user = useSelector(getUserSelector);
+  // const user = useSelector(getUserSelector);
+  const user = useCurrentUser();
   const { getUnInscribedTransactionDetailByAddress } = useBitcoin();
   const { run, transactionConfirmed } = useBatchCompleteUninscribedTransaction({});
 

@@ -1,13 +1,11 @@
 import IcCopy from '@/assets/icons/ic-copy-outline.svg';
 import IcPenguin from '@/assets/icons/ic-penguin.svg';
 import IcBitcoin from '@/assets/icons/ic-btc.svg';
-import { getUserSelector } from '@/state/user/selector';
 import { formatLongAddress, shortenAddress } from '@/utils';
 import { useWeb3React } from '@web3-react/core';
 import copy from 'copy-to-clipboard';
 import { toast } from 'react-hot-toast';
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
-import { useSelector } from 'react-redux';
 import { StyledUserInfo } from './UserInfo.styled';
 import Text from '@/components/Text';
 import IconSVG from '@/components/IconSVG';
@@ -19,13 +17,15 @@ import { useNavigate } from 'react-router-dom';
 import { ROUTE_PATH } from '@/constants/route-path';
 import format from '@/utils/amount';
 import Token from '@/constants/token';
+import { useCurrentUser } from '@/state/user/hooks';
 
 type Props = {
   className?: string;
 };
 
 const UserInfo = ({ className }: Props) => {
-  const user = useSelector(getUserSelector);
+  // const user = useSelector(getUserSelector);
+  const user = useCurrentUser();
   const { account } = useWeb3React();
   const { btcBalance, bvmBalance } = useContext(AssetsContext);
   const { onDisconnect } = useContext(WalletContext);

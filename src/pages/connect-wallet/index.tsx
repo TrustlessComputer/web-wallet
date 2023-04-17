@@ -1,20 +1,19 @@
 import React, { useContext, useState } from 'react';
 import { Wrapper, ConnectWalletButton } from './ConnectWallet.styled';
-import { WalletContext } from '@/contexts/wallet-context';
 import { CDN_URL } from '@/configs';
 import { Container } from '../layout';
+import { ConnectContext } from '@/contexts/connect.context';
 
 const ConnectWallet: React.FC = (): React.ReactElement => {
-  const { onConnect, onDeriveBitcoinKey, onDisconnect } = useContext(WalletContext);
+  const { onConnect } = useContext(ConnectContext);
   const [isConnecting, setIsConnecting] = useState(false);
 
   const handleConnectWallet = async () => {
     try {
       setIsConnecting(true);
-      const address = await onConnect();
-      await onDeriveBitcoinKey(address || '');
+      await onConnect();
     } catch (err) {
-      await onDisconnect();
+      // await onDisconnect();
     } finally {
       setIsConnecting(false);
     }

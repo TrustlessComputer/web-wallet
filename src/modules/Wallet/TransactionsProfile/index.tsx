@@ -5,7 +5,6 @@ import { TC_NETWORK_RPC } from '@/configs';
 import useBatchCompleteUninscribedTransaction from '@/hooks/contract-operations/useBatchCompleteUninscribedTransaction';
 import { ITransaction } from '@/interfaces/transaction';
 import { createTransactionHistory, getTransactionsByWallet, updateStatusTransaction } from '@/services/profile';
-import { getUserSelector } from '@/state/user/selector';
 import { formatLongAddress } from '@/utils';
 import copy from 'copy-to-clipboard';
 import { debounce } from 'lodash';
@@ -13,10 +12,10 @@ import { useEffect, useState } from 'react';
 import { Spinner } from 'react-bootstrap';
 import { toast } from 'react-hot-toast';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { useSelector } from 'react-redux';
 import * as TC_SDK from 'trustless-computer-sdk';
 import { StyledTransactionProfile } from './TransactionsProfile.styled';
 import moment from 'moment';
+import { useCurrentUser } from '@/state/user/hooks';
 
 type Props = {
   pendingList: string[];
@@ -32,7 +31,7 @@ const LIMIT_PAGE = 200;
 const TransactionsProfile = ({ pendingList }: Props) => {
   const TABLE_HEADINGS = ['Event', 'Transaction ID', 'From', 'To', 'Date & Time', 'Status'];
 
-  const user = useSelector(getUserSelector);
+  const user = useCurrentUser();
 
   const { transactionConfirmed } = useBatchCompleteUninscribedTransaction({});
 

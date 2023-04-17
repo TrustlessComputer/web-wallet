@@ -1,14 +1,13 @@
 import { TC_NETWORK_RPC } from '@/configs';
 import { ConnectionType, getConnection } from '@/connection';
 import { AssetsContext } from '@/contexts/assets-context';
-import { getUserSelector } from '@/state/user/selector';
 import { generateBitcoinTaprootKey } from '@/utils/derive-key';
 import { useWeb3React } from '@web3-react/core';
 import { useContext } from 'react';
-import { useSelector } from 'react-redux';
 import * as TC_SDK from 'trustless-computer-sdk';
 import BigNumber from 'bignumber.js';
 import { Buffer } from 'buffer';
+import { useCurrentUser } from '@/state/user/hooks';
 
 export interface ISendInsProps {
   receiverAddress: string;
@@ -46,7 +45,7 @@ export interface ICreateInscribeResponse {
 }
 
 const useBitcoin = () => {
-  const user = useSelector(getUserSelector);
+  const user = useCurrentUser();
   const tcClient = new TC_SDK.TcClient(TC_SDK.Mainnet, TC_NETWORK_RPC);
   const { getAvailableAssetsCreateTx } = useContext(AssetsContext);
   const { account: evmAddress, connector } = useWeb3React();

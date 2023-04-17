@@ -1,25 +1,25 @@
 import React, { PropsWithChildren, useEffect, useMemo } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { useAppDispatch } from '@/state/hooks';
-import { resetUser, updateEVMWallet, updateSelectedWallet, updateTaprootWallet } from '@/state/user/reducer';
+import { resetUser, updateSelectedWallet } from '@/state/user/reducer';
 import { getConnection } from '@/connection';
 import { generateBitcoinTaprootKey } from '@/utils/derive-key';
-import { useSelector } from 'react-redux';
-import { getUserSelector } from '@/state/user/selector';
 import bitcoinStorage from '@/utils/bitcoin-storage';
-import { clearAuthStorage } from '@/utils/auth-storage';
 import { switchChain } from '@/utils';
 import { SupportedChainId } from '@/constants/chains';
+import { useCurrentUser } from '@/state/user/hooks';
 
 export interface IWalletContext {
   onDisconnect: () => Promise<void>;
   onConnect: () => Promise<string | null>;
+  onRequestAccounts: () => Promise<string[] | null>;
   onDeriveBitcoinKey: (walletAddress: string) => Promise<string | null>;
 }
 
 const initialValue: IWalletContext = {
   onDisconnect: () => new Promise<void>(r => r()),
   onConnect: () => new Promise<null>(r => r(null)),
+  onRequestAccounts: () => new Promise<null>(r => r(null)),
   onDeriveBitcoinKey: () => new Promise<null>(r => r(null)),
 };
 
@@ -28,11 +28,17 @@ export const WalletContext = React.createContext<IWalletContext>(initialValue);
 export const WalletProvider: React.FC<PropsWithChildren> = ({ children }: PropsWithChildren): React.ReactElement => {
   const { connector, provider, account, chainId } = useWeb3React();
   const dispatch = useAppDispatch();
-  const user = useSelector(getUserSelector);
+  const user = useCurrentUser();
+
+  const requestAccounts = React.useCallback(async (): Promise<string[] | null> => {
+    const accounts = await connector.provider?.request({
+      method: 'eth_accounts',
+    });
+    return accounts as string[] | null;
+  }, [connector]);
 
   const disconnect = React.useCallback(async () => {
-    console.log('disconnecting...');
-    console.log('user', user);
+    console.info('disconnecting...');
     if (user?.walletAddress) {
       bitcoinStorage.removeUserTaprootAddress(user?.walletAddress);
     }
@@ -40,10 +46,7 @@ export const WalletProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
       await connector.deactivate();
     }
     await connector.resetState();
-    clearAuthStorage();
     dispatch(resetUser());
-    // TODO Clear localstorage
-    localStorage.clear();
   }, [connector, dispatch, user]);
 
   const connect = React.useCallback(async () => {
@@ -52,14 +55,13 @@ export const WalletProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
       throw new Error('Get connection error.');
     }
     await connection.connector.activate();
-    if (chainId !== SupportedChainId.TRUSTLESS_COMPUTER) {
-      await switchChain(SupportedChainId.TRUSTLESS_COMPUTER);
-    }
-    if (account) {
-      const tcAddress = account;
-      dispatch(updateEVMWallet(tcAddress));
+    const accounts = await requestAccounts();
+    if (accounts && Array.isArray(accounts)) {
+      if (chainId !== SupportedChainId.TRUSTLESS_COMPUTER) {
+        await switchChain(SupportedChainId.TRUSTLESS_COMPUTER);
+      }
       dispatch(updateSelectedWallet({ wallet: connection.type }));
-      return tcAddress;
+      return accounts[0];
     }
     return null;
   }, [dispatch, connector, provider]);
@@ -67,14 +69,14 @@ export const WalletProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
   const onDeriveBitcoinKey = React.useCallback(
     async (evmWalletAddress: string) => {
       if (evmWalletAddress) {
-        const existedWallet = bitcoinStorage.getUserTaprootAddress(evmWalletAddress);
-        if (existedWallet) {
-          dispatch(updateTaprootWallet(existedWallet));
-          return existedWallet;
-        }
+        // const existedWallet = bitcoinStorage.getUserTaprootAddress(evmWalletAddress);
+        // if (existedWallet) {
+        //   dispatch(updateTaprootWallet(existedWallet));
+        //   return existedWallet;
+        // }
         const { address: taprootAddress } = await generateBitcoinTaprootKey(evmWalletAddress);
         if (taprootAddress) {
-          dispatch(updateTaprootWallet(taprootAddress));
+          // dispatch(updateTaprootWallet(taprootAddress));
           return taprootAddress;
         }
       }
@@ -98,6 +100,7 @@ export const WalletProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
       onDisconnect: disconnect,
       onConnect: connect,
       onDeriveBitcoinKey,
+      onRequestAccounts: requestAccounts,
     };
   }, [disconnect, connect, onDeriveBitcoinKey]);
 

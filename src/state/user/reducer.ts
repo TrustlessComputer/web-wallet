@@ -1,10 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ConnectionType } from '@/connection';
 
+interface IAccount {
+  [key: string]: {
+    walletAddressBtcTaproot: string;
+    walletAddress: string;
+  };
+}
 export interface UserState {
   selectedWallet?: ConnectionType;
   walletAddressBtcTaproot?: string;
   walletAddress?: string;
+  account?: IAccount;
 }
 export const initialState: UserState = {
   selectedWallet: undefined,
@@ -19,7 +26,7 @@ const userSlice = createSlice({
     updateSelectedWallet(state, { payload: { wallet } }) {
       state.selectedWallet = wallet;
     },
-    updateEVMWallet(state, { payload }) {
+    updateBVMWallet(state, { payload }) {
       state.walletAddress = payload;
     },
     updateTaprootWallet(state, { payload }) {
@@ -30,8 +37,19 @@ const userSlice = createSlice({
       state.walletAddress = undefined;
       state.walletAddressBtcTaproot = undefined;
     },
+    updateUser(state, { payload: { tpAddress, tcAddress } }) {
+      const address = tcAddress.toLowerCase();
+      const account = {
+        ...(state.account || {}),
+        [address]: {
+          walletAddress: address,
+          walletAddressBtcTaproot: tpAddress,
+        },
+      };
+      state.account = { ...account };
+    },
   },
 });
 
-export const { updateSelectedWallet, resetUser, updateTaprootWallet, updateEVMWallet } = userSlice.actions;
+export const { updateSelectedWallet, resetUser, updateTaprootWallet, updateBVMWallet, updateUser } = userSlice.actions;
 export default userSlice.reducer;

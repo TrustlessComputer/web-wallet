@@ -12,22 +12,30 @@ import ThemeProvider, { ThemedGlobalStyle } from '@/theme/theme';
 import { Toaster } from 'react-hot-toast';
 import './reset.scss';
 import '@/styles/index.scss';
+import { ConnectProvider } from '@/contexts/connect.context';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistStore } from 'redux-persist';
 
+let persistor = persistStore(store);
 const App: React.FC = (): React.ReactElement => {
   const element = useRoutes(routes);
   return (
     <Provider store={store}>
-      <ThemeProvider>
-        <ThemedGlobalStyle />
-        <Web3Provider>
-          <XverseProvider>
-            <WalletProvider>
-              <AssetsProvider>{element}</AssetsProvider>
-              <Toaster position="top-center" reverseOrder={false} />
-            </WalletProvider>
-          </XverseProvider>
-        </Web3Provider>
-      </ThemeProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <ThemeProvider>
+          <ThemedGlobalStyle />
+          <Web3Provider>
+            <XverseProvider>
+              <WalletProvider>
+                <ConnectProvider>
+                  <AssetsProvider>{element}</AssetsProvider>
+                  <Toaster position="top-center" reverseOrder={false} />
+                </ConnectProvider>
+              </WalletProvider>
+            </XverseProvider>
+          </Web3Provider>
+        </ThemeProvider>
+      </PersistGate>
     </Provider>
   );
 };

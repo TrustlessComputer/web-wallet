@@ -5,7 +5,7 @@ import { useWeb3React } from '@web3-react/core';
 import { useContext } from 'react';
 import useBitcoin from '../useBitcoin';
 import { useSelector } from 'react-redux';
-import { getIsAuthenticatedSelector, getUserSelector } from '@/state/user/selector';
+import { getIsAuthenticatedSelector } from '@/state/user/selector';
 import { AssetsContext } from '@/contexts/assets-context';
 import { useNavigate } from 'react-router-dom';
 import { ROUTE_PATH } from '@/constants/route-path';
@@ -13,6 +13,7 @@ import { createTransactionHistory } from '@/services/profile';
 import moment from 'moment';
 import { TransactionEventType } from '@/enums/transaction';
 import { ICreateTransactionPayload } from '@/interfaces/transaction';
+import { useCurrentUser } from '@/state/user/hooks';
 
 interface IParams<P, R> {
   operation: ContractOperationHook<P, R>;
@@ -30,7 +31,8 @@ const useContractOperation = <P, R>(args: IParams<P, R>): IContractOperationRetu
   const { feeRate, getAvailableAssetsCreateTx } = useContext(AssetsContext);
   const { chainId: walletChainId } = useWeb3React();
   const isAuthenticated = useSelector(getIsAuthenticatedSelector);
-  const user = useSelector(getUserSelector);
+  // const user = useSelector(getUserSelector);
+  const user = useCurrentUser();
   const { createInscribeTx, getUnInscribedTransactionByAddress } = useBitcoin();
   const navigate = useNavigate();
 

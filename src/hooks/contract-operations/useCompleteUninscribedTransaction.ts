@@ -4,9 +4,8 @@ import { switchChain } from '@/utils';
 import { useWeb3React } from '@web3-react/core';
 import { useContext } from 'react';
 import useBitcoin from '../useBitcoin';
-import { useSelector } from 'react-redux';
-import { getUserSelector } from '@/state/user/selector';
 import { AssetsContext } from '@/contexts/assets-context';
+import { useCurrentUser } from '@/state/user/hooks';
 
 interface IParams {
   chainId?: SupportedChainId;
@@ -17,7 +16,7 @@ const useCompleteUninscribedTransaction = (args: IParams) => {
   const { feeRate, getAvailableAssetsCreateTx } = useContext(AssetsContext);
   const { chainId: walletChainId } = useWeb3React();
   const { onConnect: onConnectMetamask } = useContext(WalletContext);
-  const user = useSelector(getUserSelector);
+  const user = useCurrentUser();
   const { createInscribeTx, getUnInscribedTransactionByAddress } = useBitcoin();
 
   const connectWallet = async () => {

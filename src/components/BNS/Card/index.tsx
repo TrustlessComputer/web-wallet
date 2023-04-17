@@ -1,10 +1,9 @@
 import Button from '@/components/Button';
-import { getUserSelector } from '@/state/user/selector';
 import { shortenAddress } from '@/utils';
 import { useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
 import BNSTransferModal from '../TransferModal';
 import { StyledBNSCard } from './BNSCard.styled';
+import { useCurrentUser } from '@/state/user/hooks';
 
 type Props = {
   item: {
@@ -15,7 +14,8 @@ type Props = {
 };
 
 const BNSCard = ({ item }: Props) => {
-  const user = useSelector(getUserSelector);
+  // const user = useSelector(getUserSelector);
+  const user = useCurrentUser();
   const [showModal, setShowModal] = useState(false);
 
   const isAllowTransfer = useMemo(() => item.owner === user?.walletAddress, [item.owner, user?.walletAddress]);
