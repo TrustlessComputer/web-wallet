@@ -9,13 +9,10 @@ import Text from '@/components/Text';
 import { DappsTabs } from '@/enums/tabs';
 import { useEffect, useState } from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
 import { CDN_URL } from '@/configs';
-import { ROUTE_PATH } from '@/constants/route-path';
 import useBatchCompleteUninscribedTransaction from '@/hooks/contract-operations/useBatchCompleteUninscribedTransaction';
 import useBitcoin from '@/hooks/useBitcoin';
 import { getUserSelector } from '@/state/user/selector';
-import { getAccessToken } from '@/utils/auth-storage';
 import queryString from 'query-string';
 import { toast } from 'react-hot-toast';
 import { useSelector } from 'react-redux';
@@ -28,10 +25,6 @@ import TransactionsProfile from './TransactionsProfile';
 import UserInfo from './UserInfo';
 
 const Wallet = () => {
-  const accessToken = getAccessToken();
-
-  const navigate = useNavigate();
-
   const { tab } = queryString.parse(location.search) as { tab: string };
 
   const [activeTab, setActiveTab] = useState(tab || DappsTabs.NFT);
@@ -65,15 +58,6 @@ const Wallet = () => {
       setActiveTab(tab);
     }
   }, [tab]);
-
-  useEffect(() => {
-    // setSearchParams({ tab: activeTab });
-  }, [activeTab]);
-
-  if (!accessToken) {
-    navigate(`${ROUTE_PATH.CONNECT_WALLET}?next=${window.location.href}`);
-    return <></>;
-  }
 
   const navigateToDapps = () => {
     // navigate(`${ROUTE_PATH.DAPPS}?tab=${activeTab}`);

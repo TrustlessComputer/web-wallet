@@ -2,7 +2,7 @@ import IcOpenMenu from '@/assets/icons/ic_hambuger.svg';
 import IcLogo from '@/assets/icons/logo.svg';
 import { AssetsContext } from '@/contexts/assets-context';
 import { useWeb3React } from '@web3-react/core';
-import { gsap } from 'gsap';
+import { gsap, Power3 } from 'gsap';
 import { useContext, useEffect, useRef, useState } from 'react';
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import { Link, useNavigate } from 'react-router-dom';
@@ -29,12 +29,12 @@ const Header = ({ height }: { height: number }) => {
   useEffect(() => {
     if (refMenu.current) {
       if (isOpenMenu) {
-        gsap.to(refMenu.current, { x: 0, duration: 0.6, ease: 'power3.inOut' });
+        gsap.to(refMenu.current, { x: 0, duration: 0.6, ease: Power3.easeInOut });
       } else {
         gsap.to(refMenu.current, {
           x: '100%',
           duration: 0.6,
-          ease: 'power3.inOut',
+          ease: Power3.easeInOut,
         });
       }
     }
@@ -51,7 +51,7 @@ const Header = ({ height }: { height: number }) => {
       <div className="rightContainer">
         {account && isAuthenticated ? (
           <>
-            <div className="wallet" onClick={() => navigate(ROUTE_PATH.WALLET)}>
+            <div className="wallet" onClick={() => navigate(ROUTE_PATH.HOME)}>
               <WalletBalance>
                 <div className="balance">
                   <p>

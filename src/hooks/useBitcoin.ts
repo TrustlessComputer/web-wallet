@@ -24,7 +24,7 @@ export interface ISendBTCProps {
 
 export interface ISignKeyResp {
   privateKey: Buffer;
-  tpAddress: string;
+  walletAddressBtcTaproot: string;
   evmAddress: string;
 }
 
@@ -55,21 +55,21 @@ const useBitcoin = () => {
     const connection = getConnection(connector);
     if (connection?.type === ConnectionType.METAMASK) {
       const error = 'Can not sign with metamask';
-      const tpAddress = user?.walletAddressBtcTaproot;
-      if (!evmAddress || !tpAddress) throw new Error(error);
+      const walletAddressBtcTaproot = user?.walletAddressBtcTaproot;
+      if (!evmAddress || !walletAddressBtcTaproot) throw new Error(error);
       const { taprootChild } = await generateBitcoinTaprootKey(evmAddress);
       const privateKey = taprootChild.privateKey;
       if (!privateKey) throw new Error(error);
       return {
         privateKey,
-        tpAddress,
+        walletAddressBtcTaproot,
         evmAddress,
       };
     }
 
     return {
       privateKey: Buffer.from(''),
-      tpAddress: '',
+      walletAddressBtcTaproot: '',
       evmAddress: '',
     };
   };

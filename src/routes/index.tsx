@@ -2,9 +2,8 @@ import React from 'react';
 import { RouteObject } from 'react-router-dom';
 import Layout from '@/pages/layout';
 import NotFound from '@/pages/404';
-import Wallet from '@/pages/wallet';
 import { ROUTE_PATH } from '@/constants/route-path';
-import ConnectWallet from '@/pages/connect-wallet';
+import Home from '@/pages/home';
 
 export default [
   {
@@ -13,12 +12,8 @@ export default [
     children: [{ index: true, element: <NotFound /> }],
   },
   {
-    path: ROUTE_PATH.WALLET,
+    path: ROUTE_PATH.HOME,
     element: <Layout />,
-    children: [{ index: true, element: <Wallet /> }],
-  },
-  {
-    path: ROUTE_PATH.CONNECT_WALLET,
-    element: <ConnectWallet />,
+    children: [{ index: true, element: <Home /> }],
   },
 ] as RouteObject[];

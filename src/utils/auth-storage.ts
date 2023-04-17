@@ -22,22 +22,9 @@ export const clearAccessTokenStorage = (): void => {
 export const clearAuthStorage = (): void => {
   localStorage.remove(ACCESS_TOKEN);
   localStorage.remove(REFRESH_TOKEN);
-  // walletBTCStorage.removeWallet();
 };
 
 export const setAccessToken = (accessToken: string, refreshToken: string): void => {
   localStorage.set(ACCESS_TOKEN, accessToken);
   localStorage.set(REFRESH_TOKEN, refreshToken);
 };
-
-// export const setUserInfo = (user: User) => {
-//   if (isBrowser()) {
-//     localStorage.set(LocalStorageKey.USER_ID, user.id);
-//     localStorage.set(
-//       LocalStorageKey.USER_WALLET_ADDRESS,
-//       user.walletAddress
-//     );
-//     localStorage.set(LocalStorageKey.USER_AVATAR, user.avatar);
-//     localStorage.set(LocalStorageKey.USER_DISPLAYNAME, user.displayName);
-//   }
-// };

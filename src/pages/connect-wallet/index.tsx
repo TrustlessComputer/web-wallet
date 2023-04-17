@@ -1,43 +1,24 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Wrapper, ConnectWalletButton } from './ConnectWallet.styled';
 import { WalletContext } from '@/contexts/wallet-context';
-import { useSelector } from 'react-redux';
-import { getIsAuthenticatedSelector, getUserSelector } from '@/state/user/selector';
 import { CDN_URL } from '@/configs';
 import { Container } from '../layout';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ROUTE_PATH } from '@/constants/route-path';
 
 const ConnectWallet: React.FC = (): React.ReactElement => {
-  const { onConnect, generateBitcoinKey, onDisconnect } = useContext(WalletContext);
-  const isAuthenticated = useSelector(getIsAuthenticatedSelector);
-  const user = useSelector(getUserSelector);
-  const navigate = useNavigate();
-  let [searchParams] = useSearchParams();
+  const { onConnect, onDeriveBitcoinKey, onDisconnect } = useContext(WalletContext);
   const [isConnecting, setIsConnecting] = useState(false);
 
   const handleConnectWallet = async () => {
     try {
       setIsConnecting(true);
       const address = await onConnect();
-      await generateBitcoinKey(address || '');
+      await onDeriveBitcoinKey(address || '');
     } catch (err) {
       await onDisconnect();
     } finally {
       setIsConnecting(false);
     }
   };
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      const next = searchParams.get('next');
-      if (next) {
-        window.location.href = next;
-      } else {
-        navigate(ROUTE_PATH.HOME);
-      }
-    }
-  }, [isAuthenticated, searchParams, user]);
 
   return (
     <Container>
