@@ -87,7 +87,7 @@ export const TabContainer = styled.div`
     display: flex;
     align-items: center;
     background: ${({ theme }: { theme: DefaultTheme }) => theme.btn3};
-    padding: ${px2rem(5)} ${px2rem(14)};
+    padding: ${px2rem(8)} ${px2rem(24)};
     gap: ${px2rem(4)};
     * {
       font-weight: 500;
@@ -100,7 +100,6 @@ export const TabContainer = styled.div`
     }
 
     &.resume-btn {
-      width: ${px2rem(180)};
       justify-content: center;
     }
   }

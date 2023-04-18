@@ -160,13 +160,13 @@ const Wallet = () => {
                   }`}
                   onClick={handleResumeTransactions}
                 >
-                  <Text className="font-ibm " size="regular">
+                  <Text size="regular" color="text8">
                     {processing ? 'Processing...' : `Resume all pending`}
                   </Text>
                 </Button>
               ) : (
                 <Button className="explore-btn" onClick={navigateToDapps}>
-                  <Text className="font-ibm" size="regular">
+                  <Text size="regular" color="text8">
                     Explore Dapp Store
                   </Text>
                 </Button>
