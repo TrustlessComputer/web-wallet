@@ -12,9 +12,10 @@ import ThemeProvider, { ThemedGlobalStyle } from '@/theme/theme';
 import { Toaster } from 'react-hot-toast';
 import './reset.scss';
 import '@/styles/index.scss';
-import { ConnectProvider } from '@/contexts/connect.context';
+import { ConnectProvider } from '@/contexts/connect-context';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
+import { TransactorProvider } from '@/contexts/transactor-context';
 
 let persistor = persistStore(store);
 const App: React.FC = (): React.ReactElement => {
@@ -28,7 +29,9 @@ const App: React.FC = (): React.ReactElement => {
             <XverseProvider>
               <WalletProvider>
                 <ConnectProvider>
-                  <AssetsProvider>{element}</AssetsProvider>
+                  <AssetsProvider>
+                    <TransactorProvider>{element}</TransactorProvider>
+                  </AssetsProvider>
                   <Toaster position="top-center" reverseOrder={false} />
                 </ConnectProvider>
               </WalletProvider>

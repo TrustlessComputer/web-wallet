@@ -86,11 +86,10 @@ export const TabContainer = styled.div`
   .explore-btn {
     display: flex;
     align-items: center;
-    background-color: ${({ theme }: { theme: DefaultTheme }) => theme.white};
+    background: ${({ theme }: { theme: DefaultTheme }) => theme.orange.linearGradient};
     padding: ${px2rem(5)} ${px2rem(14)};
     gap: ${px2rem(4)};
-    p {
-      color: ${({ theme }: { theme: DefaultTheme }) => theme.primary.brand};
+    * {
       font-weight: 500;
     }
 

@@ -9,7 +9,6 @@ import Text from '@/components/Text';
 import { DappsTabs } from '@/enums/tabs';
 import { useEffect, useState } from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
-import { CDN_URL } from '@/configs';
 import useBatchCompleteUninscribedTransaction from '@/hooks/contract-operations/useBatchCompleteUninscribedTransaction';
 import useBitcoin from '@/hooks/useBitcoin';
 import queryString from 'query-string';
@@ -170,7 +169,6 @@ const Wallet = () => {
                   <Text className="font-ibm" size="regular">
                     Explore Dapp Store
                   </Text>
-                  <img src={`${CDN_URL}/icons/ic-arrow-right.svg`} alt="" />
                 </Button>
               )
             }

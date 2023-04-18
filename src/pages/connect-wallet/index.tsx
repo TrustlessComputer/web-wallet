@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Wrapper, ConnectWalletButton } from './ConnectWallet.styled';
 import { CDN_URL } from '@/configs';
 import { Container } from '../layout';
-import { ConnectContext } from '@/contexts/connect.context';
+import { ConnectContext } from '@/contexts/connect-context';
 
 const ConnectWallet: React.FC = (): React.ReactElement => {
   const { onConnect } = useContext(ConnectContext);
