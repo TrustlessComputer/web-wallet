@@ -8,6 +8,8 @@ import * as TC_SDK from 'trustless-computer-sdk';
 import BigNumber from 'bignumber.js';
 import { Buffer } from 'buffer';
 import { useCurrentUser } from '@/state/user/hooks';
+import bitcoinStorage from '@/utils/bitcoin-storage';
+import { ITCTxDetail } from '@/interfaces/transaction';
 
 export interface ISendInsProps {
   receiverAddress: string;
@@ -159,10 +161,22 @@ const useBitcoin = () => {
     return unInscribedTxIDs;
   };
 
-  const getUnInscribedTransactionDetailByAddress = async (tcAddress: string): Promise<TC_SDK.TCTxDetail[]> => {
+  const getUnInscribedTransactionDetailByAddress = async (tcAddress: string): Promise<ITCTxDetail[]> => {
     if (!tcAddress) throw Error('Address not found');
     const { unInscribedTxDetails } = await tcClient.getUnInscribedTransactionDetailByAddress(tcAddress);
-    return unInscribedTxDetails;
+    const storageTxs = bitcoinStorage.getStorageTransactions(tcAddress);
+
+    return unInscribedTxDetails.map(tx => {
+      const storageTx = storageTxs.find(item => item.Hash.toLowerCase() === tx.Hash.toLowerCase());
+      if (!storageTx) return tx;
+      return {
+        ...tx,
+        dappURL: storageTx.dappURL,
+        method: storageTx.method,
+        btcHash: storageTx.btcHash,
+        statusCode: storageTx.statusCode, // pending | processing | success | failed
+      };
+    });
   };
 
   return {

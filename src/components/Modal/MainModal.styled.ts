@@ -6,9 +6,16 @@ export const MainModal = styled(Modal)`
   &.modal {
     --bs-modal-color: ${({ theme }) => theme.bg1};
   }
+  .modal-dialog-centered {
+    justify-content: center;
+  }
 
   .modal-content {
     border-radius: 2px;
+    width: 650px;
+    ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToMedium`
+      width: 90vw;
+    `}
   }
 
   .modal-header {
@@ -22,6 +29,10 @@ export const MainModal = styled(Modal)`
 
   .modal-body {
     padding-top: 0;
+    width: 650px;
+    ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToMedium`
+      width: 90vw;
+    `}
   }
 
   .modal-footer {

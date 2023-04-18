@@ -4,6 +4,7 @@ import { StyledButton } from './Button.styled';
 
 export type ButtonProps = {
   bg?: CSSProperties['backgroundColor'];
+  color?: CSSProperties['backgroundColor'];
   onClick?: () => void;
   className?: string;
   disabled?: boolean;
@@ -11,9 +12,17 @@ export type ButtonProps = {
   type?: 'submit' | 'reset' | 'button' | undefined;
 };
 
-const Button = ({ type, bg = 'bg1', className, onClick, children, ...props }: PropsWithChildren<ButtonProps>) => {
+const Button = ({
+  type,
+  bg = 'bg1',
+  color = 'text8',
+  className,
+  onClick,
+  children,
+  ...props
+}: PropsWithChildren<ButtonProps>) => {
   return (
-    <StyledButton type={type} bg={bg} className={className} onClick={onClick} {...props}>
+    <StyledButton type={type} bg={bg} color={color} className={className} onClick={onClick} {...props}>
       {children}
     </StyledButton>
   );

@@ -33,7 +33,7 @@ const ConnectWallet: React.FC = (): React.ReactElement => {
           <h1 className="title">
             Trustless Computer is an open-source protocol that powers decentralized applications on Bitcoin.
           </h1>
-          <ConnectWalletButton disabled={isConnecting} onClick={handleConnectWallet}>
+          <ConnectWalletButton bg="btn3" disabled={isConnecting} onClick={handleConnectWallet}>
             {isConnecting ? 'Connecting...' : 'Connect wallet'}
           </ConnectWalletButton>
         </div>

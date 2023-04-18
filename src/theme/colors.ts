@@ -26,7 +26,8 @@ const commonTheme = {
 
   primary: {
     '333': '#333333',
-    brand: 'linear-gradient(180deg, #202738 0%, #070816 100%)',
+    brand: '#1C1C1C',
+    secondary: '#1C1C1C',
     '2e': '#2e2e2e',
     '5b': '#5b5b5b',
     d9: '#d9d9d9',
@@ -44,10 +45,6 @@ const commonTheme = {
     b: '#F9D03F',
   },
 
-  orange: {
-    linearGradient: 'linear-gradient(90deg, #ff8008 0%, #ffc837 100%)',
-  },
-
   red: '#FF4747',
 };
 
@@ -59,7 +56,7 @@ export const darkTheme = {
   bg3: '#404040',
   bg4: '#cecece',
   bg5: '#f2f2f2',
-  bg6: commonTheme.orange.linearGradient,
+  bg6: commonTheme.yellow.a,
 
   // Text
   text1: '#F5F5F5',
@@ -69,6 +66,7 @@ export const darkTheme = {
   text5: '#4f43e2',
   text6: commonTheme.red,
   text7: commonTheme.primary.brand,
+  text8: commonTheme.primary.secondary,
 
   // Border
   border1: '#2c2c2c',
@@ -78,6 +76,7 @@ export const darkTheme = {
   // Button
   btn1: '#1A73E8',
   btn2: '#404040',
+  btn3: commonTheme.yellow.a,
 
   // Icons
   icon1: '#D9D9D9',
@@ -96,7 +95,7 @@ export const lightTheme = {
   bg3: '#F8F8F8',
   bg4: '#cecece',
   bg5: '#f2f2f2',
-  bg6: commonTheme.orange.linearGradient,
+  bg6: commonTheme.primary.brand,
 
   // Text
   text1: commonTheme.black,
@@ -106,6 +105,7 @@ export const lightTheme = {
   text5: '#4f43e2',
   text6: '#ff4747',
   text7: commonTheme.primary.brand,
+  text8: commonTheme.primary.secondary,
 
   // Border
   border1: '#e3e2e2',
@@ -115,6 +115,7 @@ export const lightTheme = {
   // Button
   btn1: '#282828',
   btn2: commonTheme.white,
+  btn3: commonTheme.yellow.a,
 
   // Icons
   icon1: commonTheme.black,

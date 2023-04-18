@@ -27,8 +27,6 @@ export const Wrapper = styled.div`
 `;
 
 export const ConnectWalletButton = styled(Button)`
-  background: ${({ theme }) => theme.bg6};
   padding: ${px2rem(15)} ${px2rem(24)};
-  color: ${({ theme }) => theme.text1};
   min-width: ${px2rem(230)};
 `;

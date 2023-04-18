@@ -13,7 +13,7 @@ import { UploadFileContainer } from '../Dapps.styled';
 import ModalCreateToken from './ModalCreateToken';
 import { StyledTokens } from './Tokens.styled';
 
-const EXPLORER_URL = TRUSTLESS_COMPUTER_CHAIN_INFO.explorers[0].url;
+export const EXPLORER_URL = TRUSTLESS_COMPUTER_CHAIN_INFO.explorers[0].url;
 
 const Tokens = () => {
   const TABLE_HEADINGS = ['Token number', 'Name', 'Symbol', 'Supply', 'Creator'];

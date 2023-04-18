@@ -86,7 +86,7 @@ export const TabContainer = styled.div`
   .explore-btn {
     display: flex;
     align-items: center;
-    background: ${({ theme }: { theme: DefaultTheme }) => theme.orange.linearGradient};
+    background: ${({ theme }: { theme: DefaultTheme }) => theme.btn3};
     padding: ${px2rem(5)} ${px2rem(14)};
     gap: ${px2rem(4)};
     * {

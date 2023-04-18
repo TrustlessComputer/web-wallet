@@ -1,10 +1,12 @@
 import styled, { DefaultTheme } from 'styled-components';
 
-export const StyledButton = styled.button<{ bg: string }>`
+export const StyledButton = styled.button<{ bg: string; color: string }>`
   --bg-color: ${({ bg, theme }: { bg: string; theme: DefaultTheme }) => (theme as any)[bg] || theme.white};
+  --text-color: ${({ color, theme }: { color: string; theme: DefaultTheme }) => (theme as any)[color] || theme.text8};
 
-  border-radius: 2px !important;
+  border-radius: 200px;
   background-color: var(--bg-color);
+  color: var(--text-color);
   border: none;
   padding: 0;
   outline: none;

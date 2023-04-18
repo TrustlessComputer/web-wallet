@@ -1,4 +1,5 @@
 import { Transaction } from 'web3-eth';
+import * as TC_SDK from 'trustless-computer-sdk';
 
 export interface ICustomTransaction extends Transaction {
   Hex: string;
@@ -38,4 +39,11 @@ export interface IUpdateStatusTxPayload {
   tx_hash: string[];
   btc_hash?: string;
   status?: string;
+}
+
+export interface ITCTxDetail extends TC_SDK.TCTxDetail {
+  dappURL?: string;
+  method?: string;
+  btcHash?: string;
+  statusCode?: 0 | 1 | 2 | 3; // pending | processing | success | failed
 }

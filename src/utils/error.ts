@@ -1,11 +1,16 @@
 export const ERROR_CODE = {
   CONNECT_WALLET: '0',
+  EMPTY_USER: '-1',
 };
 
 export const ERROR_MESSAGE = {
   [ERROR_CODE.CONNECT_WALLET]: {
     message: 'Can not connect wallet.',
     desc: 'Can not connect wallet.',
+  },
+  [ERROR_CODE.EMPTY_USER]: {
+    message: 'Please reconnect wallet.',
+    desc: 'Please reconnect wallet.',
   },
 };
 
