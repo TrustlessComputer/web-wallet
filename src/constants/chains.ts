@@ -1,9 +1,6 @@
 import { TC_NETWORK_RPC } from '@/configs';
 
 export enum SupportedChainId {
-  MAINNET = 1,
-  GOERLI = 5,
-  POLYGON_MUMBAI = 80001,
   TRUSTLESS_COMPUTER = 22213,
 }
 
