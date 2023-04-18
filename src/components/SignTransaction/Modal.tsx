@@ -113,7 +113,7 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
                   {!isLoading && <Table tableHead={TABLE_HEADINGS} data={tokenDatas} className={'token-table'} />}
                 </WrapperTx>
                 <div className="btn-wrapper">
-                  <Button type="submit" className="btn-cancel" onClick={onHide}>
+                  <Button type="button" className="btn-cancel" onClick={onHide}>
                     <Text size="medium" fontWeight="medium" className="text-cancel">
                       Cancel
                     </Text>
