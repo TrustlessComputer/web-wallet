@@ -5,7 +5,6 @@ import { useWeb3React } from '@web3-react/core';
 import { useContext, useState } from 'react';
 import useBitcoin from '../useBitcoin';
 import { AssetsContext } from '@/contexts/assets-context';
-import { updateStatusTransaction } from '@/services/profile';
 import { toast } from 'react-hot-toast';
 import { useCurrentUser } from '@/state/user/hooks';
 import bitcoinStorage from '@/utils/bitcoin-storage';
