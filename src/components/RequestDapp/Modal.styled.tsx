@@ -27,7 +27,6 @@ export const StyledSignModal = styled(MainModal)`
   }
 
   .btn-wrapper {
-    margin-top: ${px2rem(32)};
     flex: 1;
     display: flex;
     gap: ${px2rem(24)};
