@@ -5,6 +5,7 @@
   "author": "bolt",
   "scripts": {
     "dev": "vite",
+    "dev-clean": "rm -rf ./node_modules/.vite && yarn dev",
     "build": "vite build",
     "serve": "vite preview",
     "serve:dist": "http-server dist",

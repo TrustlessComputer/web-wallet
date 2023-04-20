@@ -171,7 +171,7 @@ const Transactions = React.memo(() => {
   return (
     <StyledTransactionProfile>
       {isLoading && <Spinner />}
-      <Table tableHead={TABLE_HEADINGS} data={transactionsData} className={'transaction-table'} isLoading={isLoading} />
+      <Table tableHead={TABLE_HEADINGS} data={transactionsData} className={'transaction-table'} />
     </StyledTransactionProfile>
   );
 });
