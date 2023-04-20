@@ -8,6 +8,7 @@ import { AssetsContext } from '@/contexts/assets-context';
 import { updateStatusTransaction } from '@/services/profile';
 import { toast } from 'react-hot-toast';
 import { useCurrentUser } from '@/state/user/hooks';
+import bitcoinStorage from '@/utils/bitcoin-storage';
 
 interface IParams {
   chainId?: SupportedChainId;
@@ -76,15 +77,27 @@ const useBatchCompleteUninscribedTransaction = (args: IParams) => {
 
       if (res && res.length > 0) {
         toast.success('Transaction completed successfully');
-        const payloadUpdate = res.map(txs => {
-          return {
-            tx_hash: [...txs.tcTxIDs],
-            btc_hash: txs.revealTxID,
-            status: 'pending',
-          };
-        });
-
-        updateStatusTransaction(payloadUpdate);
+        for (const submited of res) {
+          const { tcTxIDs, revealTxID } = submited;
+          unInscribedTxDetails.forEach(tx => {
+            const isExist = tcTxIDs.some(hash => hash.toLowerCase() === tx.Hash.toLowerCase());
+            if (isExist) {
+              bitcoinStorage.updateStorageTransaction(user?.walletAddress || '', {
+                ...tx,
+                statusCode: 1,
+                btcHash: revealTxID,
+              });
+            }
+          });
+        }
+        // const payloadUpdate = res.map(txs => {
+        //   return {
+        //     tx_hash: [...txs.tcTxIDs],
+        //     btc_hash: txs.revealTxID,
+        //     status: 'pending',
+        //   };
+        // });
+        // updateStatusTransaction(payloadUpdate);
         setTransactionConfirmed(true);
         // console.log('updateConfirm', updateConfirm);
       }

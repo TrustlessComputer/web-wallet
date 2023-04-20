@@ -48,6 +48,8 @@ class BitCoinStorage {
     if (index !== -1) {
       txs[index] = tx;
       localStorage.set(key, txs);
+    } else {
+      this.addStorageTransactions(tcAddress, tx);
     }
   };
 }

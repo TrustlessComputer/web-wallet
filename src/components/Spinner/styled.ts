@@ -14,7 +14,7 @@ const Container = styled.div`
     height: 30px;
     border: 3px solid transparent;
     border-radius: 50%;
-    border-right-color: ${({ theme }) => theme.btn2};
+    border-right-color: ${({ theme }) => theme.text1};
     animation: spinner-anim 0.8s linear infinite;
   }
 

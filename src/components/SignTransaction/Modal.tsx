@@ -66,14 +66,14 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
         feeRatePerByte: feeRate.fastestFee,
       });
       for (const submited of resp) {
-        const { tcTxIDs, revealTxHex } = submited;
+        const { tcTxIDs, revealTxID } = submited;
         pendingTxs.forEach(tx => {
           const isExist = tcTxIDs.some(hash => hash.toLowerCase() === tx.Hash.toLowerCase());
           if (isExist) {
             bitcoinStorage.updateStorageTransaction(user?.walletAddress || '', {
               ...tx,
               statusCode: 1,
-              btcHash: revealTxHex,
+              btcHash: revealTxID,
             });
           }
         });

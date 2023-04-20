@@ -14,6 +14,7 @@ import Text from '@/components/Text';
 import moment from 'moment';
 import * as TC_SDK from 'trustless-computer-sdk';
 import { TC_NETWORK_RPC } from '@/configs';
+import Spinner from '@/components/Spinner';
 
 const TABLE_HEADINGS = ['Event', 'Transaction ID', 'From', 'To', 'Time', 'Status'];
 
@@ -73,14 +74,16 @@ const Transactions = React.memo(() => {
       const localTxs = [];
       for (const local of localFilter) {
         const hash = local.Hash;
-        const statusCode = await getStatusCode(hash, user.walletAddress);
+        let shouldUpdateStorage = local?.statusCode !== 2;
+        const statusCode = local?.statusCode === 2 ? 2 : await getStatusCode(hash, user.walletAddress);
         const _tx = {
           ...local,
           statusCode,
         };
-        if (statusCode === 1) {
+        if (statusCode === 2 && shouldUpdateStorage) {
           bitcoinStorage.updateStorageTransaction(user.walletAddress, {
             ..._tx,
+            statusCode: 2,
           });
         }
         localTxs.push(_tx);
@@ -157,10 +160,17 @@ const Transactions = React.memo(() => {
 
   React.useEffect(() => {
     debounceGetTransactions();
+    let interval = setInterval(() => {
+      debounceGetTransactions();
+    }, 20000);
+    return () => {
+      clearInterval(interval);
+    };
   }, [user?.walletAddress]);
 
   return (
     <StyledTransactionProfile>
+      {isLoading && <Spinner />}
       <Table tableHead={TABLE_HEADINGS} data={transactionsData} className={'transaction-table'} isLoading={isLoading} />
     </StyledTransactionProfile>
   );
