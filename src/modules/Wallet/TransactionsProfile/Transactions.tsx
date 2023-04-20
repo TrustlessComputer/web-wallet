@@ -11,10 +11,10 @@ import copy from 'copy-to-clipboard';
 import { toast } from 'react-hot-toast';
 import IcCopy from '@/assets/icons/ic-copy.svg';
 import Text from '@/components/Text';
-import moment from 'moment';
 import * as TC_SDK from 'trustless-computer-sdk';
 import { TC_NETWORK_RPC } from '@/configs';
 import Spinner from '@/components/Spinner';
+import { formatUnixDateTime } from '@/utils/time';
 
 const TABLE_HEADINGS = ['Event', 'Transaction ID', 'From', 'To', 'Time', 'Status'];
 
@@ -118,7 +118,12 @@ const Transactions = React.memo(() => {
         break;
     }
 
-    const localDateString = trans?.time ? moment(trans?.time).local().format('YYYY-MM-DD HH:mm:ss') : '-';
+    console.log('SANG TEST: ', trans?.time);
+    const localDateString = trans?.time
+      ? formatUnixDateTime({
+          dateTime: Number(trans.time) / 1000,
+        })
+      : '-';
 
     return {
       id: trans.Hash,
