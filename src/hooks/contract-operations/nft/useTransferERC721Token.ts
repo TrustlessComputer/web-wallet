@@ -16,7 +16,7 @@ export interface ITransferERC721TokenParams {
   contractAddress: string;
 }
 
-const useTransferERC721Token: ContractOperationHook<ITransferERC721TokenParams, Promise<Transaction | null>> = () => {
+const useTransferERC721Token: ContractOperationHook<ITransferERC721TokenParams, Transaction | null> = () => {
   const { account, provider } = useWeb3React();
   const { btcBalance, feeRate } = useContext(AssetsContext);
 

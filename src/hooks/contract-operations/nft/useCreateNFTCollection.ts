@@ -14,10 +14,7 @@ export interface ICreateNFTCollectionParams {
   symbol: string;
 }
 
-const useCreateNFTCollection: ContractOperationHook<
-  ICreateNFTCollectionParams,
-  Promise<DeployContractResponse | null>
-> = () => {
+const useCreateNFTCollection: ContractOperationHook<ICreateNFTCollectionParams, DeployContractResponse | null> = () => {
   const { account, provider } = useWeb3React();
   const { btcBalance, feeRate } = useContext(AssetsContext);
 
