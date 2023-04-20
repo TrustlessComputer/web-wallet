@@ -118,7 +118,6 @@ const Transactions = React.memo(() => {
         break;
     }
 
-    console.log('SANG TEST: ', trans?.time);
     const localDateString = trans?.time
       ? formatUnixDateTime({
           dateTime: Number(trans.time) / 1000,
