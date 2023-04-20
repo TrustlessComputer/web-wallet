@@ -2,7 +2,9 @@ name: Docker develop build
 
 on:
   push:
-    branches: [ "staging", "develop"]
+    branches:
+      - "staging"
+      - "develop"
 
 env:
   DOCKER_REGISTRY: gcr.io
