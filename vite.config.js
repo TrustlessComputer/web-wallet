@@ -27,7 +27,7 @@ export default defineConfig(({ mode }) => {
     plugins: [
       visualizer({
         template: 'treemap', // or sunburst
-        open: true,
+        open: false,
         gzipSize: true,
         brotliSize: true,
         filename: 'analice.html',
