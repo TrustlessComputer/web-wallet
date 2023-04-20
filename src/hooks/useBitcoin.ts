@@ -168,13 +168,11 @@ const useBitcoin = () => {
 
     return unInscribedTxDetails.map(tx => {
       const storageTx = storageTxs.find(item => item.Hash.toLowerCase() === tx.Hash.toLowerCase());
-      if (!storageTx) return tx;
+      if (!storageTx) return { ...tx, statusCode: 0 };
       return {
+        ...storageTx,
         ...tx,
-        dappURL: storageTx.dappURL,
-        method: storageTx.method,
-        btcHash: storageTx.btcHash,
-        statusCode: storageTx.statusCode, // pending | processing | success | failed
+        statusCode: 0,
       };
     });
   };

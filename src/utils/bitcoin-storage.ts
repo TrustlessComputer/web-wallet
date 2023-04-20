@@ -33,8 +33,22 @@ class BitCoinStorage {
   addStorageTransactions = (tcAddress: string, tx: ITCTxDetail) => {
     const key = this.getTxsKey(tcAddress);
     const txs = this.getStorageTransactions(tcAddress);
-    txs?.push(tx);
+    const time = new Date().getTime();
+    txs?.push({
+      ...tx,
+      time: `${time}`,
+    });
     localStorage.set(key, txs);
+  };
+  updateStorageTransaction = (tcAddress: string, tx: ITCTxDetail) => {
+    if (!tcAddress) return;
+    const key = this.getTxsKey(tcAddress);
+    const txs = this.getStorageTransactions(tcAddress);
+    const index = txs.findIndex(p => p.Hash.toLowerCase() === tx.Hash.toLowerCase());
+    if (index !== -1) {
+      txs[index] = tx;
+      localStorage.set(key, txs);
+    }
   };
 }
 

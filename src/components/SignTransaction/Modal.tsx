@@ -16,6 +16,7 @@ import { ellipsisCenter } from '@/utils';
 import { AssetsContext } from '@/contexts/assets-context';
 import Table from '@/components/Table';
 import { ITCTxDetail } from '@/interfaces/transaction';
+import bitcoinStorage from '@/utils/bitcoin-storage';
 
 const TABLE_HEADINGS = ['Hash', 'Event type', 'Dapp URL'];
 
@@ -60,11 +61,25 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
 
   const handleSubmit = async () => {
     try {
-      await createBatchInscribeTxs({
+      const resp = await createBatchInscribeTxs({
         tcTxDetails: [...pendingTxs],
         feeRatePerByte: feeRate.fastestFee,
       });
-      console.log('submit');
+      for (const submited of resp) {
+        const { tcTxIDs, revealTxHex } = submited;
+        pendingTxs.forEach(tx => {
+          const isExist = tcTxIDs.some(hash => hash.toLowerCase() === tx.Hash.toLowerCase());
+          if (isExist) {
+            bitcoinStorage.updateStorageTransaction(user?.walletAddress || '', {
+              ...tx,
+              statusCode: 1,
+              btcHash: revealTxHex,
+            });
+          }
+        });
+      }
+      toast('Sign transaction successfully');
+      onHide();
     } catch (err: any) {
       toast.error(err.message);
     }
