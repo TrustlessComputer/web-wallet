@@ -53,6 +53,15 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
           method: signData.method,
         };
       });
+
+      if (signData && signData.hash) {
+        const _signTx = pendingTxs.find(tx => tx.Hash.toLowerCase() === signData.hash.toLowerCase());
+        if (_signTx) {
+          bitcoinStorage.updateStorageTransaction(user.walletAddress, {
+            ..._signTx,
+          });
+        }
+      }
       setPendingTxs(pendingTxs);
       const Hexs = await Promise.all(
         pendingTxs.map(({ Hash }) => {
@@ -84,11 +93,7 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
     }
   }, [sizeByte, pendingTxs]);
 
-  console.log('SANG TEST: ', {
-    txFee,
-  });
-
-  const debounceGetPendingTxs = React.useCallback(debounce(getPendingTxs, 200), [user?.walletAddress]);
+  const debounceGetPendingTxs = React.useCallback(debounce(getPendingTxs, 200), [user?.walletAddress, signData]);
 
   const handleSubmit = async () => {
     try {
