@@ -2,26 +2,24 @@ import Empty from '@/components/Empty';
 import Table from '@/components/Table';
 import { TRUSTLESS_COMPUTER_CHAIN_INFO } from '@/constants/chains';
 import { getTokensWallet } from '@/services/profile';
-import { getUserSelector } from '@/state/user/selector';
 import { decimalToExponential } from '@/utils/format';
 import { debounce } from 'lodash';
 import { useEffect, useState } from 'react';
 import { Spinner } from 'react-bootstrap';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { useSelector } from 'react-redux';
 import { StyledTokenProfile } from './TokenProfile.styled';
 import TransferModal from './TransferModal';
 import useContractOperation from '@/hooks/contract-operations/useContractOperation';
 import useGetTokenBalance, { IGetTokenBalance } from '@/hooks/contract-operations/token/useGetTokenBalance';
 import { IToken } from '@/interfaces/token';
+import { useCurrentUser } from '@/state/user/hooks';
 
 const EXPLORER_URL = TRUSTLESS_COMPUTER_CHAIN_INFO.explorers[0].url;
 
 const LIMIT_PAGE = 50;
 
 const TokensProfile = () => {
-  const user = useSelector(getUserSelector);
-
+  const user = useCurrentUser();
   // const {run : getTokenBalance} = useContractOperation
 
   const { run: getTokenBalance } = useContractOperation<IGetTokenBalance, string>({
