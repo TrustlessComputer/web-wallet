@@ -17,6 +17,9 @@ import { AssetsContext } from '@/contexts/assets-context';
 import Table from '@/components/Table';
 import { ITCTxDetail } from '@/interfaces/transaction';
 import bitcoinStorage from '@/utils/bitcoin-storage';
+import Web3 from 'web3';
+import format from '@/utils/amount';
+import BigNumber from 'bignumber.js';
 
 const TABLE_HEADINGS = ['Hash', 'Event type', 'Dapp URL'];
 
@@ -32,8 +35,9 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
   const [submitting, setSubmitting] = React.useState(false);
   const [pendingTxs, setPendingTxs] = React.useState<ITCTxDetail[]>([]);
   const user = useCurrentUser();
+  const [sizeByte, setSizeByte] = React.useState<number | undefined>(undefined);
 
-  const { getUnInscribedTransactionDetailByAddress, createBatchInscribeTxs } = useBitcoin();
+  const { getUnInscribedTransactionDetailByAddress, createBatchInscribeTxs, getTCTransactionByHash } = useBitcoin();
 
   const getPendingTxs = async () => {
     try {
@@ -50,17 +54,39 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
         };
       });
       setPendingTxs(pendingTxs);
-      // const Hexs = await Promise.all(
-      //   pendingTxs.map(({ Hash }) => {
-      //     return getTCTransactionByHash(Hash);
-      //   }),
-      // );
+      const Hexs = await Promise.all(
+        pendingTxs.map(({ Hash }) => {
+          return getTCTransactionByHash(Hash);
+        }),
+      );
+      const sizeByte: number = Hexs.reduce((prev, curr) => {
+        const currSize = Web3.utils.hexToBytes(curr).length;
+        return currSize + prev;
+      }, 0);
+      setSizeByte(sizeByte);
     } catch (e) {
       // handle error
     } finally {
       setIsLoading(false);
     }
   };
+
+  const txFee = React.useMemo(() => {
+    if (!pendingTxs.length || !sizeByte) return undefined;
+    try {
+      const _txFee = TC_SDK.estimateInscribeFee({
+        feeRatePerByte: feeRate.fastestFee,
+        tcTxSizeByte: sizeByte,
+      });
+      return _txFee.totalFee.integerValue(BigNumber.ROUND_CEIL).toNumber();
+    } catch (e) {
+      return undefined;
+    }
+  }, [sizeByte, pendingTxs]);
+
+  console.log('SANG TEST: ', {
+    txFee,
+  });
 
   const debounceGetPendingTxs = React.useCallback(debounce(getPendingTxs, 200), [user?.walletAddress]);
 
@@ -140,7 +166,22 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
               <div className="container">
                 <WrapperTx>
                   {!isLoading && !!pendingTxs.length && (
-                    <Table tableHead={TABLE_HEADINGS} data={tokenDatas} className={'token-table'} />
+                    <>
+                      <Table tableHead={TABLE_HEADINGS} data={tokenDatas} className={'token-table'} />
+                      <div className="row-bw">
+                        <Text size="medium" fontWeight="semibold">
+                          Transaction Fee
+                        </Text>
+                        <Text size="large" fontWeight="semibold">
+                          {format.formatAmount({
+                            decimals: 8,
+                            originalAmount: txFee,
+                            clipAmount: false,
+                          })}{' '}
+                          BTC
+                        </Text>
+                      </div>
+                    </>
                   )}
                 </WrapperTx>
                 <div className="btn-wrapper">

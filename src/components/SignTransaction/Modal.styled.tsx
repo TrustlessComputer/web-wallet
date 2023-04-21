@@ -53,4 +53,11 @@ export const StyledSignModal = styled(MainModal)`
 
 export const WrapperTx = styled.div`
   min-height: 60px;
+  .row-bw {
+    display: flex;
+    padding: 8px;
+    justify-content: space-between;
+    .right {
+    }
+  }
 `;
