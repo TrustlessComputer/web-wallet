@@ -50,7 +50,11 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
         };
       });
       setPendingTxs(pendingTxs);
-      // const test = await getTCTransactionByHash(pendingTxs[0].Hash);
+      // const Hexs = await Promise.all(
+      //   pendingTxs.map(({ Hash }) => {
+      //     return getTCTransactionByHash(Hash);
+      //   }),
+      // );
     } catch (e) {
       // handle error
     } finally {

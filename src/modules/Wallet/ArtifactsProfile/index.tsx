@@ -18,8 +18,7 @@ const ArtifactsProfile = () => {
   const { account } = useWeb3React();
 
   const profileWallet = account;
-  const pageSize = LIMIT_PAGE;
-
+  const [pageSize] = useState(LIMIT_PAGE);
   const [isFetching, setIsFetching] = useState(false);
   const [inscriptions, setInscriptions] = useState<IInscription[]>([]);
 
@@ -38,7 +37,6 @@ const ArtifactsProfile = () => {
         setInscriptions(data);
       }
     } catch (error) {
-      // handle error
     } finally {
       setIsFetching(false);
     }
@@ -95,6 +93,7 @@ const ArtifactsProfile = () => {
                     title1={formatItemName(item.name, item.contentType)}
                     title2={shortenAddress(item.owner, 4)}
                     title3={`Artifact #${item.tokenId}`}
+                    owner={item.owner}
                   />
                 );
               })}
