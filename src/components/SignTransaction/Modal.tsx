@@ -18,8 +18,8 @@ import Table from '@/components/Table';
 import { ITCTxDetail } from '@/interfaces/transaction';
 import bitcoinStorage from '@/utils/bitcoin-storage';
 import Web3 from 'web3';
-import format from '@/utils/amount';
 import BigNumber from 'bignumber.js';
+import { formatBTCPrice } from '@/utils/format';
 
 const TABLE_HEADINGS = ['Hash', 'Event type', 'Dapp URL'];
 
@@ -178,12 +178,7 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
                           Transaction Fee
                         </Text>
                         <Text size="large" fontWeight="semibold">
-                          {format.formatAmount({
-                            decimals: 8,
-                            originalAmount: txFee,
-                            clipAmount: false,
-                          })}{' '}
-                          BTC
+                          {formatBTCPrice(txFee || 0)} BTC
                         </Text>
                       </div>
                     </>
