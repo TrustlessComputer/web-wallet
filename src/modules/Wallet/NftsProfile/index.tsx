@@ -25,7 +25,18 @@ const NftsProfile = () => {
   const fetchCollections = async (page = 1, isFetchMore = false) => {
     try {
       setIsFetching(true);
-      const data = await getCollectionsByItemsOwned({ walletAddress: profileWallet, limit: pageSize, page: page });
+      const data: Array<any> = (
+        await getCollectionsByItemsOwned({
+          walletAddress: profileWallet,
+          limit: pageSize,
+          page: page,
+        })
+      ).filter(
+        (item: any) =>
+          !['0x8b46f89bba2b1c1f9ee196f43939476e79579798', '0x16efdc6d3f977e39dac0eb0e123feffed4320bc0'].includes(
+            item.contract.toLowerCase(),
+          ),
+      );
       if (isFetchMore) {
         setCollections(prev => [...prev, ...data]);
       } else {
