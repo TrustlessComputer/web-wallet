@@ -177,6 +177,12 @@ const useBitcoin = () => {
     });
   };
 
+  const getTCTransactionByHash = async (tcTxID: string): Promise<string> => {
+    if (!tcTxID) throw Error('Address not found');
+    const { Hex } = (await tcClient.getTCTxByHash(tcTxID)) as any;
+    return Hex;
+  };
+
   return {
     createInscribeTx,
     createBatchInscribeTxs,
@@ -184,6 +190,7 @@ const useBitcoin = () => {
     getNonceInscribeable,
     getUnInscribedTransactionByAddress,
     getUnInscribedTransactionDetailByAddress,
+    getTCTransactionByHash,
   };
 };
 

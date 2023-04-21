@@ -49,8 +49,8 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
           method: signData.method,
         };
       });
-
       setPendingTxs(pendingTxs);
+      // const test = await getTCTransactionByHash(pendingTxs[0].Hash);
     } catch (e) {
       // handle error
     } finally {
@@ -106,10 +106,14 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
                 {tx.method || '-'}
               </Text>
             ),
-            url: (
-              <Text color="text1" size="medium">
-                {tx.dappURL || '-'}
-              </Text>
+            url: tx.dappURL ? (
+              <a href={tx.dappURL} target="_blank">
+                <Text color="text1" size="medium">
+                  {tx.dappURL || '-'}
+                </Text>
+              </a>
+            ) : (
+              '-'
             ),
           },
         };
