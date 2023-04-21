@@ -4,8 +4,6 @@ import { capitalizeFirstLetter, switchChain } from '@/utils';
 import { useWeb3React } from '@web3-react/core';
 import { useContext } from 'react';
 import useBitcoin from '../useBitcoin';
-import { useSelector } from 'react-redux';
-import { getIsAuthenticatedSelector } from '@/state/user/selector';
 import { AssetsContext } from '@/contexts/assets-context';
 import { useNavigate } from 'react-router-dom';
 import { ROUTE_PATH } from '@/constants/route-path';
@@ -28,8 +26,6 @@ const useContractOperation = <P, R>(args: IParams<P, R>): IContractOperationRetu
   const { call, dAppType } = operation();
   const { feeRate, getAvailableAssetsCreateTx } = useContext(AssetsContext);
   const { chainId: walletChainId } = useWeb3React();
-  const isAuthenticated = useSelector(getIsAuthenticatedSelector);
-  // const user = useSelector(getUserSelector);
   const user = useCurrentUser();
   const { createInscribeTx, getUnInscribedTransactionByAddress } = useBitcoin();
   const navigate = useNavigate();
@@ -48,8 +44,8 @@ const useContractOperation = <P, R>(args: IParams<P, R>): IContractOperationRetu
       // This function does not handle error
       // It delegates error to caller
 
-      if (!isAuthenticated || !user?.walletAddress) {
-        navigate(`${ROUTE_PATH.CONNECT_WALLET}?next=${window.location.href}`);
+      if (!user?.walletAddress) {
+        navigate(`${ROUTE_PATH.HOME}?next=${window.location.href}`);
         throw Error('Please connect wallet to continue.');
       }
 

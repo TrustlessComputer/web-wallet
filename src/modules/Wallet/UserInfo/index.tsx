@@ -24,7 +24,6 @@ type Props = {
 };
 
 const UserInfo = ({ className }: Props) => {
-  // const user = useSelector(getUserSelector);
   const user = useCurrentUser();
   const { account } = useWeb3React();
   const { btcBalance, bvmBalance } = useContext(AssetsContext);

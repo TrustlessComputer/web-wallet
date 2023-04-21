@@ -9,6 +9,7 @@ import * as TC_SDK from 'trustless-computer-sdk';
 import { formatBTCPrice } from '@/utils/format';
 import { getContract } from '@/utils';
 import { TRANSFER_TX_SIZE } from '@/configs';
+import { TransactionEventType } from '@/enums/transaction';
 
 export interface ITransferERC721TokenParams {
   to: string;
@@ -43,7 +44,7 @@ const useTransferERC721Token: ContractOperationHook<ITransferERC721TokenParams, 
           );
         }
 
-        const transaction = await contract.connect(provider.getSigner()).safeTransferFrom(account, to, tokenId);
+        const transaction = await contract.connect(provider.getSigner()).transferFrom(account, to, tokenId);
 
         return transaction;
       }
@@ -56,6 +57,7 @@ const useTransferERC721Token: ContractOperationHook<ITransferERC721TokenParams, 
   return {
     call: call,
     dAppType: DAppType.ERC721,
+    transactionType: TransactionEventType.TRANSFER,
   };
 };
 
