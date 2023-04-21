@@ -23,7 +23,7 @@ interface IContractOperationReturn<P, R> {
 
 const useContractOperation = <P, R>(args: IParams<P, R>): IContractOperationReturn<P, R> => {
   const { operation, chainId = SupportedChainId.TRUSTLESS_COMPUTER, inscribeable = true } = args;
-  const { call, dAppType } = operation();
+  const { call, dAppType, transactionType } = operation();
   const { feeRate, getAvailableAssetsCreateTx } = useContext(AssetsContext);
   const { chainId: walletChainId } = useWeb3React();
   const user = useCurrentUser();
@@ -98,7 +98,7 @@ const useContractOperation = <P, R>(args: IParams<P, R>): IContractOperationRetu
         feeRatePerByte: feeRate.fastestFee,
       });
 
-      if (dAppType === DAppType.BNS) {
+      if (dAppType === DAppType.BNS || dAppType === DAppType.ERC721) {
         bitcoinStorage.addStorageTransactions(user.walletAddress, {
           From: user?.walletAddress,
           Gas: 0,
@@ -114,6 +114,7 @@ const useContractOperation = <P, R>(args: IParams<P, R>): IContractOperationRetu
           Value: 0,
           btcHash: revealTxID,
           statusCode: 1,
+          method: `${transactionType} ${dAppType}`,
         });
       }
 

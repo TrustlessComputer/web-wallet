@@ -8,6 +8,7 @@ import BigNumber from 'bignumber.js';
 import { formatBTCPrice } from '@/utils/format';
 import { getContract } from '@/utils';
 import { TRANSFER_TX_SIZE } from '@/configs';
+import { TransactionEventType } from '@/enums/transaction';
 
 export interface ITransferERC20TokenParams {
   to: string;
@@ -55,6 +56,7 @@ const useTransferERC20Token: ContractOperationHook<ITransferERC20TokenParams, bo
   return {
     call: call,
     dAppType: DAppType.ERC20,
+    transactionType: TransactionEventType.TRANSFER,
   };
 };
 

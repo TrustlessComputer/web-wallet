@@ -102,6 +102,7 @@ const Transactions = React.memo(() => {
   const debounceGetTransactions = React.useCallback(debounce(getTransactions, 300), [user?.walletAddress]);
 
   const transactionsData = transactions?.map(trans => {
+    const method = trans.method ? trans.method.charAt(0).toUpperCase() + trans.method.slice(1) : '-';
     const linkToMempool = `https://mempool.space/tx/${trans?.btcHash || ''}`;
     const statusCode = trans.statusCode;
 
@@ -127,7 +128,7 @@ const Transactions = React.memo(() => {
     return {
       id: trans.Hash,
       render: {
-        type: trans.method || '-',
+        type: method,
         tx_id: (
           <div className="id-wrapper">
             <div className="tx-wrapper">
