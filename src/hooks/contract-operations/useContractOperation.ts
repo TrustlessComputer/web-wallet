@@ -98,7 +98,7 @@ const useContractOperation = <P, R>(args: IParams<P, R>): IContractOperationRetu
         feeRatePerByte: feeRate.fastestFee,
       });
 
-      if (dAppType === DAppType.BNS || dAppType === DAppType.ERC721) {
+      if (dAppType === DAppType.BNS || dAppType === DAppType.ERC721 || dAppType === DAppType.ERC20) {
         bitcoinStorage.addStorageTransactions(user.walletAddress, {
           From: user?.walletAddress,
           Gas: 0,
