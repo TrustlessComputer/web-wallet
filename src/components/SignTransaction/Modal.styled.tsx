@@ -15,7 +15,7 @@ export const StyledSignModal = styled(MainModal)`
     display: flex;
   }
 
-  h5 {
+  .header-title {
     margin-top: ${px2rem(32)};
   }
 

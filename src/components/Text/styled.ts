@@ -27,6 +27,10 @@ const BaseText = styled.p<{ color: string | undefined; align: string; maxWidth: 
     font-size: ${px2rem(18)};
     line-height: 160%;
   }
+  &.size-h5 {
+    font-size: ${px2rem(24)};
+    line-height: 160%;
+  }
 
   // FONT-WEIGHT
   &.weight-bold {

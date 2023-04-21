@@ -29,6 +29,7 @@ interface IProps {
 const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
   const { feeRate } = useContext(AssetsContext);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [submitting, setSubmitting] = React.useState(false);
   const [pendingTxs, setPendingTxs] = React.useState<ITCTxDetail[]>([]);
   const user = useCurrentUser();
 
@@ -61,6 +62,7 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
 
   const handleSubmit = async () => {
     try {
+      setSubmitting(true);
       const resp = await createBatchInscribeTxs({
         tcTxDetails: [...pendingTxs],
         feeRatePerByte: feeRate.fastestFee,
@@ -78,10 +80,12 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
           }
         });
       }
-      toast('Sign transaction successfully');
+      toast.success('Sign transaction successfully');
       onHide();
     } catch (err: any) {
       toast.error(err.message);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -93,17 +97,17 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
           id: `transaction-${tx?.Hash}}`,
           render: {
             hash: (
-              <Text color="text8" size="medium">
+              <Text color="text1" size="medium">
                 {ellipsisCenter({ str: tx.Hash, limit: 5 })}
               </Text>
             ),
             event: (
-              <Text color="text8" size="medium">
+              <Text color="text1" size="medium">
                 {tx.method || '-'}
               </Text>
             ),
             url: (
-              <Text color="text8" size="medium">
+              <Text color="text1" size="medium">
                 {tx.dappURL || '-'}
               </Text>
             ),
@@ -119,13 +123,17 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
   return (
     <StyledSignModal show={show} centered>
       <Modal.Body>
-        <h5 className="font-medium mb-24">SIGN TRANSACTION</h5>
+        <Text size="h5" className="font-medium mb-24 header-title">
+          SIGN TRANSACTION
+        </Text>
         <Formik key="sign" initialValues={{}} onSubmit={handleSubmit}>
           {({ handleSubmit }) => (
             <form onSubmit={handleSubmit}>
               <div className="container">
                 <WrapperTx>
-                  {!isLoading && <Table tableHead={TABLE_HEADINGS} data={tokenDatas} className={'token-table'} />}
+                  {!isLoading && !!pendingTxs.length && (
+                    <Table tableHead={TABLE_HEADINGS} data={tokenDatas} className={'token-table'} />
+                  )}
                 </WrapperTx>
                 <div className="btn-wrapper">
                   <Button type="button" className="btn-cancel" onClick={onHide}>
@@ -133,12 +141,12 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
                       Cancel
                     </Text>
                   </Button>
-                  <Button type="submit" className="btn-submit" disabled={isLoading}>
+                  <Button type="submit" className="btn-submit" disabled={submitting}>
                     <Text color="text8" size="medium" fontWeight="medium">
-                      Sign
+                      {submitting ? 'Processing...' : 'Sign'}
                     </Text>
                   </Button>
-                  <LoadingContainer loaded={!isLoading} />
+                  <LoadingContainer loaded={!isLoading && !submitting} />
                 </div>
               </div>
             </form>

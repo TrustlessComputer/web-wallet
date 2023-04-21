@@ -13,6 +13,7 @@ export const MainModal = styled(Modal)`
   .modal-content {
     border-radius: 2px;
     width: 650px;
+    background: ${({ theme }) => theme.bg1};
     ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToMedium`
       width: 90vw;
     `}
