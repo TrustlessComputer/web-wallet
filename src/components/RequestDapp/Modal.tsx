@@ -32,8 +32,10 @@ const ModalConfirmRequestDapp = React.memo(({ show, onHide, requestData }: IProp
         <IconSVG className="cursor-pointer" onClick={onHide} src={IcCloseModal} maxWidth={'22px'} />
       </Modal.Header>
       <Modal.Body>
-        <h5 className="font-medium mb-24">CONNECT REQUEST</h5>
-        <Text size="large" color="text2">
+        <Text size="h5" className="font-medium mb-24">
+          CONNECT REQUEST
+        </Text>
+        <Text size="large" color="text1">
           Approve this request to prove you have access to this wallet and you can start to use{' '}
           <a href={requestData?.redirectURL} target="_blank">
             {requestData?.redirectURL}
