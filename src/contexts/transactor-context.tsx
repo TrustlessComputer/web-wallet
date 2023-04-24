@@ -11,12 +11,14 @@ export interface ITransactorContext {
   signData?: TC_SDK.CallWalletPayload;
   requestData?: TC_SDK.RequestPayload;
   onCancelSign: () => void;
+  onShowSendBTCModal: () => void;
 }
 
 const initialValue: ITransactorContext = {
   signData: undefined,
   requestData: undefined,
   onCancelSign: () => null,
+  onShowSendBTCModal: () => null,
 };
 
 export const TransactorContext = React.createContext<ITransactorContext>(initialValue);
@@ -28,7 +30,7 @@ export const TransactorProvider: React.FC<PropsWithChildren> = ({
   const user = useCurrentUser();
   const [signData, setSignData] = React.useState<TC_SDK.CallWalletPayload | undefined>(undefined);
   const [requestData, setRequestData] = React.useState<TC_SDK.RequestPayload | undefined>(undefined);
-  const [showSendBTCModal, setShowSendBTCModal] = React.useState<boolean>(true);
+  const [showSendBTCModal, setShowSendBTCModal] = React.useState<boolean>(false);
   const navigate = useNavigate();
   const isShowSign = React.useMemo(() => {
     return !!signData && !!user;
@@ -78,11 +80,15 @@ export const TransactorProvider: React.FC<PropsWithChildren> = ({
     navigate(ROUTE_PATH.WALLET, { replace: true });
   };
 
+  const onShowSendBTCModal = () => {
+    setShowSendBTCModal(true);
+  };
+
   React.useEffect(getSignSearchParams, []);
 
   const contextValues = useMemo((): ITransactorContext => {
-    return { signData, onCancelSign, requestData };
-  }, [signData, requestData]);
+    return { signData, onCancelSign, requestData, onShowSendBTCModal };
+  }, [signData, requestData, onShowSendBTCModal]);
 
   return (
     <TransactorContext.Provider value={contextValues}>

@@ -18,6 +18,7 @@ import { ROUTE_PATH } from '@/constants/route-path';
 import format from '@/utils/amount';
 import Token from '@/constants/token';
 import { useCurrentUser } from '@/state/user/hooks';
+import { TransactorContext } from '@/contexts/transactor-context';
 
 type Props = {
   className?: string;
@@ -28,6 +29,7 @@ const UserInfo = ({ className }: Props) => {
   const { account } = useWeb3React();
   const { btcBalance, bvmBalance } = useContext(AssetsContext);
   const { onDisconnect } = useContext(WalletContext);
+  const { onShowSendBTCModal } = useContext(TransactorContext);
   const navigate = useNavigate();
 
   if (!user) return null;
@@ -47,6 +49,8 @@ const UserInfo = ({ className }: Props) => {
       navigate(ROUTE_PATH.WALLET);
     });
   };
+
+  const onClickShowSendBTC = () => onShowSendBTCModal();
 
   return (
     <StyledUserInfo className={className}>
@@ -97,8 +101,8 @@ const UserInfo = ({ className }: Props) => {
           )}
         </div>
         <div className="divider mb-24" />
-        <div className="disconnect-btn" onClick={onClickDisconnect}>
-          <img src={`${CDN_URL}/icons/ic-logout.svg`} alt="log out icon" />
+        <div className="disconnect-btn" onClick={onClickShowSendBTC}>
+          <img src={`${CDN_URL}/icons/swap.svg`} alt="log out icon" />
           <Text size="medium" color="white" className="font-ibm">
             Send BTC
           </Text>
