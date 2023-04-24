@@ -216,18 +216,17 @@ const useBitcoin = () => {
 
     const utxos = formatUTXOs(assets.txrefs);
     const inscriptions = formatInscriptions(assets.inscriptions_by_outputs);
-    const { txHex } = await TC_SDK.createTxSendBTC({
-      senderPrivateKey: privateKey,
-      utxos: utxos,
-      inscriptions: inscriptions,
-      paymentInfos: [
-        {
-          amount: new BigNumber(amount),
-          address: receiver,
-        },
-      ],
-      feeRatePerByte: feeRate,
-    });
+
+    const { txHex } = await TC_SDK.createTx(
+      privateKey,
+      utxos,
+      inscriptions,
+      '',
+      receiver,
+      new BigNumber(amount).multipliedBy(1e8),
+      feeRate,
+      true,
+    );
 
     // broadcast tx
     await TC_SDK.broadcastTx(txHex);

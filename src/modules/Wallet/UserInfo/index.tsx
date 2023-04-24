@@ -101,7 +101,7 @@ const UserInfo = ({ className }: Props) => {
           )}
         </div>
         <div className="divider mb-24" />
-        <div className="disconnect-btn" onClick={onClickShowSendBTC}>
+        <div className="send-btn" onClick={onClickShowSendBTC}>
           <img src={`${CDN_URL}/icons/swap.svg`} alt="log out icon" />
           <Text size="medium" color="white" className="font-ibm">
             Send BTC
