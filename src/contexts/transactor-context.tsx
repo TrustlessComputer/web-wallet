@@ -5,6 +5,7 @@ import * as TC_SDK from 'trustless-computer-sdk';
 import { useCurrentUser } from '@/state/user/hooks';
 import { ROUTE_PATH } from '@/constants/route-path';
 import ModalConfirmRequestDapp from '@/components/RequestDapp/Modal';
+import { SendBTCModal } from '@/components/SendBTC';
 
 export interface ITransactorContext {
   signData?: TC_SDK.CallWalletPayload;
@@ -27,8 +28,8 @@ export const TransactorProvider: React.FC<PropsWithChildren> = ({
   const user = useCurrentUser();
   const [signData, setSignData] = React.useState<TC_SDK.CallWalletPayload | undefined>(undefined);
   const [requestData, setRequestData] = React.useState<TC_SDK.RequestPayload | undefined>(undefined);
+  const [showSendBTCModal, setShowSendBTCModal] = React.useState<boolean>(true);
   const navigate = useNavigate();
-
   const isShowSign = React.useMemo(() => {
     return !!signData && !!user;
   }, [signData, user]);
@@ -88,6 +89,12 @@ export const TransactorProvider: React.FC<PropsWithChildren> = ({
       {children}
       <ModalSignTx show={isShowSign} onHide={onCancelSign} signData={signData} />
       <ModalConfirmRequestDapp show={isShowRequest} onHide={onCancelRequest} requestData={requestData} />
+      <SendBTCModal
+        show={showSendBTCModal}
+        onHide={() => {
+          setShowSendBTCModal(false);
+        }}
+      />
     </TransactorContext.Provider>
   );
 };

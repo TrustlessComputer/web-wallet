@@ -100,6 +100,12 @@ const UserInfo = ({ className }: Props) => {
         <div className="disconnect-btn" onClick={onClickDisconnect}>
           <img src={`${CDN_URL}/icons/ic-logout.svg`} alt="log out icon" />
           <Text size="medium" color="white" className="font-ibm">
+            Send BTC
+          </Text>
+        </div>
+        <div className="disconnect-btn" onClick={onClickDisconnect}>
+          <img src={`${CDN_URL}/icons/ic-logout.svg`} alt="log out icon" />
+          <Text size="medium" color="white" className="font-ibm">
             Disconnect
           </Text>
         </div>

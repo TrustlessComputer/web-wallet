@@ -18,9 +18,9 @@ export interface ISendInsProps {
 }
 
 export interface ISendBTCProps {
-  receiverAddress: string;
+  receiver: string;
   feeRate: number;
-  amount: number;
+  amount: string;
 }
 
 export interface ISignKeyResp {
@@ -44,6 +44,10 @@ export interface ICreateInscribeResponse {
   revealTxHex: string;
   revealTxID: string;
   totalFee: BigNumber;
+}
+
+export interface IInscriptionByOutput {
+  [key: string]: TC_SDK.Inscription[];
 }
 
 const useBitcoin = () => {
@@ -183,6 +187,52 @@ const useBitcoin = () => {
     return Hex;
   };
 
+  const formatUTXOs = (txrefs: TC_SDK.UTXO[]) => {
+    const utxos: TC_SDK.UTXO[] = (txrefs || []).map(utxo => ({
+      tx_hash: utxo.tx_hash,
+      tx_output_n: new BigNumber(utxo.tx_output_n).toNumber(),
+      value: new BigNumber(utxo.value),
+    }));
+    return utxos;
+  };
+  const formatInscriptions = (inscriptions: IInscriptionByOutput) => {
+    const _inscriptions: IInscriptionByOutput = {};
+    Object.keys(inscriptions).forEach(key => {
+      const utxos = inscriptions[key];
+      if (!!utxos && !!utxos.length) {
+        _inscriptions[key] = utxos?.map(utxo => ({
+          ...utxo,
+          offset: new BigNumber(utxo.offset),
+        }));
+      }
+    });
+    return _inscriptions;
+  };
+
+  const sendBTC = async ({ receiver, amount, feeRate }: ISendBTCProps) => {
+    const assets = await getAvailableAssetsCreateTx();
+    if (!assets) throw new Error('Can not load assets');
+    const { privateKey } = await signKey();
+
+    const utxos = formatUTXOs(assets.txrefs);
+    const inscriptions = formatInscriptions(assets.inscriptions_by_outputs);
+    const { txHex } = await TC_SDK.createTxSendBTC({
+      senderPrivateKey: privateKey,
+      utxos: utxos,
+      inscriptions: inscriptions,
+      paymentInfos: [
+        {
+          amount: new BigNumber(amount),
+          address: receiver,
+        },
+      ],
+      feeRatePerByte: feeRate,
+    });
+
+    // broadcast tx
+    await TC_SDK.broadcastTx(txHex);
+  };
+
   return {
     createInscribeTx,
     createBatchInscribeTxs,
@@ -191,6 +241,7 @@ const useBitcoin = () => {
     getUnInscribedTransactionByAddress,
     getUnInscribedTransactionDetailByAddress,
     getTCTransactionByHash,
+    sendBTC,
   };
 };
 
