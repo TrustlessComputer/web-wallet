@@ -49,7 +49,7 @@ const Wallet = () => {
   };
 
   const navigateToDapps = () => {
-    window.open('https://trustless.computer/dapps', '_blank');
+    window.open('https://trustless.computer/', '_blank');
     // navigate(`${ROUTE_PATH.DAPPS}?tab=${activeTab}`);
   };
 

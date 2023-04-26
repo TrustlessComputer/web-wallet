@@ -1,21 +1,14 @@
 import IcOpenMenu from '@/assets/icons/ic_hambuger.svg';
-import IcLogo from '@/assets/icons/logo.svg';
-import { AssetsContext } from '@/contexts/assets-context';
-import { gsap, Power3 } from 'gsap';
-import { useContext, useEffect, useRef, useState } from 'react';
-import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
-import { Link, useNavigate } from 'react-router-dom';
-import { WalletBalance, Wrapper } from './Header.styled';
-import MenuMobile from './MenuMobile';
+import { CDN_URL } from '@/configs';
 import { ROUTE_PATH } from '@/constants/route-path';
-import format from '@/utils/amount';
-import Token from '@/constants/token';
-import { useCurrentUser } from '@/state/user/hooks';
+import { gsap, Power3 } from 'gsap';
+import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Wrapper } from './Header.styled';
+import MenuMobile from './MenuMobile';
+// import WalletHeader from './Wallet';
 
 const Header = ({ height }: { height: number }) => {
-  const user = useCurrentUser();
-  const navigate = useNavigate();
-  const { btcBalance, bvmBalance } = useContext(AssetsContext);
   const refMenu = useRef<HTMLDivElement | null>(null);
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
 
@@ -37,39 +30,20 @@ const Header = ({ height }: { height: number }) => {
     <Wrapper style={{ height }}>
       <div className="indicator" />
       <Link className="logo" to={ROUTE_PATH.HOME}>
-        <img alt="logo" src={IcLogo} />
+        <img alt="logo" src={`${CDN_URL}/icons/wallet_logo.svg`} width={50} height={50} />
       </Link>
       <div className="rowLink" />
       <MenuMobile ref={refMenu} onCloseMenu={() => setIsOpenMenu(false)} />
       <div className="rightContainer">
-        {user && (
-          <>
-            <div className="wallet" onClick={() => navigate(ROUTE_PATH.HOME)}>
-              <WalletBalance>
-                <div className="balance">
-                  <p>
-                    {format.shorterAmount({
-                      originalAmount: btcBalance,
-                      decimals: Token.BITCOIN.decimal,
-                    })}{' '}
-                    {Token.BITCOIN.symbol}
-                  </p>
-                  <span className="divider" />
-                  <p>
-                    {format.shorterAmount({
-                      originalAmount: bvmBalance,
-                      decimals: Token.TRUSTLESS.decimal,
-                    })}{' '}
-                    {Token.TRUSTLESS.symbol}
-                  </p>
-                </div>
-                <div className="avatar">
-                  <Jazzicon diameter={32} seed={jsNumberForAddress(user.walletAddress)} />
-                </div>
-              </WalletBalance>
-            </div>
-          </>
-        )}
+        {/* <WalletHeader /> */}
+        <div className="external-link">
+          <a href={'https://trustless.computer/'} target="_blank">
+            Trustless
+          </a>
+          <a href={'https://trustlessfaucet.io/'} target="_blank">
+            Faucet
+          </a>
+        </div>
         <button className="btnMenuMobile" onClick={() => setIsOpenMenu(true)}>
           <img src={IcOpenMenu} alt="" />
         </button>

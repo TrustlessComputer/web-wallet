@@ -23,13 +23,7 @@ const ConnectWallet: React.FC = (): React.ReactElement => {
     <Container>
       <Wrapper>
         <div className="content">
-          <img
-            width={292}
-            height={118}
-            className="logo"
-            src={`${CDN_URL}/images/trustless-logo-1.svg`}
-            alt="trustless computer logo"
-          />
+          <img alt="logo banner" src={`${CDN_URL}/icons/wallet_logo.svg`} className="logo" width={120} height={120} />
           <h1 className="title">
             Trustless Computer is an open-source protocol that powers decentralized applications on Bitcoin.
           </h1>
