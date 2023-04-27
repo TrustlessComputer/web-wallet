@@ -24,9 +24,7 @@ const ConnectWallet: React.FC = (): React.ReactElement => {
       <Wrapper>
         <div className="content">
           <img alt="logo banner" src={`${CDN_URL}/icons/wallet_logo.svg`} className="logo" width={120} height={120} />
-          <h1 className="title">
-            Trustless Computer is an open-source protocol that powers decentralized applications on Bitcoin.
-          </h1>
+          <h1 className="title">{`A crypto wallet & gateway to decentralized applications on Bitcoin.`}</h1>
           <ConnectWalletButton bg="btn3" disabled={isConnecting} onClick={handleConnectWallet}>
             {isConnecting ? 'Connecting...' : 'Connect wallet'}
           </ConnectWalletButton>
