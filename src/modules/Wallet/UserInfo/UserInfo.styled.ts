@@ -84,4 +84,18 @@ export const StyledUserInfo = styled.div`
       max-width: 18px;
     }
   }
+
+  .send-btn {
+    display: flex;
+    align-items: center;
+    gap: ${px2rem(12)};
+    cursor: pointer;
+    margin-bottom: ${px2rem(12)};
+    &:hover {
+      opacity: 0.75;
+    }
+    img {
+      width: 18px;
+    }
+  }
 `;

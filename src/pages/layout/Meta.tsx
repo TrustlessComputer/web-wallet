@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 const Meta = () => {
   return (
     <Helmet>
-      <title>Trustless computer</title>
+      <title>Trustless Wallet</title>
     </Helmet>
   );
 };

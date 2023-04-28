@@ -4,11 +4,11 @@ import isNumber from 'lodash/isNumber';
 const FORMAT_PATTERN = 'DD MMM hh:mm A';
 
 interface IFormatDate {
-  dateTime: number;
+  dateTime: number | string;
   formatPattern?: string;
 }
 const formatUnixDateTime = ({ dateTime, formatPattern = FORMAT_PATTERN }: IFormatDate) =>
-  moment.unix(dateTime).format(formatPattern);
+  moment.unix(Number(dateTime)).format(formatPattern);
 
 const formatDateTime = ({ dateTime, formatPattern = FORMAT_PATTERN }: IFormatDate) =>
   moment(dateTime).format(formatPattern);

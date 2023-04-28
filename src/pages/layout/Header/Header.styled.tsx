@@ -2,7 +2,6 @@ import Button from '@/components/Button';
 import px2rem from '@/utils/px2rem';
 import { Tooltip } from 'react-bootstrap';
 import styled, { DefaultTheme } from 'styled-components';
-import { Link } from 'react-router-dom';
 
 const Wrapper = styled.div`
   display: flex;
@@ -51,6 +50,14 @@ const Wrapper = styled.div`
     align-items: center;
     gap: ${px2rem(16)};
     position: relative;
+    color: ${({ theme }: { theme: DefaultTheme }) => theme.white};
+
+    .external-link {
+      display: flex;
+      align-items: center;
+      gap: ${px2rem(16)};
+      margin-right: ${px2rem(24)};
+    }
 
     @media screen and (min-width: 1024px) {
       :hover {
@@ -126,7 +133,7 @@ const Wrapper = styled.div`
   `};
 `;
 
-const StyledLink = styled(Link)<{ active: boolean }>`
+const StyledLink = styled.a<{ active: boolean }>`
   cursor: pointer;
   font-weight: 400;
   font-size: ${px2rem(16)};

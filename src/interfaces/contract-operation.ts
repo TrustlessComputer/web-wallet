@@ -1,4 +1,5 @@
 import { TransactionResponse } from '@ethersproject/abstract-provider';
+import { TransactionEventType } from '@/enums/transaction';
 
 export enum DAppType {
   ERC721 = 'NFT', // NFTs
@@ -8,8 +9,9 @@ export enum DAppType {
 }
 
 export type ContractOperationHook<P, R> = (arg?: any) => {
-  call: (args: P) => R;
+  call: (args: P) => Promise<R>;
   dAppType: DAppType;
+  transactionType: TransactionEventType;
 };
 
 export type DeployContractResponse = {

@@ -18,10 +18,10 @@ import NamesProfile from './NamesProfile';
 import NftsProfile from './NftsProfile';
 import { StyledProfile, TabContainer } from './Profile.styled';
 import TokensProfile from './TokensProfile';
-import TransactionsProfile from './TransactionsProfile';
 import UserInfo from './UserInfo';
 import { useCurrentUser } from '@/state/user/hooks';
 import Button from '@/components/Button';
+import Transactions from '@/modules/Wallet/TransactionsProfile/Transactions';
 
 const Wallet = () => {
   const { tab } = queryString.parse(location.search) as { tab: string };
@@ -49,6 +49,7 @@ const Wallet = () => {
   };
 
   const navigateToDapps = () => {
+    window.open('https://trustless.computer/', '_blank');
     // navigate(`${ROUTE_PATH.DAPPS}?tab=${activeTab}`);
   };
 
@@ -147,7 +148,8 @@ const Wallet = () => {
               </div>
             }
           >
-            <TransactionsProfile pendingList={transactions} />
+            <Transactions />
+            {/*<TransactionsProfile pendingList={transactions} />*/}
           </Tab>
 
           <Tab

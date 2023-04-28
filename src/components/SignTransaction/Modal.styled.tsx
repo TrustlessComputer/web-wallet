@@ -15,7 +15,7 @@ export const StyledSignModal = styled(MainModal)`
     display: flex;
   }
 
-  h5 {
+  .header-title {
     margin-top: ${px2rem(32)};
   }
 
@@ -27,6 +27,7 @@ export const StyledSignModal = styled(MainModal)`
   }
 
   .btn-wrapper {
+    margin-top: ${px2rem(32)};
     flex: 1;
     display: flex;
     gap: ${px2rem(24)};
@@ -52,4 +53,11 @@ export const StyledSignModal = styled(MainModal)`
 
 export const WrapperTx = styled.div`
   min-height: 60px;
+  .row-bw {
+    display: flex;
+    padding: 8px;
+    justify-content: space-between;
+    .right {
+    }
+  }
 `;

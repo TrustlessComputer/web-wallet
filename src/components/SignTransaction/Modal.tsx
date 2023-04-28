@@ -16,6 +16,10 @@ import { ellipsisCenter } from '@/utils';
 import { AssetsContext } from '@/contexts/assets-context';
 import Table from '@/components/Table';
 import { ITCTxDetail } from '@/interfaces/transaction';
+import bitcoinStorage from '@/utils/bitcoin-storage';
+import Web3 from 'web3';
+import BigNumber from 'bignumber.js';
+import { formatBTCPrice } from '@/utils/format';
 
 const TABLE_HEADINGS = ['Hash', 'Event type', 'Dapp URL'];
 
@@ -28,10 +32,12 @@ interface IProps {
 const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
   const { feeRate } = useContext(AssetsContext);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [submitting, setSubmitting] = React.useState(false);
   const [pendingTxs, setPendingTxs] = React.useState<ITCTxDetail[]>([]);
   const user = useCurrentUser();
+  const [sizeByte, setSizeByte] = React.useState<number | undefined>(undefined);
 
-  const { getUnInscribedTransactionDetailByAddress, createBatchInscribeTxs } = useBitcoin();
+  const { getUnInscribedTransactionDetailByAddress, createBatchInscribeTxs, getTCTransactionByHash } = useBitcoin();
 
   const getPendingTxs = async () => {
     try {
@@ -48,7 +54,25 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
         };
       });
 
+      if (signData && signData.hash) {
+        const _signTx = pendingTxs.find(tx => tx.Hash.toLowerCase() === signData.hash.toLowerCase());
+        if (_signTx) {
+          bitcoinStorage.updateStorageTransaction(user.walletAddress, {
+            ..._signTx,
+          });
+        }
+      }
       setPendingTxs(pendingTxs);
+      const Hexs = await Promise.all(
+        pendingTxs.map(({ Hash }) => {
+          return getTCTransactionByHash(Hash);
+        }),
+      );
+      const sizeByte: number = Hexs.reduce((prev, curr) => {
+        const currSize = Web3.utils.hexToBytes(curr).length;
+        return currSize + prev;
+      }, 0);
+      setSizeByte(sizeByte);
     } catch (e) {
       // handle error
     } finally {
@@ -56,17 +80,47 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
     }
   };
 
-  const debounceGetPendingTxs = React.useCallback(debounce(getPendingTxs, 200), [user?.walletAddress]);
+  const txFee = React.useMemo(() => {
+    if (!pendingTxs.length || !sizeByte) return undefined;
+    try {
+      const _txFee = TC_SDK.estimateInscribeFee({
+        feeRatePerByte: feeRate.fastestFee,
+        tcTxSizeByte: sizeByte,
+      });
+      return _txFee.totalFee.integerValue(BigNumber.ROUND_CEIL).toNumber();
+    } catch (e) {
+      return undefined;
+    }
+  }, [sizeByte, pendingTxs]);
+
+  const debounceGetPendingTxs = React.useCallback(debounce(getPendingTxs, 200), [user?.walletAddress, signData]);
 
   const handleSubmit = async () => {
     try {
-      await createBatchInscribeTxs({
+      setSubmitting(true);
+      const resp = await createBatchInscribeTxs({
         tcTxDetails: [...pendingTxs],
         feeRatePerByte: feeRate.fastestFee,
       });
-      console.log('submit');
+      for (const submited of resp) {
+        const { tcTxIDs, revealTxID } = submited;
+        pendingTxs.forEach(tx => {
+          const isExist = tcTxIDs.some(hash => hash.toLowerCase() === tx.Hash.toLowerCase());
+          if (isExist) {
+            bitcoinStorage.updateStorageTransaction(user?.walletAddress || '', {
+              ...tx,
+              statusCode: 1,
+              btcHash: revealTxID,
+            });
+          }
+        });
+      }
+      toast.success('Sign transaction successfully');
+      onHide();
     } catch (err: any) {
       toast.error(err.message);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -78,19 +132,23 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
           id: `transaction-${tx?.Hash}}`,
           render: {
             hash: (
-              <Text color="text8" size="medium">
+              <Text color="text1" size="medium">
                 {ellipsisCenter({ str: tx.Hash, limit: 5 })}
               </Text>
             ),
             event: (
-              <Text color="text8" size="medium">
+              <Text color="text1" size="medium">
                 {tx.method || '-'}
               </Text>
             ),
-            url: (
-              <Text color="text8" size="medium">
-                {tx.dappURL || '-'}
-              </Text>
+            url: tx.dappURL ? (
+              <a href={tx.dappURL} target="_blank">
+                <Text color="text1" size="medium">
+                  {tx.dappURL || '-'}
+                </Text>
+              </a>
+            ) : (
+              '-'
             ),
           },
         };
@@ -104,13 +162,27 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
   return (
     <StyledSignModal show={show} centered>
       <Modal.Body>
-        <h5 className="font-medium mb-24">SIGN TRANSACTION</h5>
+        <Text size="h5" className="font-medium mb-24 header-title">
+          SIGN TRANSACTION
+        </Text>
         <Formik key="sign" initialValues={{}} onSubmit={handleSubmit}>
           {({ handleSubmit }) => (
             <form onSubmit={handleSubmit}>
               <div className="container">
                 <WrapperTx>
-                  {!isLoading && <Table tableHead={TABLE_HEADINGS} data={tokenDatas} className={'token-table'} />}
+                  {!isLoading && !!pendingTxs.length && (
+                    <>
+                      <Table tableHead={TABLE_HEADINGS} data={tokenDatas} className={'token-table'} />
+                      <div className="row-bw">
+                        <Text size="medium" fontWeight="semibold">
+                          Transaction Fee
+                        </Text>
+                        <Text size="large" fontWeight="semibold">
+                          {formatBTCPrice(txFee || 0)} BTC
+                        </Text>
+                      </div>
+                    </>
+                  )}
                 </WrapperTx>
                 <div className="btn-wrapper">
                   <Button type="button" className="btn-cancel" onClick={onHide}>
@@ -118,12 +190,12 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
                       Cancel
                     </Text>
                   </Button>
-                  <Button type="submit" className="btn-submit" disabled={isLoading}>
+                  <Button type="submit" className="btn-submit" disabled={submitting}>
                     <Text color="text8" size="medium" fontWeight="medium">
-                      Sign
+                      {submitting ? 'Processing...' : 'Sign'}
                     </Text>
                   </Button>
-                  <LoadingContainer loaded={!isLoading} />
+                  <LoadingContainer loaded={!isLoading && !submitting} />
                 </div>
               </div>
             </form>

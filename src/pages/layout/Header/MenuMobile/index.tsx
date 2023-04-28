@@ -20,7 +20,7 @@ const MenuMobile = React.forwardRef(({ onCloseMenu }: IProp, ref: ForwardedRef<H
   const navigate = useNavigate();
 
   const handleConnectWallet = async () => {
-    navigate(`${ROUTE_PATH.CONNECT_WALLET}?next=${window.location.href}`);
+    navigate(`${ROUTE_PATH.HOME}?next=${window.location.href}`);
   };
 
   return (

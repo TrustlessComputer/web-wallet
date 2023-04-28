@@ -73,7 +73,7 @@ export const ConnectProvider: React.FC<PropsWithChildren> = ({ children }: Props
   React.useEffect(() => {
     setTimeout(() => {
       setMounted(true);
-    }, 300);
+    }, 500);
   }, []);
 
   const contextValues = useMemo((): IConnectContext => {
@@ -85,7 +85,7 @@ export const ConnectProvider: React.FC<PropsWithChildren> = ({ children }: Props
   return (
     <ConnectContext.Provider value={contextValues}>
       {children}
-      <LoadingContainer loaded={mounted} />
+      <LoadingContainer loaded={mounted} opacity={100} />
     </ConnectContext.Provider>
   );
 };

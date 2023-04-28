@@ -1,19 +1,15 @@
 import { SupportedChainId } from '@/constants/chains';
-import { ContractOperationHook } from '@/interfaces/contract-operation';
+import { ContractOperationHook, DAppType } from '@/interfaces/contract-operation';
 import { capitalizeFirstLetter, switchChain } from '@/utils';
 import { useWeb3React } from '@web3-react/core';
 import { useContext } from 'react';
 import useBitcoin from '../useBitcoin';
-import { useSelector } from 'react-redux';
-import { getIsAuthenticatedSelector } from '@/state/user/selector';
 import { AssetsContext } from '@/contexts/assets-context';
 import { useNavigate } from 'react-router-dom';
 import { ROUTE_PATH } from '@/constants/route-path';
-import { createTransactionHistory } from '@/services/profile';
-import moment from 'moment';
-import { TransactionEventType } from '@/enums/transaction';
-import { ICreateTransactionPayload } from '@/interfaces/transaction';
 import { useCurrentUser } from '@/state/user/hooks';
+import bitcoinStorage from '@/utils/bitcoin-storage';
+import BigNumber from 'bignumber.js';
 
 interface IParams<P, R> {
   operation: ContractOperationHook<P, R>;
@@ -27,11 +23,9 @@ interface IContractOperationReturn<P, R> {
 
 const useContractOperation = <P, R>(args: IParams<P, R>): IContractOperationReturn<P, R> => {
   const { operation, chainId = SupportedChainId.TRUSTLESS_COMPUTER, inscribeable = true } = args;
-  const { call, dAppType } = operation();
+  const { call, dAppType, transactionType } = operation();
   const { feeRate, getAvailableAssetsCreateTx } = useContext(AssetsContext);
   const { chainId: walletChainId } = useWeb3React();
-  const isAuthenticated = useSelector(getIsAuthenticatedSelector);
-  // const user = useSelector(getUserSelector);
   const user = useCurrentUser();
   const { createInscribeTx, getUnInscribedTransactionByAddress } = useBitcoin();
   const navigate = useNavigate();
@@ -50,8 +44,8 @@ const useContractOperation = <P, R>(args: IParams<P, R>): IContractOperationRetu
       // This function does not handle error
       // It delegates error to caller
 
-      if (!isAuthenticated || !user?.walletAddress) {
-        navigate(`${ROUTE_PATH.CONNECT_WALLET}?next=${window.location.href}`);
+      if (!user?.walletAddress) {
+        navigate(`${ROUTE_PATH.HOME}?next=${window.location.href}`);
         throw Error('Please connect wallet to continue.');
       }
 
@@ -99,23 +93,43 @@ const useContractOperation = <P, R>(args: IParams<P, R>): IContractOperationRetu
       console.log('feeRatePerByte', feeRate.fastestFee);
 
       // Make inscribe transaction
-      const { commitTxID, revealTxID } = await createInscribeTx({
+      const { revealTxID } = await createInscribeTx({
         tcTxIDs: [...unInscribedTxIDs, Object(tx).hash],
         feeRatePerByte: feeRate.fastestFee,
       });
 
-      const currentTimeString = moment().format('YYYY-MM-DDTHH:mm:ssZ');
-      const transactionHistory: ICreateTransactionPayload = {
-        dapp_type: `${TransactionEventType.CREATE} ${dAppType}`,
-        tx_hash: Object(tx).hash,
-        from_address: Object(tx).from,
-        to_address: Object(tx).to,
-        time: currentTimeString,
-      };
-      if (commitTxID && revealTxID) {
-        transactionHistory.btc_tx_hash = revealTxID;
+      if (dAppType === DAppType.BNS || dAppType === DAppType.ERC721 || dAppType === DAppType.ERC20) {
+        bitcoinStorage.addStorageTransactions(user.walletAddress, {
+          From: user?.walletAddress,
+          Gas: 0,
+          GasPrice: 0,
+          Hash: Object(tx).hash,
+          Input: undefined,
+          Nonce: 0,
+          R: new BigNumber(0),
+          S: new BigNumber(0),
+          To: '',
+          Type: 0,
+          V: 0,
+          Value: 0,
+          btcHash: revealTxID,
+          statusCode: 1,
+          method: `${transactionType} ${dAppType}`,
+        });
       }
-      await createTransactionHistory(transactionHistory);
+
+      // const currentTimeString = moment().format('YYYY-MM-DDTHH:mm:ssZ');
+      // const transactionHistory: ICreateTransactionPayload = {
+      //   dapp_type: `${TransactionEventType.CREATE} ${dAppType}`,
+      //   tx_hash: Object(tx).hash,
+      //   from_address: Object(tx).from,
+      //   to_address: Object(tx).to,
+      //   time: currentTimeString,
+      // };
+      // if (commitTxID && revealTxID) {
+      //   transactionHistory.btc_tx_hash = revealTxID;
+      // }
+      // await createTransactionHistory(transactionHistory);
 
       return tx;
     } catch (err) {

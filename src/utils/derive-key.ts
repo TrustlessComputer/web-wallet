@@ -3,7 +3,7 @@ import { Buffer } from 'buffer';
 import * as bitcoin from 'bitcoinjs-lib';
 import BIP32Factory from 'bip32';
 import ecc from '@bitcoinerlab/secp256k1';
-import bitcoinStorage from '@/utils/bitcoin-storage';
+// import bitcoinStorage from '@/utils/bitcoin-storage';
 import { clearAccessTokenStorage } from './auth-storage';
 import { resetUser } from '@/state/user/reducer';
 import store from '@/state';
@@ -82,9 +82,9 @@ export const generateBitcoinTaprootKey = async (address: string) => {
       network: isProduction() ? networks.bitcoin : networks.regtest,
     });
 
-    if (taprootAddress) {
-      bitcoinStorage.setUserTaprootAddress(address, taprootAddress);
-    }
+    // if (taprootAddress) {
+    //   bitcoinStorage.setUserTaprootAddress(address, taprootAddress);
+    // }
 
     return {
       root,

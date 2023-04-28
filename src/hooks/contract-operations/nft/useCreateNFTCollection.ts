@@ -8,16 +8,14 @@ import { AssetsContext } from '@/contexts/assets-context';
 import * as TC_SDK from 'trustless-computer-sdk';
 import BigNumber from 'bignumber.js';
 import { formatBTCPrice } from '@/utils/format';
+import { TransactionEventType } from '@/enums/transaction';
 
 export interface ICreateNFTCollectionParams {
   name: string;
   symbol: string;
 }
 
-const useCreateNFTCollection: ContractOperationHook<
-  ICreateNFTCollectionParams,
-  Promise<DeployContractResponse | null>
-> = () => {
+const useCreateNFTCollection: ContractOperationHook<ICreateNFTCollectionParams, DeployContractResponse | null> = () => {
   const { account, provider } = useWeb3React();
   const { btcBalance, feeRate } = useContext(AssetsContext);
 
@@ -59,6 +57,7 @@ const useCreateNFTCollection: ContractOperationHook<
   return {
     call: call,
     dAppType: DAppType.ERC721,
+    transactionType: TransactionEventType.CREATE,
   };
 };
 
