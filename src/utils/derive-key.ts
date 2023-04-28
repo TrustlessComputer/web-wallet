@@ -8,6 +8,8 @@ import { clearAccessTokenStorage } from './auth-storage';
 import { resetUser } from '@/state/user/reducer';
 import store from '@/state';
 import { stringToBuffer } from './string';
+import { isProduction } from '@/utils/commons';
+import { networks } from 'bitcoinjs-lib';
 
 bitcoin.initEccLib(ecc);
 const bip32 = BIP32Factory(ecc);
@@ -77,6 +79,7 @@ export const generateBitcoinTaprootKey = async (address: string) => {
     const taprootChild = root.derivePath(DEFAULT_PATH);
     const { address: taprootAddress } = bitcoin.payments.p2tr({
       internalPubkey: toXOnly(taprootChild.publicKey),
+      network: isProduction() ? networks.bitcoin : networks.regtest,
     });
 
     if (taprootAddress) {

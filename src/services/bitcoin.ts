@@ -1,20 +1,18 @@
 import { apiClient } from '@/services';
-import {
-  BINANCE_PAIR,
-  FeeRateName,
-  ICollectedUTXOResp,
-  IFeeRate,
-  IPendingUTXO,
-  ITokenPriceResp,
-} from '@/interfaces/api/bitcoin';
+import { BINANCE_PAIR, FeeRateName, ICollectedUTXOResp, IFeeRate, IPendingUTXO } from '@/interfaces/api/bitcoin';
 import BigNumber from 'bignumber.js';
 import * as TC_SDK from 'trustless-computer-sdk';
+import { API_BLOCKSTREAM, TC_NETWORK_RPC } from '@/configs';
+import { BTC_NETWORK } from '@/utils/commons';
 
-const BINANCE_API_URL = 'https://api.binance.com/api/v3';
+// const BINANCE_API_URL = 'https://api.binance.com/api/v3';
 const WALLETS_API_PATH = '/wallets';
 
 // Collected UTXO
-export const getCollectedUTXO = async (btcAddress: string): Promise<ICollectedUTXOResp | undefined> => {
+export const getCollectedUTXO = async (
+  btcAddress: string,
+  tcAddress: string,
+): Promise<ICollectedUTXOResp | undefined> => {
   try {
     const collected: any = await apiClient.get<ICollectedUTXOResp>(`${WALLETS_API_PATH}/${btcAddress}`);
     const incomingUTXOs: TC_SDK.UTXO[] = [];
@@ -32,10 +30,22 @@ export const getCollectedUTXO = async (btcAddress: string): Promise<ICollectedUT
         }
       }
     }
-    console.log('Incoming UTXOs: ', incomingUTXOs);
+    const tempUTXOs = [...(collected?.txrefs || []), ...incomingUTXOs];
+    let utxos;
+    try {
+      const tcClient = new TC_SDK.TcClient(BTC_NETWORK, TC_NETWORK_RPC);
+      utxos = await TC_SDK.aggregateUTXOs({
+        tcAddress: tcAddress,
+        btcAddress: btcAddress,
+        utxos: [...tempUTXOs],
+        tcClient,
+      });
+    } catch (e) {
+      utxos = [...tempUTXOs];
+    }
     return {
       ...collected,
-      txrefs: [...(collected?.txrefs || []), ...incomingUTXOs],
+      txrefs: utxos || [],
     } as any;
   } catch (err) {
     console.log(err);
@@ -46,8 +56,8 @@ export const getPendingUTXOs = async (btcAddress: string): Promise<IPendingUTXO[
   let pendingUTXOs = [];
   if (!btcAddress) return [];
   try {
-    // const res = await apiClient.get(`https://blockstream.info/api/address/${btcAddress}/txs`);
-    const res = await fetch(`https://blockstream.info/api/address/${btcAddress}/txs`).then(res => {
+    // https://blockstream.regtest.trustless.computer/regtest/api/address/bcrt1p7vs2w9cyeqpc7ktzuqnm9qxmtng5cethgh66ykjz9uhdaz0arpfq93cr3a/txs
+    const res = await fetch(`${API_BLOCKSTREAM}/address/${btcAddress}/txs`).then(res => {
       return res.json();
     });
     pendingUTXOs = (res || []).filter((item: IPendingUTXO) => !item.status.confirmed);
@@ -79,14 +89,17 @@ export const getFeeRate = async (): Promise<IFeeRate> => {
   }
 };
 
-export const getTokenRate = async (pair: BINANCE_PAIR = 'ETHBTC'): Promise<number> => {
-  try {
-    const res = await fetch(`${BINANCE_API_URL}/ticker/price?symbol=${pair}`);
-    const data: ITokenPriceResp = await res.json();
-    const rate = data?.price;
-    return new BigNumber(rate).toNumber();
-  } catch (err: unknown) {
-    console.log(err);
-    throw err;
-  }
+// eslint-disable-next-line no-unused-vars
+export const getTokenRate = async (_: BINANCE_PAIR = 'ETHBTC'): Promise<number> => {
+  return 1;
+  // try {
+  //   // const res = await fetch(`${BINANCE_API_URL}/ticker/price?symbol=${pair}`);
+  //   // const data: ITokenPriceResp = await res.json();
+  //   // const rate = data?.price;
+  //   // return new BigNumber(rate).toNumber();
+  //   return 1;
+  // } catch (err: unknown) {
+  //   console.log(err);
+  //   throw err;
+  // }
 };

@@ -16,6 +16,7 @@ import * as TC_SDK from 'trustless-computer-sdk';
 import { StyledTransactionProfile } from './TransactionsProfile.styled';
 import moment from 'moment';
 import { useCurrentUser } from '@/state/user/hooks';
+import { BTC_NETWORK } from '@/utils/commons';
 
 type Props = {
   pendingList: string[];
@@ -77,7 +78,7 @@ const TransactionsProfile = ({ pendingList }: Props) => {
     if (user && user.walletAddress) {
       try {
         setIsLoading(true);
-        const tcClient = new TC_SDK.TcClient(TC_SDK.Mainnet, TC_NETWORK_RPC);
+        const tcClient = new TC_SDK.TcClient(BTC_NETWORK, TC_NETWORK_RPC);
         const res = await tcClient.getTCTxByHash(tx);
         if (res && res.blockHash) {
           await updateStatusTransaction([{ tx_hash: [tx], status: TransactionStatus.CONFIRMED }]);

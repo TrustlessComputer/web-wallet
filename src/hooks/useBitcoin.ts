@@ -10,6 +10,7 @@ import { Buffer } from 'buffer';
 import { useCurrentUser } from '@/state/user/hooks';
 import bitcoinStorage from '@/utils/bitcoin-storage';
 import { ITCTxDetail } from '@/interfaces/transaction';
+import { BTC_NETWORK } from '@/utils/commons';
 
 export interface ISendInsProps {
   receiverAddress: string;
@@ -48,7 +49,7 @@ export interface ICreateInscribeResponse {
 
 const useBitcoin = () => {
   const user = useCurrentUser();
-  const tcClient = new TC_SDK.TcClient(TC_SDK.Mainnet, TC_NETWORK_RPC);
+  const tcClient = new TC_SDK.TcClient(BTC_NETWORK, TC_NETWORK_RPC);
   const { getAvailableAssetsCreateTx } = useContext(AssetsContext);
   const { account: evmAddress, connector } = useWeb3React();
 
