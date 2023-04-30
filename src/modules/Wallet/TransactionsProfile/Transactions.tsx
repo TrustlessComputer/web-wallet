@@ -159,7 +159,7 @@ const Transactions = React.memo(() => {
         fromAddress: formatLongAddress(trans.From) || '-',
         toAddress: formatLongAddress(trans.To) || '-',
         time: localDateString,
-        status: <div className={`status ${status.toLowerCase()}`}>{status}</div>,
+        status: <div className={`status ${status.toLowerCase()}`}>{statusCode === 0 ? 'Need to resume' : status}</div>,
       },
     };
   });

@@ -163,7 +163,7 @@ const Wallet = () => {
                   onClick={handleResumeTransactions}
                 >
                   <Text size="regular" color="text8">
-                    {processing ? 'Processing...' : `Need to resume`}
+                    {processing ? 'Processing...' : `Resume all pending`}
                   </Text>
                 </Button>
               ) : (
