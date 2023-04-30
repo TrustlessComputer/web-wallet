@@ -54,6 +54,7 @@ export interface IInscriptionByOutput {
 const useBitcoin = () => {
   const user = useCurrentUser();
   const tcClient = new TC_SDK.TcClient(BTC_NETWORK, TC_NETWORK_RPC);
+  console.log('tcClient: ', tcClient);
   const { getAvailableAssetsCreateTx } = useContext(AssetsContext);
   const { account: evmAddress, connector } = useWeb3React();
 
