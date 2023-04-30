@@ -13,6 +13,7 @@ import useContractOperation from '@/hooks/contract-operations/useContractOperati
 import useGetTokenBalance, { IGetTokenBalance } from '@/hooks/contract-operations/token/useGetTokenBalance';
 import { IToken } from '@/interfaces/token';
 import { useCurrentUser } from '@/state/user/hooks';
+import format from '@/utils/amount';
 
 const EXPLORER_URL = TRUSTLESS_COMPUTER_CHAIN_INFO.explorers[0].url;
 
@@ -83,41 +84,46 @@ const TokensProfile = () => {
     }
   };
 
-  const tokenDatas = tokensList.map(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    token => {
-      const totalSupply = parseInt(token?.totalSupply) / decimalToExponential(token.decimal);
-      const balance = parseInt(token?.balance) / decimalToExponential(token.decimal);
-      const linkTokenExplorer = `${EXPLORER_URL}/token/${token?.address}`;
+  const tokenDatas = tokensList.map(token => {
+    const balance = format.shorterAmount({
+      originalAmount: token.balance || 0,
+      decimals: token.decimal,
+    });
 
-      return {
-        id: `token-${token?.address}}`,
-        render: {
-          number: token?.index,
-          name: (
-            <a href={linkTokenExplorer} rel="rel=”noopener noreferrer”" target="_blank">
-              {token?.name || '-'}
-            </a>
-          ),
+    const totalSupply = format.shorterAmount({
+      originalAmount: token.totalSupply || 0,
+      decimals: token.decimal,
+    });
 
-          symbol: token?.symbol || '-',
-          balance: balance.toLocaleString(),
-          supply: totalSupply.toLocaleString(),
-          action: (
-            <>
-              {balance > 0 && (
-                <div className="owner-actions">
-                  <button onClick={() => hanldeOpenTransferModal(token)} className="transfer-button">
-                    Transfer
-                  </button>
-                </div>
-              )}
-            </>
-          ),
-        },
-      };
-    },
-  );
+    const linkTokenExplorer = `${EXPLORER_URL}/token/${token?.address}`;
+
+    return {
+      id: `token-${token?.address}}`,
+      render: {
+        number: token?.index,
+        name: (
+          <a href={linkTokenExplorer} rel="rel=”noopener noreferrer”" target="_blank">
+            {token?.name || '-'}
+          </a>
+        ),
+
+        symbol: token?.symbol || '-',
+        balance: balance,
+        supply: Number(totalSupply) > 0 ? totalSupply : '-',
+        action: (
+          <>
+            {Number(balance || 0) > 0 && (
+              <div className="owner-actions">
+                <button onClick={() => hanldeOpenTransferModal(token)} className="transfer-button">
+                  Transfer
+                </button>
+              </div>
+            )}
+          </>
+        ),
+      },
+    };
+  });
 
   const onLoadMoreTokens = () => {
     if (isFetching || tokensList.length % LIMIT_PAGE !== 0) return;
