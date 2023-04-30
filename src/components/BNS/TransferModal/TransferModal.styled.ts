@@ -1,8 +1,21 @@
-import { MainModal } from '@/components/Modal/MainModal.styled';
 import px2rem from '@/utils/px2rem';
 import styled from 'styled-components';
+import { Modal } from 'react-bootstrap';
 
-export const StyledTransferModal = styled(MainModal)`
+export const StyledTransferModal = styled(Modal)`
+  &.modal {
+    --bs-modal-color: ${({ theme }) => theme.bg1};
+  }
+
+  .modal-header {
+    border-bottom: none;
+    padding: 0;
+    display: flex;
+    justify-content: flex-end;
+    padding-top: ${px2rem(18)};
+    padding-right: ${px2rem(18)};
+  }
+
   * {
     font-family: 'Bandeins Strange Variable' !important;
   }

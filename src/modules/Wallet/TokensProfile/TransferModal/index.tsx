@@ -78,7 +78,7 @@ const TransferModal = (props: Props) => {
         <IconSVG className="cursor-pointer" onClick={handleClose} src={IcCloseModal} maxWidth={'22px'} />
       </Modal.Header>
       <Modal.Body>
-        <Title>Transfer NFT</Title>
+        <Title>Transfer Token</Title>
 
         <Formik
           key="create"
@@ -93,7 +93,7 @@ const TransferModal = (props: Props) => {
             <form onSubmit={handleSubmit}>
               <WrapInput>
                 <label htmlFor="toAddress" className="title-input">
-                  TRANSFER NFT TO
+                  TRANSFER TOKEN TO
                 </label>
                 <input
                   id="toAddress"

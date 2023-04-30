@@ -59,7 +59,7 @@ const BNSTransferModal = (props: Props) => {
   return (
     <StyledTransferModal show={show} onHide={handleClose} centered>
       <Modal.Header>
-        <IconSVG className="cursor-pointer" onClick={handleClose} src={IcCloseModal} maxWidth={'22px'} />
+        <IconSVG className="cursor-pointer" onClick={handleClose} src={IcCloseModal} maxWidth="22px" />
       </Modal.Header>
       <Modal.Body>
         <h5 className="font-medium mb-24">Transfer Name</h5>
