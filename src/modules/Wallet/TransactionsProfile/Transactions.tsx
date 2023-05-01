@@ -16,6 +16,8 @@ import { TC_NETWORK_RPC } from '@/configs';
 import Spinner from '@/components/Spinner';
 import { formatUnixDateTime } from '@/utils/time';
 import { BTC_NETWORK } from '@/utils/commons';
+import useBatchCompleteUninscribedTransaction from '@/hooks/contract-operations/useBatchCompleteUninscribedTransaction';
+import Button from '@/components/Button';
 
 const TABLE_HEADINGS = ['Event', 'Transaction ID', 'From', 'To', 'Time', 'Status'];
 
@@ -30,6 +32,20 @@ const Transactions = React.memo(() => {
   const user = useCurrentUser();
   const [transactions, setTransactions] = useState<ITCTxDetail[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [, setProcessing] = useState(false);
+  const { run } = useBatchCompleteUninscribedTransaction({});
+
+  const handleResumeTransactions = async () => {
+    try {
+      setProcessing(true);
+      await run();
+    } catch (err: any) {
+      toast.error(err.message);
+    } finally {
+      setProcessing(false);
+      debounceGetTransactions();
+    }
+  };
 
   const { getUnInscribedTransactionDetailByAddress } = useBitcoin();
 
@@ -159,7 +175,14 @@ const Transactions = React.memo(() => {
         fromAddress: formatLongAddress(trans.From) || '-',
         toAddress: formatLongAddress(trans.To) || '-',
         time: localDateString,
-        status: <div className={`status ${status.toLowerCase()}`}>{statusCode === 0 ? 'Need to resume' : status}</div>,
+        status:
+          statusCode === 0 ? (
+            <Button bg="bg6" className="resume-btn" type="button" onClick={handleResumeTransactions}>
+              Process
+            </Button>
+          ) : (
+            <div className={`status ${status.toLowerCase()}`}>{status}</div>
+          ),
       },
     };
   });

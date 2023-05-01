@@ -13,6 +13,13 @@ export const StyledTransactionProfile = styled.div`
     place-items: center;
   }
 
+  .resume-btn {
+    padding: 6px 16px;
+    border-radius: 4px;
+    font-size: ${px2rem(14)};
+    font-weight: 500;
+  }
+
   .status {
     text-transform: capitalize;
 
