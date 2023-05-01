@@ -63,7 +63,7 @@ const SendBTCModal = React.memo(({ show, onHide }: IProps) => {
       toast.success('Transferred successfully');
       onHide();
     } catch (err) {
-      console.log('SANG TEST ERROR: ', err);
+      console.log('SEND BTC ERROR: ', err);
     } finally {
       setSubmitting(false);
     }

@@ -14,6 +14,7 @@ import useGetTokenBalance, { IGetTokenBalance } from '@/hooks/contract-operation
 import { IToken } from '@/interfaces/token';
 import { useCurrentUser } from '@/state/user/hooks';
 import format from '@/utils/amount';
+import convert from '@/utils/convert';
 
 const EXPLORER_URL = TRUSTLESS_COMPUTER_CHAIN_INFO.explorers[0].url;
 
@@ -97,6 +98,8 @@ const TokensProfile = () => {
 
     const linkTokenExplorer = `${EXPLORER_URL}/token/${token?.address}`;
 
+    const balanceNumb = convert.toNumber({ text: balance || '0', autoCorrect: true });
+
     return {
       id: `token-${token?.address}}`,
       render: {
@@ -112,7 +115,7 @@ const TokensProfile = () => {
         supply: Number(totalSupply) > 0 ? totalSupply : '-',
         action: (
           <>
-            {Number(balance || 0) > 0 && (
+            {balanceNumb > 0 && (
               <div className="owner-actions">
                 <button onClick={() => hanldeOpenTransferModal(token)} className="transfer-button">
                   Transfer
