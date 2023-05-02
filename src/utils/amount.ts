@@ -76,7 +76,14 @@ const toFixed = (payload: IToFixed) => {
 };
 
 const formatAmount = (payload: IAmount) => {
-  const { originalAmount, humanAmount, decimals, clipAmount = true, decimalDigits = true } = payload;
+  const {
+    originalAmount,
+    humanAmount,
+    decimals,
+    clipAmount = true,
+    decimalDigits = true,
+    maxDigits: _maxDigits,
+  } = payload;
   const decimalSeparator = getDecimalSeparator();
   const groupSeparator = getGroupSeparator();
   const fmt = {
@@ -92,12 +99,14 @@ const formatAmount = (payload: IAmount) => {
         originalAmount,
         decimals,
       });
-    const maxDigits = getMaxDecimalDigits({
-      clipAmount,
-      decimalDigits,
-      decimals,
-      humanAmount: convertHumanAmount,
-    });
+    const maxDigits =
+      _maxDigits ||
+      getMaxDecimalDigits({
+        clipAmount,
+        decimalDigits,
+        decimals,
+        humanAmount: convertHumanAmount,
+      });
     let fixedNumber = convertHumanAmount;
     if (decimals) {
       fixedNumber = floor(convertHumanAmount, Math.min(decimals, maxDigits));

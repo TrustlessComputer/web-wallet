@@ -15,6 +15,7 @@ import { IToken } from '@/interfaces/token';
 import { useCurrentUser } from '@/state/user/hooks';
 import format from '@/utils/amount';
 import convert from '@/utils/convert';
+import BigNumber from 'bignumber.js';
 
 const EXPLORER_URL = TRUSTLESS_COMPUTER_CHAIN_INFO.explorers[0].url;
 
@@ -86,14 +87,18 @@ const TokensProfile = () => {
   };
 
   const tokenDatas = tokensList.map(token => {
-    const balance = format.shorterAmount({
-      originalAmount: token.balance || 0,
+    const balance = format.formatAmount({
+      originalAmount: new BigNumber(token.balance || 0).toNumber(),
       decimals: token.decimal,
+      clipAmount: false,
+      maxDigits: 9,
     });
 
-    const totalSupply = format.shorterAmount({
-      originalAmount: token.totalSupply || 0,
+    const totalSupply = format.formatAmount({
+      originalAmount: new BigNumber(token.totalSupply || 0).toNumber(),
       decimals: token.decimal,
+      clipAmount: false,
+      maxDigits: 9,
     });
 
     const linkTokenExplorer = `${EXPLORER_URL}/token/${token?.address}`;
