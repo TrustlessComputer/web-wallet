@@ -1,4 +1,5 @@
 import * as TC_SDK from 'trustless-computer-sdk';
+import { extend } from 'lodash';
 
 export interface IInscriptionByOutput {
   [key: string]: TC_SDK.Inscription[];
@@ -137,6 +138,8 @@ export interface IPendingUTXO {
   status: Status;
   txid: string;
 }
+
+export interface IBlockStreamTxs extends IPendingUTXO {}
 
 export type IThorAssetsType = 'BTC.BTC' | 'ETH.ETH';
 

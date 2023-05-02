@@ -26,6 +26,7 @@ export enum TransactionStatus {
   Processing = 'Processing',
   Confirmed = 'Confirmed',
   Failed = 'Failed',
+  Success = 'Success',
 }
 
 const Transactions = React.memo(() => {
@@ -135,6 +136,23 @@ const Transactions = React.memo(() => {
         status = TransactionStatus.Confirmed;
         break;
     }
+    let statusComp = undefined;
+    if (trans.btcHash !== undefined) {
+      const mesg = statusCode === 2 ? TransactionStatus.Success : 'Waiting in the mempool';
+      statusComp = (
+        <a
+          className={`status ${status.toLowerCase()}`}
+          target="_blank"
+          href={
+            statusCode === 2
+              ? `https://explorer.trustless.computer/tx/${trans.Hash}`
+              : `https://mempool.space/tx/${trans.btcHash}`
+          }
+        >
+          {mesg}
+        </a>
+      );
+    }
 
     const localDateString = trans?.time
       ? formatUnixDateTime({
@@ -188,7 +206,7 @@ const Transactions = React.memo(() => {
               Process
             </Button>
           ) : (
-            <div className={`status ${status.toLowerCase()}`}>{status}</div>
+            <div className={`status ${status.toLowerCase()}`}>{statusComp ? statusComp : status}</div>
           ),
       },
     };

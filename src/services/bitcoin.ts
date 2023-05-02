@@ -1,5 +1,12 @@
 import { apiClient } from '@/services';
-import { BINANCE_PAIR, FeeRateName, ICollectedUTXOResp, IFeeRate, IPendingUTXO } from '@/interfaces/api/bitcoin';
+import {
+  BINANCE_PAIR,
+  FeeRateName,
+  IBlockStreamTxs,
+  ICollectedUTXOResp,
+  IFeeRate,
+  IPendingUTXO,
+} from '@/interfaces/api/bitcoin';
 import BigNumber from 'bignumber.js';
 import * as TC_SDK from 'trustless-computer-sdk';
 import { API_BLOCKSTREAM, TC_NETWORK_RPC } from '@/configs';
@@ -65,6 +72,20 @@ export const getPendingUTXOs = async (btcAddress: string): Promise<IPendingUTXO[
     return [];
   }
   return pendingUTXOs;
+};
+
+export const getBlockstreamTxs = async (btcAddress: string): Promise<IBlockStreamTxs[]> => {
+  let txs = [];
+  if (!btcAddress) return [];
+  try {
+    const res = await fetch(`${API_BLOCKSTREAM}/address/${btcAddress}/txs`).then(res => {
+      return res.json();
+    });
+    txs = res;
+  } catch (err) {
+    return [];
+  }
+  return txs;
 };
 
 export const getFeeRate = async (): Promise<IFeeRate> => {
