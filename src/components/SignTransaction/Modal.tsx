@@ -20,6 +20,7 @@ import bitcoinStorage from '@/utils/bitcoin-storage';
 import Web3 from 'web3';
 import BigNumber from 'bignumber.js';
 import { formatBTCPrice } from '@/utils/format';
+import { triggerHash } from '@/services/bridgeClient';
 
 const TABLE_HEADINGS = ['Hash', 'Event type', 'Dapp URL'];
 
@@ -39,6 +40,8 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
 
   const { getUnInscribedTransactionDetailByAddress, createBatchInscribeTxs, getTCTransactionByHash } = useBitcoin();
 
+  const debounceTriggerHash = React.useCallback(debounce(triggerHash, 1000), []);
+
   const getPendingTxs = async () => {
     try {
       if (!user) {
@@ -55,6 +58,9 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
       });
 
       if (signData && signData.hash) {
+        if (!pendingTxs || pendingTxs.length === 0) {
+          debounceTriggerHash(signData.hash, user.walletAddress);
+        }
         const _signTx = pendingTxs.find(tx => tx.Hash.toLowerCase() === signData.hash.toLowerCase());
         if (_signTx) {
           bitcoinStorage.updateStorageTransaction(user.walletAddress, {
@@ -157,7 +163,7 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
 
   useAsyncEffect(async () => {
     debounceGetPendingTxs();
-  }, [user?.walletAddress]);
+  }, [user?.walletAddress, signData]);
 
   return (
     <StyledSignModal show={show} centered>
