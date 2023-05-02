@@ -174,7 +174,14 @@ const Transactions = React.memo(() => {
         ),
         fromAddress: formatLongAddress(trans.From) || '-',
         toAddress: formatLongAddress(trans.To) || '-',
-        time: localDateString,
+        time: (
+          <>
+            {localDateString}
+            <Text color="bg4" size="regular">
+              Nonce: {trans.Nonce}
+            </Text>
+          </>
+        ),
         status:
           statusCode === 0 ? (
             <Button bg="bg6" className="resume-btn" type="button" onClick={handleResumeTransactions}>
