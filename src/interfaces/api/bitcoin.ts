@@ -1,5 +1,4 @@
 import * as TC_SDK from 'trustless-computer-sdk';
-import { extend } from 'lodash';
 
 export interface IInscriptionByOutput {
   [key: string]: TC_SDK.Inscription[];

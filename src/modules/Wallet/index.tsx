@@ -26,7 +26,7 @@ import Transactions from '@/modules/Wallet/TransactionsProfile/Transactions';
 const Wallet = () => {
   const { tab } = queryString.parse(location.search) as { tab: string };
 
-  const [activeTab, setActiveTab] = useState(tab || DappsTabs.NFT);
+  const [activeTab, setActiveTab] = useState(tab || DappsTabs.TRANSACTION);
   const [processing, setProcessing] = useState(false);
 
   const user = useCurrentUser();
