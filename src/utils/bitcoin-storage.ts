@@ -1,6 +1,6 @@
 import { TAPROOT_ADDRESS } from '@/constants/storage-key';
 import localStorage from '@/utils/localstorage';
-import { ITCTxDetail } from '@/interfaces/transaction';
+import { IStoredSign, IStoredSignValue, ITCTxDetail } from '@/interfaces/transaction';
 import { orderBy } from 'lodash';
 
 class BitCoinStorage {
@@ -30,7 +30,19 @@ class BitCoinStorage {
   getStorageTransactions = (tcAddress: string): ITCTxDetail[] => {
     const key = this.getTxsKey(tcAddress);
     const txs = (localStorage.get(key) || []) as ITCTxDetail[];
-    return orderBy(txs, item => Number(item.Nonce || 0), 'desc');
+    const signs = this.getStoredSigns(tcAddress);
+    const _txs = txs.map(tx => {
+      const signData = signs[tx.Hash] || signs[tx.Hash.toLowerCase()];
+      if (!signData) return tx;
+      const { time, dappURL, method } = signData;
+      return {
+        ...tx,
+        time,
+        dappURL,
+        method,
+      };
+    });
+    return orderBy(_txs, item => Number(item.Nonce || 0), 'desc');
   };
   addStorageTransactions = (tcAddress: string, tx: ITCTxDetail) => {
     const key = this.getTxsKey(tcAddress);
@@ -53,6 +65,28 @@ class BitCoinStorage {
     } else {
       this.addStorageTransactions(tcAddress, tx);
     }
+  };
+
+  // sign transaction
+  private getSignKey = (tcAddress: string) => {
+    return `sign-transaction-${tcAddress.toLowerCase()}`;
+  };
+  getStoredSigns = (tcAddress: string): IStoredSign => {
+    const key = this.getSignKey(tcAddress);
+    return (localStorage.get(key) || {}) as IStoredSign;
+  };
+  setStoredSign = (tcAddress: string, signData: IStoredSignValue) => {
+    if (!tcAddress || !signData) return;
+    const signs = this.getStoredSigns(tcAddress);
+    if (signs[signData.hash] || signs[signData.hash.toLowerCase()]) return;
+    const key = this.getSignKey(tcAddress);
+    localStorage.set(key, {
+      ...signs,
+      [signData.hash]: {
+        ...signData,
+        time: new Date().getTime(),
+      },
+    });
   };
 }
 

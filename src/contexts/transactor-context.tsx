@@ -6,6 +6,7 @@ import { useCurrentUser } from '@/state/user/hooks';
 import { ROUTE_PATH } from '@/constants/route-path';
 import ModalConfirmRequestDapp from '@/components/RequestDapp/Modal';
 import { SendBTCModal } from '@/components/SendBTC';
+import bitcoinStorage from '@/utils/bitcoin-storage';
 
 export interface ITransactorContext {
   signData?: TC_SDK.CallWalletPayload;
@@ -49,12 +50,16 @@ export const TransactorProvider: React.FC<PropsWithChildren> = ({
       const dappURL = searchParams.get('dappURL');
       const isRedirect = searchParams.get('isRedirect');
       if (hash && method && dappURL) {
-        setSignData({
+        const payload = {
           hash,
           method,
           dappURL,
           isRedirect: Boolean(isRedirect),
-        });
+        };
+        setSignData(payload);
+        if (user?.walletAddress) {
+          bitcoinStorage.setStoredSign(user.walletAddress, payload);
+        }
       }
     } else if (actionName === TC_SDK.RequestFunction.request) {
       const redirectURL = searchParams.get('redirectURL');
@@ -84,7 +89,7 @@ export const TransactorProvider: React.FC<PropsWithChildren> = ({
     setShowSendBTCModal(true);
   };
 
-  React.useEffect(getSignSearchParams, []);
+  React.useEffect(getSignSearchParams, [user?.walletAddress]);
 
   const contextValues = useMemo((): ITransactorContext => {
     return { signData, onCancelSign, requestData, onShowSendBTCModal };

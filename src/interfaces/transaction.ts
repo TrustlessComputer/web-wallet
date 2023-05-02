@@ -50,3 +50,11 @@ export interface ITCTxDetail extends TC_SDK.TCTxDetail {
   btcHash?: string;
   statusCode?: IStatusCode;
 }
+
+export interface IStoredSignValue extends TC_SDK.CallWalletPayload {
+  time?: string;
+}
+
+export interface IStoredSign {
+  [key: string]: IStoredSignValue;
+}
