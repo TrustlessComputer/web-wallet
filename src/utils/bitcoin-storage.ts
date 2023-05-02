@@ -30,7 +30,7 @@ class BitCoinStorage {
   getStorageTransactions = (tcAddress: string): ITCTxDetail[] => {
     const key = this.getTxsKey(tcAddress);
     const txs = (localStorage.get(key) || []) as ITCTxDetail[];
-    return orderBy(txs, item => Number(item.time || 0), 'desc');
+    return orderBy(txs, item => Number(item.Nonce || 0), 'desc');
   };
   addStorageTransactions = (tcAddress: string, tx: ITCTxDetail) => {
     const key = this.getTxsKey(tcAddress);

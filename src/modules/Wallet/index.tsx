@@ -41,6 +41,7 @@ const Wallet = () => {
         const res = await getUnInscribedTransactionDetailByAddress(user.walletAddress);
         if (res && res.length > 0) {
           setTransactions(res.map(tx => tx.Hash));
+          setActiveTab(DappsTabs.TRANSACTION);
         }
       } catch (err: unknown) {
         console.log('Fail to get transactions');
@@ -78,7 +79,12 @@ const Wallet = () => {
     <StyledProfile className="row">
       <UserInfo className="col-xl-2" />
       <TabContainer className="wrapper col-xl-9 offset-xl-1">
-        <Tabs defaultActiveKey={activeTab} id="uncontrolled-tab" onSelect={key => setActiveTab(key || DappsTabs.NFT)}>
+        <Tabs
+          defaultActiveKey={activeTab}
+          id="uncontrolled-tab"
+          onSelect={key => setActiveTab(key || DappsTabs.NFT)}
+          activeKey={activeTab}
+        >
           <Tab
             mountOnEnter
             eventKey={DappsTabs.NFT}
