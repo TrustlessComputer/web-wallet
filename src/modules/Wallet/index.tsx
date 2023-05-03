@@ -9,10 +9,10 @@ import Text from '@/components/Text';
 import { DappsTabs } from '@/enums/tabs';
 import { useEffect, useState } from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
-import useBatchCompleteUninscribedTransaction from '@/hooks/contract-operations/useBatchCompleteUninscribedTransaction';
+// import useBatchCompleteUninscribedTransaction from '@/hooks/contract-operations/useBatchCompleteUninscribedTransaction';
 import useBitcoin from '@/hooks/useBitcoin';
 import queryString from 'query-string';
-import { toast } from 'react-hot-toast';
+// import { toast } from 'react-hot-toast';
 import ArtifactsProfile from './ArtifactsProfile';
 import NamesProfile from './NamesProfile';
 import NftsProfile from './NftsProfile';
@@ -27,20 +27,19 @@ const Wallet = () => {
   const { tab } = queryString.parse(location.search) as { tab: string };
 
   const [activeTab, setActiveTab] = useState(tab || DappsTabs.TRANSACTION);
-  const [processing, setProcessing] = useState(false);
+  // const [processing, setProcessing] = useState(false);
 
   const user = useCurrentUser();
   const { getUnInscribedTransactionDetailByAddress } = useBitcoin();
-  const { run, transactionConfirmed } = useBatchCompleteUninscribedTransaction({});
-
-  const [transactions, setTransactions] = useState<string[]>([]);
+  // const { run, transactionConfirmed } = useBatchCompleteUninscribedTransaction({});
+  // const [transactions, setTransactions] = useState<string[]>([]);
 
   const fetchTransactions = async () => {
     if (user && user.walletAddress) {
       try {
         const res = await getUnInscribedTransactionDetailByAddress(user.walletAddress);
         if (res && res.length > 0) {
-          setTransactions(res.map(tx => tx.Hash));
+          // setTransactions(res.map(tx => tx.Hash));
           setActiveTab(DappsTabs.TRANSACTION);
         }
       } catch (err: unknown) {
@@ -54,16 +53,16 @@ const Wallet = () => {
     // navigate(`${ROUTE_PATH.DAPPS}?tab=${activeTab}`);
   };
 
-  const handleResumeTransactions = async () => {
-    try {
-      setProcessing(true);
-      await run();
-    } catch (err: any) {
-      toast.error(err.message);
-    } finally {
-      setProcessing(false);
-    }
-  };
+  // const handleResumeTransactions = async () => {
+  //   try {
+  //     setProcessing(true);
+  //     await run();
+  //   } catch (err: any) {
+  //     toast.error(err.message);
+  //   } finally {
+  //     setProcessing(false);
+  //   }
+  // };
 
   useEffect(() => {
     if (user) fetchTransactions();
@@ -162,16 +161,17 @@ const Wallet = () => {
             mountOnEnter
             title={
               activeTab === DappsTabs.TRANSACTION ? (
-                <Button
-                  className={`explore-btn resume-btn ${
-                    transactions.length === 0 || transactionConfirmed ? 'disable' : ''
-                  }`}
-                  onClick={handleResumeTransactions}
-                >
-                  <Text size="regular" color="text8">
-                    {processing ? 'Processing...' : `Process all transactions`}
-                  </Text>
-                </Button>
+                // <Button
+                //   className={`explore-btn resume-btn ${
+                //     transactions.length === 0 || transactionConfirmed ? 'disable' : ''
+                //   }`}
+                //   onClick={handleResumeTransactions}
+                // >
+                //   <Text size="regular" color="text8">
+                //     {processing ? 'Processing...' : `Process all transactions`}
+                //   </Text>
+                // </Button>
+                <></>
               ) : (
                 <Button className="explore-btn" onClick={navigateToDapps}>
                   <Text size="regular" color="text8">

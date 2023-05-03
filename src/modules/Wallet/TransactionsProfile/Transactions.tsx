@@ -33,7 +33,7 @@ const Transactions = React.memo(() => {
   const user = useCurrentUser();
   const [transactions, setTransactions] = useState<ITCTxDetail[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [, setProcessing] = useState(false);
+  const [isProcessing, setProcessing] = useState(false);
   const { run } = useBatchCompleteUninscribedTransaction({});
 
   const numbPending = React.useMemo(() => {
@@ -206,7 +206,13 @@ const Transactions = React.memo(() => {
         ),
         status:
           statusCode === 0 ? (
-            <Button bg="bg6" className="resume-btn" type="button" onClick={handleResumeTransactions}>
+            <Button
+              bg="bg6"
+              className="resume-btn"
+              type="button"
+              onClick={handleResumeTransactions}
+              disabled={isProcessing}
+            >
               Process
             </Button>
           ) : (
@@ -228,14 +234,22 @@ const Transactions = React.memo(() => {
 
   return (
     <StyledTransactionProfile>
-      <div className="header-wrapper">
-        <Text size="h5">{`You have ${numbPending} incomplete ${
-          numbPending === 1 ? 'transaction' : 'transactions'
-        }`}</Text>
-        <Button bg="bg6" className="process-btn" type="button" onClick={handleResumeTransactions}>
-          Process them now
-        </Button>
-      </div>
+      {!!numbPending && (
+        <div className="header-wrapper">
+          <Text size="h5">{`You have ${numbPending} incomplete ${
+            numbPending === 1 ? 'transaction' : 'transactions'
+          }`}</Text>
+          <Button
+            disabled={isProcessing}
+            bg="bg6"
+            className="process-btn"
+            type="button"
+            onClick={handleResumeTransactions}
+          >
+            {isProcessing ? 'Processing...' : 'Process them now'}
+          </Button>
+        </div>
+      )}
       {isLoading && <Spinner />}
       <Table tableHead={TABLE_HEADINGS} data={transactionsData} className={'transaction-table'} />
     </StyledTransactionProfile>
