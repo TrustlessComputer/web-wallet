@@ -5,6 +5,25 @@ export const StyledTransactionProfile = styled.div`
   .transactions {
     height: 100vh;
   }
+  .header-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+
+    padding: ${px2rem(24)} ${px2rem(48)};
+    background-color: #2e2e2e;
+    margin-bottom: 32px;
+
+    gap: ${px2rem(32)};
+
+    .process-btn {
+      padding: 12px 32px;
+      border-radius: 4px;
+      font-size: ${px2rem(16)};
+      font-weight: 600;
+    }
+  }
 
   .loading {
     min-height: ${px2rem(200)};

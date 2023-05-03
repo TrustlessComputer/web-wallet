@@ -85,6 +85,22 @@ export const StyledUserInfo = styled.div`
     }
   }
 
+  .share-btn {
+    display: flex;
+    align-items: center;
+    gap: ${px2rem(12)};
+    cursor: pointer;
+    margin-bottom: 12px;
+
+    &:hover {
+      opacity: 0.75;
+    }
+    img {
+      max-width: 18px;
+      filter: sepia(100%) saturate(200%) brightness(1300%) hue-rotate(330deg);
+    }
+  }
+
   .send-btn {
     display: flex;
     align-items: center;

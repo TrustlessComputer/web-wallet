@@ -36,6 +36,10 @@ const Transactions = React.memo(() => {
   const [, setProcessing] = useState(false);
   const { run } = useBatchCompleteUninscribedTransaction({});
 
+  const numbPending = React.useMemo(() => {
+    return transactions.filter(item => item.statusCode === 0).length;
+  }, [transactions]);
+
   const handleResumeTransactions = async () => {
     try {
       setProcessing(true);
@@ -224,6 +228,14 @@ const Transactions = React.memo(() => {
 
   return (
     <StyledTransactionProfile>
+      <div className="header-wrapper">
+        <Text size="h5">{`You have ${numbPending} incomplete ${
+          numbPending === 1 ? 'transaction' : 'transactions'
+        }`}</Text>
+        <Button bg="bg6" className="process-btn" type="button" onClick={handleResumeTransactions}>
+          Process them now
+        </Button>
+      </div>
       {isLoading && <Spinner />}
       <Table tableHead={TABLE_HEADINGS} data={transactionsData} className={'transaction-table'} />
     </StyledTransactionProfile>
