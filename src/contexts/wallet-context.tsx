@@ -7,6 +7,8 @@ import { generateBitcoinTaprootKey } from '@/utils/derive-key';
 import { switchChain } from '@/utils';
 import { SupportedChainId } from '@/constants/chains';
 import { useCurrentUser } from '@/state/user/hooks';
+import { triggerSwitchAccount } from '@/services/tcNode';
+import { getLastedWalletAddress, setLastedWalletAddress } from '@/utils/auth-storage';
 
 export interface IWalletContext {
   onDisconnect: () => Promise<void>;
@@ -33,6 +35,10 @@ export const WalletProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
     const accounts = await connector.provider?.request({
       method: 'eth_accounts',
     });
+
+    if (accounts && Array.isArray(accounts)) {
+      triggerChangeAccount(accounts[0]);
+    }
     return accounts as string[] | null;
   }, [connector]);
 
@@ -74,6 +80,14 @@ export const WalletProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
     },
     [dispatch, account],
   );
+
+  const triggerChangeAccount = (address: string) => {
+    const lastedWalletAddress = getLastedWalletAddress();
+    if (lastedWalletAddress === null || lastedWalletAddress.toLocaleLowerCase() !== address.toLocaleLowerCase()) {
+      triggerSwitchAccount(address);
+      setLastedWalletAddress(address);
+    }
+  };
 
   useEffect(() => {
     const handleAccountsChanged = async () => {

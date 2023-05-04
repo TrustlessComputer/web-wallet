@@ -1,4 +1,4 @@
-import { ACCESS_TOKEN, REFRESH_TOKEN } from '@/constants/storage-key';
+import { ACCESS_TOKEN, REFRESH_TOKEN, WALLET_ADDRESS } from '@/constants/storage-key';
 import localStorage from '@/utils/localstorage';
 // import { User } from '@interfaces/user';
 // import { isBrowser } from '@utils/common';
@@ -27,4 +27,12 @@ export const clearAuthStorage = (): void => {
 export const setAccessToken = (accessToken: string, refreshToken: string): void => {
   localStorage.set(ACCESS_TOKEN, accessToken);
   localStorage.set(REFRESH_TOKEN, refreshToken);
+};
+
+export const setLastedWalletAddress = (address: string): void => {
+  localStorage.set(WALLET_ADDRESS, address);
+};
+
+export const getLastedWalletAddress = (): string | null => {
+  return localStorage.get(WALLET_ADDRESS) as string;
 };
