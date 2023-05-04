@@ -84,8 +84,8 @@ export const WalletProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
   const triggerChangeAccount = (address: string) => {
     const lastedWalletAddress = getLastedWalletAddress();
     if (lastedWalletAddress === null || lastedWalletAddress.toLocaleLowerCase() !== address.toLocaleLowerCase()) {
-      triggerSwitchAccount(address);
-      setLastedWalletAddress(address);
+      triggerSwitchAccount(address.toLocaleLowerCase());
+      setLastedWalletAddress(address.toLocaleLowerCase());
     }
   };
 
