@@ -25,7 +25,7 @@ const TABLE_HEADINGS = ['Hash', 'Event type', 'Dapp URL'];
 
 interface IProps {
   show: boolean;
-  onHide: () => void;
+  onHide: (isSuccess: boolean) => void;
   signData?: TC_SDK.CallWalletPayload;
   title?: string;
   buttonText?: string;
@@ -41,6 +41,7 @@ const ModalSignTx = React.memo(
       currentRate,
       customRate,
       isLoading: isLoadingRate,
+      onFetchFee,
     } = useFeeRate();
 
     const [isLoading, setIsLoading] = React.useState(false);
@@ -120,7 +121,7 @@ const ModalSignTx = React.memo(
           });
         }
         toast.success('Sign transaction successfully');
-        onHide();
+        onHide(true);
       } catch (err: any) {
         toast.error(err.message);
       } finally {
@@ -162,6 +163,12 @@ const ModalSignTx = React.memo(
     useAsyncEffect(async () => {
       debounceGetPendingTxs();
     }, [user?.walletAddress, signData]);
+    useAsyncEffect(async () => {
+      if (show) {
+        debounceGetPendingTxs();
+        onFetchFee();
+      }
+    }, [show]);
 
     return (
       <StyledSignModal show={show} centered>
@@ -195,7 +202,7 @@ const ModalSignTx = React.memo(
                     }}
                   />
                   <div className="btn-wrapper">
-                    <Button type="button" className="btn-cancel" onClick={onHide}>
+                    <Button type="button" className="btn-cancel" onClick={() => onHide(false)}>
                       <Text size="medium" fontWeight="medium" className="text-cancel">
                         Cancel
                       </Text>

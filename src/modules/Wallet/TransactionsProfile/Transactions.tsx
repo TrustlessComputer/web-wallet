@@ -41,9 +41,11 @@ const Transactions = React.memo(() => {
     return transactions.filter(item => item.statusCode === 0).length;
   }, [transactions]);
 
-  const onHide = () => {
+  const onHide = (isSuccess: boolean) => {
     setIsShow(false);
-    debounceGetTransactions();
+    if (isSuccess) {
+      debounceGetTransactions();
+    }
   };
 
   const handleResumeTransactions = async () => {

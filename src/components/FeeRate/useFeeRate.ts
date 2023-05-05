@@ -46,6 +46,7 @@ const useFeeRate = () => {
 
     onChangeFee,
     onChangeCustomFee,
+    onFetchFee,
   };
 };
 
