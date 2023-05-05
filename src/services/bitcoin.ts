@@ -92,13 +92,6 @@ export const getFeeRate = async (): Promise<IFeeRate> => {
   try {
     const res = await fetch('https://mempool.space/api/v1/fees/recommended');
     const fee: IFeeRate = await res.json();
-    if (fee[FeeRateName.fastestFee] <= 10) {
-      return {
-        [FeeRateName.fastestFee]: 15,
-        [FeeRateName.halfHourFee]: 10,
-        [FeeRateName.hourFee]: 5,
-      };
-    }
     return fee;
   } catch (err: unknown) {
     console.log(err);

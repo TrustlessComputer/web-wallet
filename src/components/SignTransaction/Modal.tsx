@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import useBitcoin from '@/hooks/useBitcoin';
 import useAsyncEffect from 'use-async-effect';
 import { useCurrentUser } from '@/state/user/hooks';
@@ -13,14 +13,13 @@ import * as TC_SDK from 'trustless-computer-sdk';
 import debounce from 'lodash/debounce';
 import LoadingContainer from '@/components/Loader';
 import { ellipsisCenter } from '@/utils';
-import { AssetsContext } from '@/contexts/assets-context';
 import Table from '@/components/Table';
 import { ITCTxDetail } from '@/interfaces/transaction';
 import bitcoinStorage from '@/utils/bitcoin-storage';
 import Web3 from 'web3';
-import BigNumber from 'bignumber.js';
-import { formatBTCPrice } from '@/utils/format';
 import { triggerHash } from '@/services/bridgeClient';
+import { FeeRate } from '@/components/FeeRate';
+import useFeeRate from '@/components/FeeRate/useFeeRate';
 
 const TABLE_HEADINGS = ['Hash', 'Event type', 'Dapp URL'];
 
@@ -31,7 +30,16 @@ interface IProps {
 }
 
 const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
-  const { feeRate } = useContext(AssetsContext);
+  const {
+    feeRate,
+    onChangeFee,
+    onChangeCustomFee,
+    currentRateType,
+    currentRate,
+    customRate,
+    isLoading: isLoadingRate,
+  } = useFeeRate();
+
   const [isLoading, setIsLoading] = React.useState(false);
   const [submitting, setSubmitting] = React.useState(false);
   const [pendingTxs, setPendingTxs] = React.useState<ITCTxDetail[]>([]);
@@ -86,19 +94,6 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
     }
   };
 
-  const txFee = React.useMemo(() => {
-    if (!pendingTxs.length || !sizeByte) return undefined;
-    try {
-      const _txFee = TC_SDK.estimateInscribeFee({
-        feeRatePerByte: feeRate.fastestFee,
-        tcTxSizeByte: sizeByte,
-      });
-      return _txFee.totalFee.integerValue(BigNumber.ROUND_CEIL).toNumber();
-    } catch (e) {
-      return undefined;
-    }
-  }, [sizeByte, pendingTxs]);
-
   const debounceGetPendingTxs = React.useCallback(debounce(getPendingTxs, 200), [user?.walletAddress, signData]);
 
   const handleSubmit = async () => {
@@ -106,7 +101,7 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
       setSubmitting(true);
       const resp = await createBatchInscribeTxs({
         tcTxDetails: [...pendingTxs],
-        feeRatePerByte: feeRate.fastestFee,
+        feeRatePerByte: currentRate,
       });
       for (const submited of resp) {
         const { tcTxIDs, revealTxID } = submited;
@@ -179,24 +174,30 @@ const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
                   {!isLoading && !!pendingTxs.length && (
                     <>
                       <Table tableHead={TABLE_HEADINGS} data={tokenDatas} className={'token-table'} />
-                      <div className="row-bw">
-                        <Text size="medium" fontWeight="semibold">
-                          Transaction Fee
-                        </Text>
-                        <Text size="large" fontWeight="semibold">
-                          {formatBTCPrice(txFee || 0)} BTC
-                        </Text>
-                      </div>
                     </>
                   )}
                 </WrapperTx>
+                <FeeRate
+                  allRate={feeRate}
+                  isCustom={true}
+                  onChangeFee={onChangeFee}
+                  onChangeCustomFee={onChangeCustomFee}
+                  currentRateType={currentRateType}
+                  currentRate={currentRate}
+                  customRate={customRate}
+                  isLoading={isLoadingRate || isLoading}
+                  options={{
+                    type: 'inscribe',
+                    sizeByte: sizeByte,
+                  }}
+                />
                 <div className="btn-wrapper">
                   <Button type="button" className="btn-cancel" onClick={onHide}>
                     <Text size="medium" fontWeight="medium" className="text-cancel">
                       Cancel
                     </Text>
                   </Button>
-                  <Button type="submit" className="btn-submit" disabled={submitting}>
+                  <Button type="submit" className="btn-submit" disabled={submitting || isLoading || isLoadingRate}>
                     <Text color="text8" size="medium" fontWeight="medium">
                       {submitting ? 'Processing...' : 'Sign'}
                     </Text>
