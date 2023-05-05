@@ -64,6 +64,7 @@ const SendBTCModal = React.memo(({ show, onHide }: IProps) => {
       onHide();
     } catch (err) {
       console.log('SEND BTC ERROR: ', err);
+      if (err instanceof Error) toast.error(err.message);
     } finally {
       setSubmitting(false);
     }
