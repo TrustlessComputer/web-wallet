@@ -81,6 +81,7 @@ const FeeRate = React.memo((props: IProps) => {
   };
 
   const renderCustomRate = () => {
+    const { amount, symbol } = calcAmount(props.customRate);
     return (
       <ItemWrapper
         lg="3"
@@ -96,7 +97,8 @@ const FeeRate = React.memo((props: IProps) => {
         <Text size="large" align="center">
           Customize Sats
         </Text>
-        <Text size="regular" className="vbyte">{`${props.customRate} sats/vByte`}</Text>
+        {!!amount && amount !== '-' && <Text size="regular" className="vbyte">{`~${amount} ${symbol}`}</Text>}
+        {/*{!!amount && <Text size="regular" className="vbyte">{`${props.customRate} sats/vByte`}</Text>}*/}
         <input
           ref={customRef}
           id="feeRate"
