@@ -27,190 +27,194 @@ interface IProps {
   show: boolean;
   onHide: () => void;
   signData?: TC_SDK.CallWalletPayload;
+  title?: string;
+  buttonText?: string;
 }
 
-const ModalSignTx = React.memo(({ show, onHide, signData }: IProps) => {
-  const {
-    feeRate,
-    onChangeFee,
-    onChangeCustomFee,
-    currentRateType,
-    currentRate,
-    customRate,
-    isLoading: isLoadingRate,
-  } = useFeeRate();
+const ModalSignTx = React.memo(
+  ({ show, onHide, signData, title = 'SIGN TRANSACTION', buttonText = 'Sign' }: IProps) => {
+    const {
+      feeRate,
+      onChangeFee,
+      onChangeCustomFee,
+      currentRateType,
+      currentRate,
+      customRate,
+      isLoading: isLoadingRate,
+    } = useFeeRate();
 
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [submitting, setSubmitting] = React.useState(false);
-  const [pendingTxs, setPendingTxs] = React.useState<ITCTxDetail[]>([]);
-  const user = useCurrentUser();
-  const [sizeByte, setSizeByte] = React.useState<number | undefined>(undefined);
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [submitting, setSubmitting] = React.useState(false);
+    const [pendingTxs, setPendingTxs] = React.useState<ITCTxDetail[]>([]);
+    const user = useCurrentUser();
+    const [sizeByte, setSizeByte] = React.useState<number | undefined>(undefined);
 
-  const { getUnInscribedTransactionDetailByAddress, createBatchInscribeTxs, getTCTransactionByHash } = useBitcoin();
+    const { getUnInscribedTransactionDetailByAddress, createBatchInscribeTxs, getTCTransactionByHash } = useBitcoin();
 
-  const debounceTriggerHash = React.useCallback(debounce(triggerHash, 1000), []);
+    const debounceTriggerHash = React.useCallback(debounce(triggerHash, 1000), []);
 
-  const getPendingTxs = async () => {
-    try {
-      if (!user) {
-        throw new WError(ERROR_CODE.EMPTY_USER);
-      }
-      setIsLoading(true);
-      let pendingTxs = (await getUnInscribedTransactionDetailByAddress(user.walletAddress)).map(tx => {
-        if (!signData?.hash || tx.Hash.toLowerCase() !== signData.hash.toLowerCase()) return tx;
-        return {
-          ...tx,
-          dappURL: signData.dappURL,
-          method: signData.method,
-        };
-      });
-
-      if (signData && signData.hash) {
-        if (!pendingTxs || pendingTxs.length === 0) {
-          debounceTriggerHash(signData.hash, user.walletAddress);
+    const getPendingTxs = async () => {
+      try {
+        if (!user) {
+          throw new WError(ERROR_CODE.EMPTY_USER);
         }
-        const _signTx = pendingTxs.find(tx => tx.Hash.toLowerCase() === signData.hash.toLowerCase());
-        if (_signTx) {
-          bitcoinStorage.updateStorageTransaction(user.walletAddress, {
-            ..._signTx,
-          });
-        }
-      }
-      setPendingTxs(pendingTxs);
-      const Hexs = await Promise.all(
-        pendingTxs.map(({ Hash }) => {
-          return getTCTransactionByHash(Hash);
-        }),
-      );
-      const sizeByte: number = Hexs.reduce((prev, curr) => {
-        const currSize = Web3.utils.hexToBytes(curr).length;
-        return currSize + prev;
-      }, 0);
-      setSizeByte(sizeByte);
-    } catch (e) {
-      // handle error
-    } finally {
-      setIsLoading(false);
-    }
-  };
+        setIsLoading(true);
+        let pendingTxs = (await getUnInscribedTransactionDetailByAddress(user.walletAddress)).map(tx => {
+          if (!signData?.hash || tx.Hash.toLowerCase() !== signData.hash.toLowerCase()) return tx;
+          return {
+            ...tx,
+            dappURL: signData.dappURL,
+            method: signData.method,
+          };
+        });
 
-  const debounceGetPendingTxs = React.useCallback(debounce(getPendingTxs, 200), [user?.walletAddress, signData]);
-
-  const handleSubmit = async () => {
-    try {
-      setSubmitting(true);
-      const resp = await createBatchInscribeTxs({
-        tcTxDetails: [...pendingTxs],
-        feeRatePerByte: currentRate,
-      });
-      for (const submited of resp) {
-        const { tcTxIDs, revealTxID } = submited;
-        pendingTxs.forEach(tx => {
-          const isExist = tcTxIDs.some(hash => hash.toLowerCase() === tx.Hash.toLowerCase());
-          if (isExist) {
-            bitcoinStorage.updateStorageTransaction(user?.walletAddress || '', {
-              ...tx,
-              statusCode: 1,
-              btcHash: revealTxID,
+        if (signData && signData.hash) {
+          if (!pendingTxs || pendingTxs.length === 0) {
+            debounceTriggerHash(signData.hash, user.walletAddress);
+          }
+          const _signTx = pendingTxs.find(tx => tx.Hash.toLowerCase() === signData.hash.toLowerCase());
+          if (_signTx) {
+            bitcoinStorage.updateStorageTransaction(user.walletAddress, {
+              ..._signTx,
             });
           }
-        });
+        }
+        setPendingTxs(pendingTxs);
+        const Hexs = await Promise.all(
+          pendingTxs.map(({ Hash }) => {
+            return getTCTransactionByHash(Hash);
+          }),
+        );
+        const sizeByte: number = Hexs.reduce((prev, curr) => {
+          const currSize = Web3.utils.hexToBytes(curr).length;
+          return currSize + prev;
+        }, 0);
+        setSizeByte(sizeByte);
+      } catch (e) {
+        // handle error
+      } finally {
+        setIsLoading(false);
       }
-      toast.success('Sign transaction successfully');
-      onHide();
-    } catch (err: any) {
-      toast.error(err.message);
-    } finally {
-      setSubmitting(false);
-    }
-  };
+    };
 
-  const tokenDatas =
-    (pendingTxs &&
-      pendingTxs.length > 0 &&
-      pendingTxs.map(tx => {
-        return {
-          id: `transaction-${tx?.Hash}}`,
-          render: {
-            hash: (
-              <Text color="text1" size="medium">
-                {ellipsisCenter({ str: tx.Hash, limit: 5 })}
-              </Text>
-            ),
-            event: (
-              <Text color="text1" size="medium">
-                {tx.method || '-'}
-              </Text>
-            ),
-            url: tx.dappURL ? (
-              <a href={tx.dappURL} target="_blank">
+    const debounceGetPendingTxs = React.useCallback(debounce(getPendingTxs, 200), [user?.walletAddress, signData]);
+
+    const handleSubmit = async () => {
+      try {
+        setSubmitting(true);
+        const resp = await createBatchInscribeTxs({
+          tcTxDetails: [...pendingTxs],
+          feeRatePerByte: currentRate,
+        });
+        for (const submited of resp) {
+          const { tcTxIDs, revealTxID } = submited;
+          pendingTxs.forEach(tx => {
+            const isExist = tcTxIDs.some(hash => hash.toLowerCase() === tx.Hash.toLowerCase());
+            if (isExist) {
+              bitcoinStorage.updateStorageTransaction(user?.walletAddress || '', {
+                ...tx,
+                statusCode: 1,
+                btcHash: revealTxID,
+              });
+            }
+          });
+        }
+        toast.success('Sign transaction successfully');
+        onHide();
+      } catch (err: any) {
+        toast.error(err.message);
+      } finally {
+        setSubmitting(false);
+      }
+    };
+
+    const tokenDatas =
+      (pendingTxs &&
+        pendingTxs.length > 0 &&
+        pendingTxs.map(tx => {
+          return {
+            id: `transaction-${tx?.Hash}}`,
+            render: {
+              hash: (
                 <Text color="text1" size="medium">
-                  {tx.dappURL || '-'}
+                  {ellipsisCenter({ str: tx.Hash, limit: 5 })}
                 </Text>
-              </a>
-            ) : (
-              '-'
-            ),
-          },
-        };
-      })) ||
-    [];
+              ),
+              event: (
+                <Text color="text1" size="medium">
+                  {tx.method || '-'}
+                </Text>
+              ),
+              url: tx.dappURL ? (
+                <a href={tx.dappURL} target="_blank">
+                  <Text color="text1" size="medium">
+                    {tx.dappURL || '-'}
+                  </Text>
+                </a>
+              ) : (
+                '-'
+              ),
+            },
+          };
+        })) ||
+      [];
 
-  useAsyncEffect(async () => {
-    debounceGetPendingTxs();
-  }, [user?.walletAddress, signData]);
+    useAsyncEffect(async () => {
+      debounceGetPendingTxs();
+    }, [user?.walletAddress, signData]);
 
-  return (
-    <StyledSignModal show={show} centered>
-      <Modal.Body>
-        <Text size="h5" className="font-medium mb-24 header-title">
-          SIGN TRANSACTION
-        </Text>
-        <Formik key="sign" initialValues={{}} onSubmit={handleSubmit}>
-          {({ handleSubmit }) => (
-            <form onSubmit={handleSubmit}>
-              <div className="container">
-                <WrapperTx>
-                  {!isLoading && !!pendingTxs.length && (
-                    <>
-                      <Table tableHead={TABLE_HEADINGS} data={tokenDatas} className={'token-table'} />
-                    </>
-                  )}
-                </WrapperTx>
-                <FeeRate
-                  allRate={feeRate}
-                  isCustom={true}
-                  onChangeFee={onChangeFee}
-                  onChangeCustomFee={onChangeCustomFee}
-                  currentRateType={currentRateType}
-                  currentRate={currentRate}
-                  customRate={customRate}
-                  isLoading={isLoadingRate || isLoading}
-                  options={{
-                    type: 'inscribe',
-                    sizeByte: sizeByte,
-                  }}
-                />
-                <div className="btn-wrapper">
-                  <Button type="button" className="btn-cancel" onClick={onHide}>
-                    <Text size="medium" fontWeight="medium" className="text-cancel">
-                      Cancel
-                    </Text>
-                  </Button>
-                  <Button type="submit" className="btn-submit" disabled={submitting || isLoading || isLoadingRate}>
-                    <Text color="text8" size="medium" fontWeight="medium">
-                      {submitting ? 'Processing...' : 'Sign'}
-                    </Text>
-                  </Button>
-                  <LoadingContainer loaded={!isLoading && !submitting} />
+    return (
+      <StyledSignModal show={show} centered>
+        <Modal.Body>
+          <Text style={{ textTransform: 'uppercase' }} size="h5" className="font-medium mb-24 header-title">
+            {title}
+          </Text>
+          <Formik key="sign" initialValues={{}} onSubmit={handleSubmit}>
+            {({ handleSubmit }) => (
+              <form onSubmit={handleSubmit}>
+                <div className="container">
+                  <WrapperTx>
+                    {!isLoading && !!pendingTxs.length && (
+                      <>
+                        <Table tableHead={TABLE_HEADINGS} data={tokenDatas} className={'token-table'} />
+                      </>
+                    )}
+                  </WrapperTx>
+                  <FeeRate
+                    allRate={feeRate}
+                    isCustom={true}
+                    onChangeFee={onChangeFee}
+                    onChangeCustomFee={onChangeCustomFee}
+                    currentRateType={currentRateType}
+                    currentRate={currentRate}
+                    customRate={customRate}
+                    isLoading={isLoadingRate || isLoading}
+                    options={{
+                      type: 'inscribe',
+                      sizeByte: sizeByte,
+                    }}
+                  />
+                  <div className="btn-wrapper">
+                    <Button type="button" className="btn-cancel" onClick={onHide}>
+                      <Text size="medium" fontWeight="medium" className="text-cancel">
+                        Cancel
+                      </Text>
+                    </Button>
+                    <Button type="submit" className="btn-submit" disabled={submitting || isLoading || isLoadingRate}>
+                      <Text color="text8" size="medium" fontWeight="medium">
+                        {submitting ? 'Processing...' : buttonText}
+                      </Text>
+                    </Button>
+                    <LoadingContainer loaded={!isLoading && !submitting} />
+                  </div>
                 </div>
-              </div>
-            </form>
-          )}
-        </Formik>
-      </Modal.Body>
-    </StyledSignModal>
-  );
-});
+              </form>
+            )}
+          </Formik>
+        </Modal.Body>
+      </StyledSignModal>
+    );
+  },
+);
 
 export default ModalSignTx;

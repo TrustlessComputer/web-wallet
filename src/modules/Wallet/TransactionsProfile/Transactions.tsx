@@ -16,8 +16,8 @@ import { TC_NETWORK_RPC } from '@/configs';
 import Spinner from '@/components/Spinner';
 import { formatUnixDateTime } from '@/utils/time';
 import { BTC_NETWORK } from '@/utils/commons';
-import useBatchCompleteUninscribedTransaction from '@/hooks/contract-operations/useBatchCompleteUninscribedTransaction';
 import Button from '@/components/Button';
+import { ModalSignTx } from '@/components/SignTransaction';
 
 const TABLE_HEADINGS = ['Event', 'Transaction ID', 'From', 'To', 'Time', 'Status'];
 
@@ -33,26 +33,31 @@ const Transactions = React.memo(() => {
   const user = useCurrentUser();
   const [transactions, setTransactions] = useState<ITCTxDetail[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [isProcessing, setProcessing] = useState(false);
-  const { run } = useBatchCompleteUninscribedTransaction({});
-
+  // const [isProcessing, setProcessing] = useState(false);
+  // const { run } = useBatchCompleteUninscribedTransaction({});
+  const { getUnInscribedTransactionDetailByAddress } = useBitcoin();
+  const [isShow, setIsShow] = React.useState(false);
   const numbPending = React.useMemo(() => {
     return transactions.filter(item => item.statusCode === 0).length;
   }, [transactions]);
 
-  const handleResumeTransactions = async () => {
-    try {
-      setProcessing(true);
-      await run();
-    } catch (err: any) {
-      toast.error(err.message);
-    } finally {
-      setProcessing(false);
-      debounceGetTransactions();
-    }
+  const onHide = () => {
+    setIsShow(false);
+    debounceGetTransactions();
   };
 
-  const { getUnInscribedTransactionDetailByAddress } = useBitcoin();
+  const handleResumeTransactions = async () => {
+    setIsShow(true);
+    // try {
+    //   setProcessing(true);
+    //   await run();
+    // } catch (err: any) {
+    //   toast.error(err.message);
+    // } finally {
+    //   setProcessing(false);
+    //   debounceGetTransactions();
+    // }
+  };
 
   const getStatusCode = async (txHash: string, tcAddress: string): Promise<IStatusCode> => {
     if (tcAddress) {
@@ -206,13 +211,7 @@ const Transactions = React.memo(() => {
         ),
         status:
           statusCode === 0 ? (
-            <Button
-              bg="bg6"
-              className="resume-btn"
-              type="button"
-              onClick={handleResumeTransactions}
-              disabled={isProcessing}
-            >
+            <Button bg="bg6" className="resume-btn" type="button" onClick={handleResumeTransactions}>
               Process
             </Button>
           ) : (
@@ -239,19 +238,14 @@ const Transactions = React.memo(() => {
           <Text size="h5">{`You have ${numbPending} incomplete ${
             numbPending === 1 ? 'transaction' : 'transactions'
           }`}</Text>
-          <Button
-            disabled={isProcessing}
-            bg="bg6"
-            className="process-btn"
-            type="button"
-            onClick={handleResumeTransactions}
-          >
-            {isProcessing ? 'Processing...' : 'Process them now'}
+          <Button bg="bg6" className="process-btn" type="button" onClick={handleResumeTransactions}>
+            {'Process them now'}
           </Button>
         </div>
       )}
       {isLoading && <Spinner />}
       <Table tableHead={TABLE_HEADINGS} data={transactionsData} className={'transaction-table'} />
+      <ModalSignTx show={isShow} onHide={onHide} title="Process pending transactions" buttonText="Process now" />
     </StyledTransactionProfile>
   );
 });
