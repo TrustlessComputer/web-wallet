@@ -16,6 +16,7 @@ interface IProps {
 
   onChangeFee: (rate: FeeRateName) => void;
   onChangeCustomFee?: (rate: string) => void;
+  error?: string;
 
   options?: {
     type: 'inscribe';
@@ -126,6 +127,11 @@ const FeeRate = React.memo((props: IProps) => {
         {renderItem(FeeRateName.fastestFee)}
         {renderCustomRate()}
       </Content>
+      {!!props.error && (
+        <Text color="red" size="medium" style={{ marginTop: -24 }}>
+          {props.error}
+        </Text>
+      )}
     </Container>
   );
 });

@@ -18,6 +18,7 @@ import { formatUnixDateTime } from '@/utils/time';
 import { BTC_NETWORK } from '@/utils/commons';
 import Button from '@/components/Button';
 import { ModalSignTx } from '@/components/SignTransaction';
+import ModalSpeedUp from '@/components/SpeedUp/Modal';
 
 const TABLE_HEADINGS = ['Event', 'Transaction ID', 'From', 'To', 'Time', 'Status'];
 
@@ -29,14 +30,21 @@ export enum TransactionStatus {
   Success = 'Success',
 }
 
+export interface ISpeedUpTx {
+  btcHash: string;
+  tcTxs: ITCTxDetail[];
+  minFeeRate: number;
+}
+
 const Transactions = React.memo(() => {
   const user = useCurrentUser();
   const [transactions, setTransactions] = useState<ITCTxDetail[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  // const [isProcessing, setProcessing] = useState(false);
-  // const { run } = useBatchCompleteUninscribedTransaction({});
-  const { getUnInscribedTransactionDetailByAddress } = useBitcoin();
+  const { getUnInscribedTransactionDetailByAddress, isRBFable } = useBitcoin();
   const [isShow, setIsShow] = React.useState(false);
+  const [isShowModalSpeedup, setIsShowModalSpeedup] = React.useState(false);
+  const [speedUpTx, setSpeedUpTx] = React.useState<ISpeedUpTx | undefined>(undefined);
+
   const numbPending = React.useMemo(() => {
     return transactions.filter(item => item.statusCode === 0).length;
   }, [transactions]);
@@ -48,17 +56,30 @@ const Transactions = React.memo(() => {
     }
   };
 
+  const onHideModalSpeedUp = (isSuccess: boolean) => {
+    setIsShowModalSpeedup(false);
+    setSpeedUpTx(undefined);
+    if (isSuccess) {
+      debounceGetTransactions();
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
+    }
+  };
+
   const handleResumeTransactions = async () => {
     setIsShow(true);
-    // try {
-    //   setProcessing(true);
-    //   await run();
-    // } catch (err: any) {
-    //   toast.error(err.message);
-    // } finally {
-    //   setProcessing(false);
-    //   debounceGetTransactions();
-    // }
+  };
+
+  const handleSpeedUp = async (btcHash: string) => {
+    setIsShowModalSpeedup(true);
+    const tcTxs = transactions.filter(trans => trans.btcHash && trans.btcHash.toLowerCase() === btcHash.toLowerCase());
+    const feeRate = tcTxs.find(tx => !tx.feeRate)?.feeRate || 0;
+    setSpeedUpTx({
+      btcHash,
+      tcTxs,
+      minFeeRate: feeRate,
+    });
   };
 
   const getStatusCode = async (txHash: string, tcAddress: string): Promise<IStatusCode> => {
@@ -67,6 +88,9 @@ const Transactions = React.memo(() => {
         const tcClient = new TC_SDK.TcClient(BTC_NETWORK, TC_NETWORK_RPC);
         const res = await tcClient.getTCTxByHash(txHash);
         if (res && res.blockHash) {
+          if (res.blockHash === '0x0') {
+            return 3;
+          }
           return 2;
         }
       } catch (e) {
@@ -103,16 +127,34 @@ const Transactions = React.memo(() => {
       const localTxs = [];
       for (const local of localFilter) {
         const hash = local.Hash;
-        let shouldUpdateStorage = local?.statusCode !== 2;
-        const statusCode = local?.statusCode === 2 ? 2 : await getStatusCode(hash, user.walletAddress);
+        let shouldUpdateStorage = local?.statusCode !== 2 && local?.statusCode !== 3;
+        const statusCode =
+          local?.statusCode === 2 || local?.statusCode === 3
+            ? local?.statusCode
+            : await getStatusCode(hash, user.walletAddress);
+        let _isRBFable = false;
+        let _currentRate = 0;
+        if (local.btcHash && local.statusCode === 1) {
+          const { isRBFable: canReplace, oldFeeRate: currentRate } = await isRBFable({
+            btcHash: local.btcHash,
+            btcAddress: user.walletAddressBtcTaproot,
+            tcAddress: user.walletAddress,
+          });
+          _isRBFable = canReplace;
+          _currentRate = currentRate;
+        }
+
         const _tx = {
           ...local,
           statusCode,
+          isRBFable: _isRBFable,
+          feeRate: _currentRate,
         };
-        if (statusCode === 2 && shouldUpdateStorage) {
+
+        if ((statusCode === 2 || statusCode === 3) && shouldUpdateStorage) {
           bitcoinStorage.updateStorageTransaction(user.walletAddress, {
             ..._tx,
-            statusCode: 2,
+            statusCode: statusCode,
           });
         }
         localTxs.push(_tx);
@@ -146,9 +188,12 @@ const Transactions = React.memo(() => {
       case 2:
         status = TransactionStatus.Confirmed;
         break;
+      case 3:
+        status = TransactionStatus.Failed;
+        break;
     }
     let statusComp = undefined;
-    if (trans.btcHash !== undefined) {
+    if (trans.btcHash !== undefined && trans.statusCode !== 3) {
       const mesg = statusCode === 2 ? TransactionStatus.Success : 'Waiting in the mempool';
       statusComp = (
         <a
@@ -217,7 +262,21 @@ const Transactions = React.memo(() => {
               Process
             </Button>
           ) : (
-            <div className={`status ${status.toLowerCase()}`}>{statusComp ? statusComp : status}</div>
+            <>
+              <div className={`status ${status.toLowerCase()}`}>{statusComp ? statusComp : status}</div>
+              {!!trans.btcHash && !!trans.isRBFable && !!trans.feeRate && (
+                <Button
+                  bg="bg6"
+                  className="speedup-btn"
+                  type="button"
+                  onClick={() => {
+                    handleSpeedUp(trans.btcHash!);
+                  }}
+                >
+                  Speed up
+                </Button>
+              )}
+            </>
           ),
       },
     };
@@ -241,13 +300,14 @@ const Transactions = React.memo(() => {
             numbPending === 1 ? 'transaction' : 'transactions'
           }`}</Text>
           <Button bg="bg6" className="process-btn" type="button" onClick={handleResumeTransactions}>
-            {'Process them now'}
+            Process them now
           </Button>
         </div>
       )}
       {isLoading && <Spinner />}
       <Table tableHead={TABLE_HEADINGS} data={transactionsData} className={'transaction-table'} />
       <ModalSignTx show={isShow} onHide={onHide} title="Process pending transactions" buttonText="Process now" />
+      <ModalSpeedUp show={isShowModalSpeedup && !!speedUpTx} speedUpTx={speedUpTx} onHide={onHideModalSpeedUp} />
     </StyledTransactionProfile>
   );
 });

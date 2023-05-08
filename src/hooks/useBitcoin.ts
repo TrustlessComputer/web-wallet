@@ -51,6 +51,19 @@ export interface IInscriptionByOutput {
   [key: string]: TC_SDK.Inscription[];
 }
 
+export interface ICreateSpeedUpBTCParams {
+  btcHash: string;
+  feeRate: number;
+  tcAddress: string;
+  btcAddress: string;
+}
+
+export interface IIsSpeedUpBTCParams {
+  btcHash: string;
+  tcAddress: string;
+  btcAddress: string;
+}
+
 const useBitcoin = () => {
   const user = useCurrentUser();
   const tcClient = new TC_SDK.TcClient(BTC_NETWORK, TC_NETWORK_RPC);
@@ -234,6 +247,36 @@ const useBitcoin = () => {
     await TC_SDK.broadcastTx(txHex);
   };
 
+  const createSpeedUpBTCTx = async (payload: ICreateSpeedUpBTCParams): Promise<string> => {
+    const assets = await getAvailableAssetsCreateTx();
+    if (!assets) throw new Error('Can not load assets');
+    const { privateKey } = await signKey();
+    const { revealTxID } = await TC_SDK.replaceByFeeInscribeTx({
+      senderPrivateKey: privateKey,
+      utxos: assets.txrefs,
+      inscriptions: assets.inscriptions_by_outputs,
+      revealTxID: payload.btcHash,
+      feeRatePerByte: payload.feeRate,
+      tcClient,
+      tcAddress: payload.tcAddress,
+      btcAddress: payload.btcAddress,
+    });
+    return revealTxID;
+  };
+
+  const isRBFable = async (payload: IIsSpeedUpBTCParams) => {
+    const { isRBFable, oldFeeRate } = await TC_SDK.isRBFable({
+      revealTxID: payload.btcHash,
+      tcClient,
+      tcAddress: payload.tcAddress,
+      btcAddress: payload.btcAddress,
+    });
+    return {
+      isRBFable,
+      oldFeeRate,
+    };
+  };
+
   return {
     createInscribeTx,
     createBatchInscribeTxs,
@@ -242,7 +285,9 @@ const useBitcoin = () => {
     getUnInscribedTransactionByAddress,
     getUnInscribedTransactionDetailByAddress,
     getTCTransactionByHash,
+    createSpeedUpBTCTx,
     sendBTC,
+    isRBFable,
   };
 };
 

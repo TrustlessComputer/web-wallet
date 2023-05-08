@@ -7,6 +7,7 @@ import { ROUTE_PATH } from '@/constants/route-path';
 import ModalConfirmRequestDapp from '@/components/RequestDapp/Modal';
 import { SendBTCModal } from '@/components/SendBTC';
 import bitcoinStorage from '@/utils/bitcoin-storage';
+import { isProduction } from '@/utils/commons';
 
 export interface ITransactorContext {
   signData?: TC_SDK.CallWalletPayload;
@@ -55,6 +56,7 @@ export const TransactorProvider: React.FC<PropsWithChildren> = ({
           method,
           dappURL,
           isRedirect: Boolean(isRedirect),
+          isMainnet: isProduction(),
         };
         setSignData(payload);
         if (user?.walletAddress) {
@@ -67,6 +69,7 @@ export const TransactorProvider: React.FC<PropsWithChildren> = ({
       const target = searchParams.get('target');
       if (redirectURL && redirectURL) {
         setRequestData({
+          isMainnet: isProduction(),
           method: method as TC_SDK.RequestMethod,
           redirectURL: redirectURL,
           target: target as TC_SDK.Target,

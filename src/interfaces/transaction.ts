@@ -49,6 +49,8 @@ export interface ITCTxDetail extends TC_SDK.TCTxDetail {
   method?: string;
   btcHash?: string;
   statusCode?: IStatusCode;
+  isRBFable?: boolean;
+  feeRate?: number;
 }
 
 export interface IStoredSignValue extends TC_SDK.CallWalletPayload {

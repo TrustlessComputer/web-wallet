@@ -4,7 +4,11 @@ import { getFeeRate } from '@/services/bitcoin';
 import { FeeRateName, IFeeRate } from '@/interfaces/api/bitcoin';
 import { isNumeric } from '@/utils';
 
-const useFeeRate = () => {
+interface IProps {
+  minFeeRate: number | undefined;
+}
+
+const useFeeRate = ({ minFeeRate }: IProps) => {
   const [selectedRate, setRate] = useState<FeeRateName>(FeeRateName.fastestFee);
   const [customRate, setCustomRate] = useState<string>('');
 
@@ -37,12 +41,18 @@ const useFeeRate = () => {
     return customRate && isNumeric(customRate) ? Number(customRate) : feeRate[selectedRate];
   }, [customRate, selectedRate, feeRate]);
 
+  const error = React.useMemo(() => {
+    if (!minFeeRate || (minFeeRate && Number(currentRate || 0) > minFeeRate)) return '';
+    return `Minimum required sats are ${minFeeRate}.`;
+  }, [minFeeRate, currentRate]);
+
   return {
     isLoading: loading,
     feeRate,
     currentRate,
     customRate,
     currentRateType: customRate ? undefined : selectedRate,
+    error,
 
     onChangeFee,
     onChangeCustomFee,

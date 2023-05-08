@@ -42,7 +42,7 @@ const ModalSignTx = React.memo(
       customRate,
       isLoading: isLoadingRate,
       onFetchFee,
-    } = useFeeRate();
+    } = useFeeRate({ minFeeRate: undefined });
 
     const [isLoading, setIsLoading] = React.useState(false);
     const [submitting, setSubmitting] = React.useState(false);

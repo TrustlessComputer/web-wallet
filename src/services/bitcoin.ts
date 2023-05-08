@@ -7,7 +7,6 @@ import {
   IFeeRate,
   IPendingUTXO,
 } from '@/interfaces/api/bitcoin';
-import BigNumber from 'bignumber.js';
 import * as TC_SDK from 'trustless-computer-sdk';
 import { API_BLOCKSTREAM, TC_NETWORK_RPC } from '@/configs';
 import { BTC_NETWORK } from '@/utils/commons';
@@ -22,22 +21,7 @@ export const getCollectedUTXO = async (
 ): Promise<ICollectedUTXOResp | undefined> => {
   try {
     const collected: any = await apiClient.get<ICollectedUTXOResp>(`${WALLETS_API_PATH}/${btcAddress}`);
-    const incomingUTXOs: TC_SDK.UTXO[] = [];
-    const pendingUTXOs = await getPendingUTXOs(btcAddress);
-    for (const utxo of pendingUTXOs) {
-      for (let index = 0; index < utxo.vout.length; index++) {
-        const vout = utxo.vout[index];
-        if (vout.scriptpubkey_address.toLowerCase() === btcAddress.toLowerCase() && vout.value) {
-          // append incoming utxo
-          incomingUTXOs.push({
-            tx_hash: utxo.txid,
-            tx_output_n: index,
-            value: new BigNumber(vout.value),
-          });
-        }
-      }
-    }
-    const tempUTXOs = [...(collected?.txrefs || []), ...incomingUTXOs];
+    const tempUTXOs = [...(collected?.txrefs || [])];
     let utxos;
     try {
       const tcClient = new TC_SDK.TcClient(BTC_NETWORK, TC_NETWORK_RPC);

@@ -39,6 +39,17 @@ export const StyledTransactionProfile = styled.div`
     font-weight: 500;
   }
 
+  .speedup-btn {
+    padding: 6px 16px;
+    border-radius: 4px;
+    font-size: ${px2rem(14)};
+    font-weight: 500;
+    margin-top: 12px;
+    background-color: transparent;
+    border: 1px solid ${({ theme }) => theme.bg6};
+    color: ${({ theme }) => theme.bg6};
+  }
+
   .status {
     text-transform: capitalize;
 
@@ -52,6 +63,10 @@ export const StyledTransactionProfile = styled.div`
     }
     &.processing {
       color: #4185ec;
+      text-decoration: underline;
+    }
+    &.failed {
+      color: #ff4747;
       text-decoration: underline;
     }
     &.pending {
