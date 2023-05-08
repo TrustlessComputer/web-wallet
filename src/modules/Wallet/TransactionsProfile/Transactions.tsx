@@ -52,9 +52,8 @@ const Transactions = React.memo(() => {
   const onHide = (isSuccess: boolean) => {
     setIsShow(false);
     if (isSuccess) {
-      debounceGetTransactions();
       setTimeout(() => {
-        window.location.reload();
+        debounceGetTransactions();
       }, 1000);
     }
   };
@@ -63,9 +62,8 @@ const Transactions = React.memo(() => {
     setIsShowModalSpeedup(false);
     setSpeedUpTx(undefined);
     if (isSuccess) {
-      debounceGetTransactions();
       setTimeout(() => {
-        window.location.reload();
+        debounceGetTransactions();
       }, 1000);
     }
   };

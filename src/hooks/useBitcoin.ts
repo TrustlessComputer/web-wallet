@@ -261,7 +261,7 @@ const useBitcoin = () => {
       });
       return {
         isRBFable,
-        oldFeeRate,
+        oldFeeRate: Math.ceil(oldFeeRate),
       };
     } catch (e) {
       return {

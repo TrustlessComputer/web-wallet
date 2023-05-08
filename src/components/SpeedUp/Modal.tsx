@@ -63,9 +63,9 @@ const ModalSpeedUp = React.memo(({ show, onHide, title = 'Speed up', buttonText 
           tcAddress: user.walletAddress,
           btcAddress: user.walletAddressBtcTaproot,
         });
+        bitcoinStorage.updateSpeedUpBTCHash(newBTCHash, speedUpTx.btcHash, user?.walletAddress!);
         toast.success('Sign transaction successfully');
         onHide(true);
-        bitcoinStorage.updateSpeedUpBTCHash(newBTCHash, user?.walletAddress!);
       }
     } catch (err: any) {
       toast.error(err.message);
@@ -119,7 +119,6 @@ const ModalSpeedUp = React.memo(({ show, onHide, title = 'Speed up', buttonText 
                   <WrapperTx>
                     <div className="row-bw">
                       <Text size="large">BTC:</Text>
-
                       <Row style={{ display: 'flex', flexDirection: 'row' }}>
                         <Text size="large" className="tc-hash">
                           <a href={`https://mempool.space/tx/${speedUpTx.btcHash}`} target="_blank">
@@ -159,6 +158,12 @@ const ModalSpeedUp = React.memo(({ show, onHide, title = 'Speed up', buttonText 
                           </Row>
                         ))}
                       </div>
+                    </div>
+                    <div className="row-bw">
+                      <Text size="large">Current sats:</Text>
+                      <Text size="large" className="tc-hash">
+                        {speedUpTx.minFeeRate}
+                      </Text>
                     </div>
                   </WrapperTx>
                 )}

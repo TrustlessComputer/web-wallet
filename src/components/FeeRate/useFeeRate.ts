@@ -43,7 +43,7 @@ const useFeeRate = ({ minFeeRate }: IProps) => {
 
   const error = React.useMemo(() => {
     if (!minFeeRate || (minFeeRate && Number(currentRate || 0) > minFeeRate)) return '';
-    return `Minimum required sats are ${minFeeRate}.`;
+    return `Sats must be greater than ${minFeeRate}.`;
   }, [minFeeRate, currentRate]);
 
   return {

@@ -88,14 +88,14 @@ class BitCoinStorage {
       },
     });
   };
-  updateSpeedUpBTCHash = (btcHash: string, tcAddress: string) => {
+  updateSpeedUpBTCHash = (newBTCHash: string, oldBTCHash: string, tcAddress: string) => {
     const key = this.getTxsKey(tcAddress);
     const txs = (localStorage.get(key) || []) as ITCTxDetail[];
     const newTxs = txs.map(tx => {
-      if (tx.btcHash && tx.btcHash.toLowerCase() === btcHash) {
+      if (tx.btcHash && tx.btcHash.toLowerCase() === oldBTCHash.toLowerCase()) {
         return {
           ...tx,
-          btcHash,
+          btcHash: newBTCHash,
           statusCode: 1,
         };
       }
