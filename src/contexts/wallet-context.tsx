@@ -9,6 +9,8 @@ import { SupportedChainId } from '@/constants/chains';
 import { useCurrentUser } from '@/state/user/hooks';
 import { triggerSwitchAccount } from '@/services/tcNode';
 import { getLastedWalletAddress, setLastedWalletAddress } from '@/utils/auth-storage';
+import * as TC_SDK from 'trustless-computer-sdk';
+import { isProduction } from '@/utils/commons';
 
 export interface IWalletContext {
   onDisconnect: () => Promise<void>;
@@ -30,6 +32,7 @@ export const WalletProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
   const { connector, provider, account, chainId } = useWeb3React();
   const dispatch = useAppDispatch();
   const user = useCurrentUser();
+  const [isSetNetwork, setIsSetNetwork] = React.useState(false);
 
   const requestAccounts = React.useCallback(async (): Promise<string[] | null> => {
     const accounts = await connector.provider?.request({
@@ -99,6 +102,11 @@ export const WalletProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
     }
   }, [disconnect]);
 
+  React.useEffect(() => {
+    TC_SDK.setBTCNetwork(isProduction() ? 1 : 3);
+    setIsSetNetwork(true);
+  }, []);
+
   const contextValues = useMemo((): IWalletContext => {
     return {
       onDisconnect: disconnect,
@@ -108,5 +116,5 @@ export const WalletProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
     };
   }, [disconnect, connect, onDeriveBitcoinKey]);
 
-  return <WalletContext.Provider value={contextValues}>{children}</WalletContext.Provider>;
+  return <WalletContext.Provider value={contextValues}>{isSetNetwork && children}</WalletContext.Provider>;
 };

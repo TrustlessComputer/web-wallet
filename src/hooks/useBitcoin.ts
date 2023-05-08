@@ -107,7 +107,6 @@ const useBitcoin = () => {
       feeRatePerByte,
       tcClient,
     });
-
     const { commitTxHex, commitTxID, revealTxHex, revealTxID } = await TC_SDK.createInscribeTx({
       senderPrivateKey: privateKey,
       utxos: assets.txrefs,
@@ -139,13 +138,6 @@ const useBitcoin = () => {
       tcClient,
     });
 
-    // tcTxIDs: string[];
-    // commitTxHex: string;
-    // commitTxID: string;
-    // revealTxHex: string;
-    // revealTxID: string;
-    // totalFee: BigNumber;
-
     const res = await TC_SDK.createBatchInscribeTxs({
       senderPrivateKey: privateKey,
       utxos: assets.txrefs,
@@ -154,11 +146,6 @@ const useBitcoin = () => {
       feeRatePerByte,
       tcClient,
     });
-
-    // console.log('commitTxID', commitTxID);
-    // console.log('commitTxHex', commitTxHex);
-    // console.log('revealTxID', revealTxID);
-    // console.log('revealTxHex', revealTxHex);
 
     return res;
   };
@@ -265,16 +252,23 @@ const useBitcoin = () => {
   };
 
   const isRBFable = async (payload: IIsSpeedUpBTCParams) => {
-    const { isRBFable, oldFeeRate } = await TC_SDK.isRBFable({
-      revealTxID: payload.btcHash,
-      tcClient,
-      tcAddress: payload.tcAddress,
-      btcAddress: payload.btcAddress,
-    });
-    return {
-      isRBFable,
-      oldFeeRate,
-    };
+    try {
+      const { isRBFable, oldFeeRate } = await TC_SDK.isRBFable({
+        revealTxID: payload.btcHash,
+        tcClient,
+        tcAddress: payload.tcAddress,
+        btcAddress: payload.btcAddress,
+      });
+      return {
+        isRBFable,
+        oldFeeRate,
+      };
+    } catch (e) {
+      return {
+        isRBFable: false,
+        oldFeeRate: 0,
+      };
+    }
   };
 
   return {

@@ -55,7 +55,6 @@ export const StyledTransactionProfile = styled.div`
 
     &.confirmed {
       color: #00aa6c;
-      text-decoration: underline;
     }
     &.success {
       color: #00aa6c;

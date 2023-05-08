@@ -53,6 +53,9 @@ const Transactions = React.memo(() => {
     setIsShow(false);
     if (isSuccess) {
       debounceGetTransactions();
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     }
   };
 
@@ -63,7 +66,7 @@ const Transactions = React.memo(() => {
       debounceGetTransactions();
       setTimeout(() => {
         window.location.reload();
-      }, 500);
+      }, 1000);
     }
   };
 
@@ -74,7 +77,7 @@ const Transactions = React.memo(() => {
   const handleSpeedUp = async (btcHash: string) => {
     setIsShowModalSpeedup(true);
     const tcTxs = transactions.filter(trans => trans.btcHash && trans.btcHash.toLowerCase() === btcHash.toLowerCase());
-    const feeRate = tcTxs.find(tx => !tx.feeRate)?.feeRate || 0;
+    const feeRate = tcTxs.find(tx => !!tx.feeRate)?.feeRate || 0;
     setSpeedUpTx({
       btcHash,
       tcTxs,
@@ -199,6 +202,7 @@ const Transactions = React.memo(() => {
         <a
           className={`status ${status.toLowerCase()}`}
           target="_blank"
+          style={{ textDecoration: trans.btcHash ? 'underline' : 'unset' }}
           href={
             statusCode === 2
               ? `https://explorer.trustless.computer/tx/${trans.Hash}`
