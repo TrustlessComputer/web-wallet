@@ -51,6 +51,7 @@ export interface ITCTxDetail extends TC_SDK.TCTxDetail {
   statusCode?: IStatusCode;
   isRBFable?: boolean;
   feeRate?: number;
+  minSat?: number;
 }
 
 export interface IStoredSignValue extends TC_SDK.CallWalletPayload {

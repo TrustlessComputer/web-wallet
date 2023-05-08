@@ -39,7 +39,7 @@ const ModalSpeedUp = React.memo(({ show, onHide, title = 'Speed up', buttonText 
     isLoading: isLoadingRate,
     onFetchFee,
     error,
-  } = useFeeRate({ minFeeRate: speedUpTx?.minFeeRate });
+  } = useFeeRate({ minFeeRate: speedUpTx?.minRate });
   const [sizeByte, setSizeByte] = React.useState<number | undefined>(undefined);
   const [isLoading, setIsLoading] = React.useState(false);
   const [submitting, setSubmitting] = React.useState(false);
@@ -162,7 +162,13 @@ const ModalSpeedUp = React.memo(({ show, onHide, title = 'Speed up', buttonText 
                     <div className="row-bw">
                       <Text size="large">Current sats:</Text>
                       <Text size="large" className="tc-hash">
-                        {speedUpTx.minFeeRate}
+                        {speedUpTx.currentRate}
+                      </Text>
+                    </div>
+                    <div className="row-bw">
+                      <Text size="large">Min sats:</Text>
+                      <Text size="large" className="tc-hash">
+                        {speedUpTx.minRate + 1}
                       </Text>
                     </div>
                   </WrapperTx>
@@ -176,6 +182,7 @@ const ModalSpeedUp = React.memo(({ show, onHide, title = 'Speed up', buttonText 
                   currentRate={currentRate}
                   customRate={customRate}
                   isLoading={isLoadingRate || isLoading}
+                  minRate={speedUpTx?.minRate}
                   error={error}
                   options={{
                     type: 'inscribe',

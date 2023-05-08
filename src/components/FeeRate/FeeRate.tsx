@@ -13,6 +13,7 @@ interface IProps {
   currentRate: number;
   currentRateType: FeeRateName | undefined;
   customRate: string;
+  minRate?: number;
 
   onChangeFee: (rate: FeeRateName) => void;
   onChangeCustomFee?: (rate: string) => void;
@@ -89,7 +90,9 @@ const FeeRate = React.memo((props: IProps) => {
         md="12"
         onClick={() => {
           if (props.onChangeCustomFee && !!customRef && !!customRef.current) {
-            props.onChangeCustomFee(`${Number(props.allRate[FeeRateName.fastestFee] + 5)}`);
+            props.onChangeCustomFee(
+              `${props.minRate ? props.minRate + 1 : Number(props.allRate[FeeRateName.fastestFee] + 5)}`,
+            );
             customRef.current.focus();
           }
         }}

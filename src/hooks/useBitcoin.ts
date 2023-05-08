@@ -253,7 +253,7 @@ const useBitcoin = () => {
 
   const isRBFable = async (payload: IIsSpeedUpBTCParams) => {
     try {
-      const { isRBFable, oldFeeRate } = await TC_SDK.isRBFable({
+      const { isRBFable, oldFeeRate, minSat } = await TC_SDK.isRBFable({
         revealTxID: payload.btcHash,
         tcClient,
         tcAddress: payload.tcAddress,
@@ -262,11 +262,13 @@ const useBitcoin = () => {
       return {
         isRBFable,
         oldFeeRate: Math.ceil(oldFeeRate),
+        minSat: Math.ceil(minSat || 0),
       };
     } catch (e) {
       return {
         isRBFable: false,
         oldFeeRate: 0,
+        minSat: 0,
       };
     }
   };

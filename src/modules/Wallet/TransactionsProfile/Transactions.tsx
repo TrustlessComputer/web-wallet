@@ -33,7 +33,8 @@ export enum TransactionStatus {
 export interface ISpeedUpTx {
   btcHash: string;
   tcTxs: ITCTxDetail[];
-  minFeeRate: number;
+  currentRate: number;
+  minRate: number;
 }
 
 const Transactions = React.memo(() => {
@@ -75,11 +76,12 @@ const Transactions = React.memo(() => {
   const handleSpeedUp = async (btcHash: string) => {
     setIsShowModalSpeedup(true);
     const tcTxs = transactions.filter(trans => trans.btcHash && trans.btcHash.toLowerCase() === btcHash.toLowerCase());
-    const feeRate = tcTxs.find(tx => !!tx.feeRate)?.feeRate || 0;
+    const tx = tcTxs.find(tx => !!tx.feeRate);
     setSpeedUpTx({
       btcHash,
       tcTxs,
-      minFeeRate: feeRate,
+      currentRate: tx?.feeRate || 0,
+      minRate: tx?.minSat || 0,
     });
   };
 
@@ -135,14 +137,20 @@ const Transactions = React.memo(() => {
             : await getStatusCode(hash, user.walletAddress);
         let _isRBFable = false;
         let _currentRate = 0;
+        let _minSat = 0;
         if (local.btcHash && local.statusCode === 1) {
-          const { isRBFable: canReplace, oldFeeRate: currentRate } = await isRBFable({
+          const {
+            isRBFable: canReplace,
+            oldFeeRate: currentRate,
+            minSat,
+          } = await isRBFable({
             btcHash: local.btcHash,
             btcAddress: user.walletAddressBtcTaproot,
             tcAddress: user.walletAddress,
           });
           _isRBFable = canReplace;
           _currentRate = currentRate;
+          _minSat = minSat;
         }
 
         const _tx = {
@@ -150,6 +158,7 @@ const Transactions = React.memo(() => {
           statusCode,
           isRBFable: _isRBFable,
           feeRate: _currentRate,
+          minSat: _minSat,
         };
 
         if ((statusCode === 2 || statusCode === 3) && shouldUpdateStorage) {

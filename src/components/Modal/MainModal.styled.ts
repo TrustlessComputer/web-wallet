@@ -12,7 +12,7 @@ export const MainModal = styled(Modal)`
 
   .modal-content {
     border-radius: 2px;
-    width: 800px;
+    width: ${px2rem(800)};
     background: ${({ theme }) => theme.bg1};
     ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToMedium`
       width: 90vw;
@@ -30,7 +30,7 @@ export const MainModal = styled(Modal)`
 
   .modal-body {
     padding-top: 0;
-    width: 800px;
+    width: ${px2rem(800)};
     ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToMedium`
       width: 90vw;
     `}
