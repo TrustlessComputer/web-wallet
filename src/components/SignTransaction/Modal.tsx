@@ -8,7 +8,7 @@ import Text from '@/components/Text';
 import { Modal } from 'react-bootstrap';
 import { toast } from 'react-hot-toast';
 import Button from '@/components/Button';
-import WError, { ERROR_CODE } from '@/utils/error';
+import WError, { ERROR_CODE, getErrorMessage } from '@/utils/error';
 import * as TC_SDK from 'trustless-computer-sdk';
 import debounce from 'lodash/debounce';
 import LoadingContainer from '@/components/Loader';
@@ -123,7 +123,8 @@ const ModalSignTx = React.memo(
         toast.success('Sign transaction successfully');
         onHide(true);
       } catch (err: any) {
-        toast.error(err.message);
+        const { desc } = getErrorMessage(err, 'Send BTC');
+        toast.error(desc);
       } finally {
         setSubmitting(false);
       }

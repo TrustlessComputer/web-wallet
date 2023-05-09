@@ -13,6 +13,7 @@ import { FeeRateName } from '@/interfaces/api/bitcoin';
 import { toast } from 'react-hot-toast';
 import { formatBTCPrice } from '@/utils/format';
 import * as TC_SDK from 'trustless-computer-sdk';
+import { getErrorMessage } from '@/utils/error';
 
 interface IProps {
   show: boolean;
@@ -63,8 +64,8 @@ const SendBTCModal = React.memo(({ show, onHide }: IProps) => {
       toast.success('Transferred successfully');
       onHide();
     } catch (err) {
-      console.log('SEND BTC ERROR: ', err);
-      if (err instanceof Error) toast.error(err.message);
+      const { desc } = getErrorMessage(err, 'Send BTC');
+      toast.error(desc);
     } finally {
       setSubmitting(false);
     }

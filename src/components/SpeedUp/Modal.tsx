@@ -19,6 +19,7 @@ import { ellipsisCenter } from '@/utils';
 import Web3 from 'web3';
 import copy from 'copy-to-clipboard';
 import IcCopy from '@/assets/icons/ic-copy.svg';
+import { getErrorMessage } from '@/utils/error';
 
 interface IProps {
   show: boolean;
@@ -68,7 +69,8 @@ const ModalSpeedUp = React.memo(({ show, onHide, title = 'Speed up', buttonText 
         onHide(true);
       }
     } catch (err: any) {
-      toast.error(err.message);
+      const { desc } = getErrorMessage(err, 'Speedup');
+      toast.error(desc);
     } finally {
       setSubmitting(false);
     }
