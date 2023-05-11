@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import { ICollectedUTXOResp, ITxHistory, IFeeRate } from '@/interfaces/api/bitcoin';
-import { getCollectedUTXO, getFeeRate, getTokenRate } from '@/services/bitcoin';
+import { getCollectedUTXO, getFeeRate, getPendingUTXOs, getTokenRate } from '@/services/bitcoin';
 import { comingAmountBuilder, currentAssetsBuilder } from '@/utils/utxo';
 import debounce from 'lodash/debounce';
 import { useWeb3React } from '@web3-react/core';
@@ -148,13 +148,14 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
   };
 
   const getAvailableAssetsCreateTx = async () => {
-    const assets = await fetchAssets();
+    const [assets, pendingUTXOs] = await Promise.all([await fetchAssets(), await getPendingUTXOs(currentAddress)]);
+
     // Current assets
     let _currentAssets = undefined;
     if (assets) {
       _currentAssets = currentAssetsBuilder({
         current: assets,
-        pending: [],
+        pending: pendingUTXOs,
       });
     }
     setCurrentAssets(_currentAssets);
