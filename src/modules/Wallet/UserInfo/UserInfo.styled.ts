@@ -20,6 +20,9 @@ export const StyledUserInfo = styled.div`
 
   .address {
     color: ${({ theme }: { theme: DefaultTheme }) => theme.white};
+    .ic-token {
+      margin-top: 6px;
+    }
 
     .wallet-address {
       display: flex;
@@ -36,7 +39,8 @@ export const StyledUserInfo = styled.div`
     }
     .btc-address {
       display: flex;
-      align-items: center;
+      //align-items: center;
+      align-items: flex-start;
       gap: ${px2rem(12)};
       margin-bottom: ${px2rem(24)};
     }

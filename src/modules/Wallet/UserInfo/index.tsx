@@ -74,8 +74,11 @@ const UserInfo = ({ className }: Props) => {
           </div>
           <div className="address">
             <div className="btc-address">
-              <IconSVG src={IcPenguin} maxWidth="32" />
+              <IconSVG src={IcPenguin} maxWidth="32" className="ic-token" />
               <div>
+                <Text size="medium" color="text1">
+                  TC address:
+                </Text>
                 <div className="wallet-address">
                   <h5> {shortenAddress(profileWallet, 4)}</h5>
                   <div className="icCopy" onClick={() => onClickCopy(profileWallet)}>
@@ -93,8 +96,11 @@ const UserInfo = ({ className }: Props) => {
             </div>
             {profileBtcWallet && (
               <div className="btc-address">
-                <IconSVG src={IcBitcoin} maxWidth="32" />
+                <IconSVG src={IcBitcoin} maxWidth="32" className="ic-token" />
                 <div>
+                  <Text size="medium" color="text1">
+                    Bitcoin address:
+                  </Text>
                   <div className="wallet-address">
                     <h5> {formatLongAddress(profileBtcWallet)}</h5>
                     <div className="icCopy" onClick={() => onClickCopy(profileBtcWallet)}>
