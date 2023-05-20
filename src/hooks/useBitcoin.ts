@@ -167,12 +167,29 @@ const useBitcoin = () => {
     return unInscribedTxIDs;
   };
 
+  const getTCTransactionByHash = async (tcTxID: string): Promise<string> => {
+    if (!tcTxID) throw Error('Address not found');
+    const { Hex } = (await tcClient.getTCTxByHash(tcTxID)) as any;
+    return Hex;
+  };
+
   const getUnInscribedTransactionDetailByAddress = async (tcAddress: string): Promise<ITCTxDetail[]> => {
     if (!tcAddress) throw Error('Address not found');
     const { unInscribedTxDetails } = await tcClient.getUnInscribedTransactionDetailByAddress(tcAddress);
+
+    const uninscribes: ITCTxDetail[] = [];
+    for (const uninscribe of unInscribedTxDetails) {
+      try {
+        await getTCTransactionByHash(uninscribe.Hash);
+        uninscribes.push(uninscribe);
+      } catch (e) {
+        // todo handle error
+      }
+    }
+
     const storageTxs = bitcoinStorage.getStorageTransactions(tcAddress);
 
-    return unInscribedTxDetails.map(tx => {
+    return uninscribes.map(tx => {
       const storageTx = storageTxs.find(item => item.Hash.toLowerCase() === tx.Hash.toLowerCase());
       if (!storageTx) return { ...tx, statusCode: 0 };
       return {
@@ -181,12 +198,6 @@ const useBitcoin = () => {
         statusCode: 0,
       };
     });
-  };
-
-  const getTCTransactionByHash = async (tcTxID: string): Promise<string> => {
-    if (!tcTxID) throw Error('Address not found');
-    const { Hex } = (await tcClient.getTCTxByHash(tcTxID)) as any;
-    return Hex;
   };
 
   const formatUTXOs = (txrefs: TC_SDK.UTXO[]) => {

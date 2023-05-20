@@ -164,10 +164,13 @@ const ModalSignTx = React.memo(
     useAsyncEffect(async () => {
       debounceGetPendingTxs();
     }, [user?.walletAddress, signData]);
+
     useAsyncEffect(async () => {
       if (show) {
         debounceGetPendingTxs();
         onFetchFee();
+      } else {
+        setPendingTxs([]);
       }
     }, [show]);
 

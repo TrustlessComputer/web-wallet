@@ -40,6 +40,7 @@ export interface ISpeedUpTx {
 const Transactions = React.memo(() => {
   const user = useCurrentUser();
   const [transactions, setTransactions] = useState<ITCTxDetail[]>([]);
+  const [pendingTxs, setPendingTxs] = useState<ITCTxDetail[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const { getUnInscribedTransactionDetailByAddress, isRBFable } = useBitcoin();
   const [isShow, setIsShow] = React.useState(false);
@@ -47,8 +48,8 @@ const Transactions = React.memo(() => {
   const [speedUpTx, setSpeedUpTx] = React.useState<ISpeedUpTx | undefined>(undefined);
 
   const numbPending = React.useMemo(() => {
-    return transactions.filter(item => item.statusCode === 0).length;
-  }, [transactions]);
+    return pendingTxs.length;
+  }, [pendingTxs]);
 
   const onHide = (isSuccess: boolean) => {
     setIsShow(false);
@@ -108,6 +109,7 @@ const Transactions = React.memo(() => {
       if (!user) return;
       setIsLoading(true);
       const pendingTxs = await getUnInscribedTransactionDetailByAddress(user.walletAddress);
+      setPendingTxs(pendingTxs);
       const storageTxs = bitcoinStorage.getStorageTransactions(user.walletAddress);
 
       // map pending history
