@@ -154,11 +154,10 @@ const useBitcoin = () => {
     tcAddress: string,
   ): Promise<{
     nonce: number;
-    gasPrice: number;
   }> => {
     if (!tcAddress) throw Error('Address not found');
-    const { nonce, gasPrice } = await tcClient.getNonceInscribeable(tcAddress);
-    return { nonce, gasPrice };
+    const nonce = await tcClient.getInscribeableNonce(tcAddress);
+    return { nonce };
   };
 
   const getUnInscribedTransactionByAddress = async (tcAddress: string): Promise<Array<string>> => {
