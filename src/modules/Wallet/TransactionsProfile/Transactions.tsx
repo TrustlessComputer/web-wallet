@@ -92,12 +92,13 @@ const Transactions = React.memo(() => {
         const tcClient = new TC_SDK.TcClient(BTC_NETWORK, TC_NETWORK_RPC);
         const res = await tcClient.getTCTxByHash(txHash);
         if (res && res.blockHash) {
-          if (res.blockHash === '0x0') {
+          if (res.status === '0x0') {
             return 3;
           }
           return 2;
         }
       } catch (e) {
+        return 3;
         // handle error
       }
     }
