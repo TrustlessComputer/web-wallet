@@ -122,6 +122,16 @@ const ModalSignTx = React.memo(
         }
         toast.success('Sign transaction successfully');
         onHide(true);
+
+        if (signData?.isRedirect && signData.dappURL) {
+          setTimeout(() => {
+            try {
+              window.open(signData.dappURL, '_self');
+            } catch (e) {
+              // to do error
+            }
+          }, 500);
+        }
       } catch (err: any) {
         const { desc } = getErrorMessage(err, 'Send BTC');
         toast.error(desc);
