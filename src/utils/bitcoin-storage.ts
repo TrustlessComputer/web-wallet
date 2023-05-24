@@ -44,17 +44,17 @@ class BitCoinStorage {
     });
     return orderBy(_txs, item => Number(item.Nonce || 0), 'desc');
   };
-  addStorageTransactions = (tcAddress: string, tx: ITCTxDetail) => {
+  addStorageTransactions = (tcAddress: string, tx: ITCTxDetail, isUpdateTime = true) => {
     const key = this.getTxsKey(tcAddress);
     const txs = this.getStorageTransactions(tcAddress);
-    const time = new Date().getTime();
+    const time = isUpdateTime ? new Date().getTime() : undefined;
     txs?.push({
       ...tx,
       time: `${time}`,
     });
     localStorage.set(key, txs);
   };
-  updateStorageTransaction = (tcAddress: string, tx: ITCTxDetail) => {
+  updateStorageTransaction = (tcAddress: string, tx: ITCTxDetail, isUpdateTime = true) => {
     if (!tcAddress) return;
     const key = this.getTxsKey(tcAddress);
     const txs = this.getStorageTransactions(tcAddress);
@@ -63,7 +63,7 @@ class BitCoinStorage {
       txs[index] = tx;
       localStorage.set(key, txs);
     } else {
-      this.addStorageTransactions(tcAddress, tx);
+      this.addStorageTransactions(tcAddress, tx, isUpdateTime);
     }
   };
 

@@ -172,6 +172,25 @@ const useBitcoin = () => {
     return Hex;
   };
 
+  const getPendingInscribeTxsDetail = async (tcAddress: string): Promise<any[]> => {
+    if (!tcAddress) throw Error('Address not found');
+    try {
+      const pendingTxs = (await tcClient.getPendingInscribeTxsDetail(tcAddress)) || [];
+      const transactions = pendingTxs.map(tx => {
+        const { TCHash, Reveal } = tx;
+        const btcHash = Reveal.BTCHash;
+        return {
+          Hash: TCHash,
+          btcHash,
+          statusCode: 1,
+        };
+      });
+      return transactions;
+    } catch (e) {
+      return [];
+    }
+  };
+
   const getUnInscribedTransactionDetailByAddress = async (tcAddress: string): Promise<ITCTxDetail[]> => {
     if (!tcAddress) throw Error('Address not found');
     const { unInscribedTxDetails } = await tcClient.getUnInscribedTransactionDetailByAddress(tcAddress);
@@ -294,6 +313,7 @@ const useBitcoin = () => {
     createSpeedUpBTCTx,
     sendBTC,
     isRBFable,
+    getPendingInscribeTxsDetail,
   };
 };
 

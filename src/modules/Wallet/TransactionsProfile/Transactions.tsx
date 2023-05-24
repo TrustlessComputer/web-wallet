@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useCurrentUser } from '@/state/user/hooks';
 import { IStatusCode, ITCTxDetail } from '@/interfaces/transaction';
-import { debounce } from 'lodash';
+import { debounce, uniqBy } from 'lodash';
 import useBitcoin from '@/hooks/useBitcoin';
 import bitcoinStorage from '@/utils/bitcoin-storage';
 import { StyledTransactionProfile } from '@/modules/Wallet/TransactionsProfile/TransactionsProfile.styled';
@@ -42,7 +42,7 @@ const Transactions = React.memo(() => {
   const [transactions, setTransactions] = useState<ITCTxDetail[]>([]);
   const [pendingTxs, setPendingTxs] = useState<ITCTxDetail[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  const { getUnInscribedTransactionDetailByAddress, isRBFable } = useBitcoin();
+  const { getUnInscribedTransactionDetailByAddress, isRBFable, getPendingInscribeTxsDetail } = useBitcoin();
   const [isShow, setIsShow] = React.useState(false);
   const [isShowModalSpeedup, setIsShowModalSpeedup] = React.useState(false);
   const [speedUpTx, setSpeedUpTx] = React.useState<ISpeedUpTx | undefined>(undefined);
@@ -109,7 +109,11 @@ const Transactions = React.memo(() => {
     try {
       if (!user) return;
       setIsLoading(true);
-      const pendingTxs = await getUnInscribedTransactionDetailByAddress(user.walletAddress);
+      const [pendingTxs, inscribePending] = await Promise.all([
+        await getUnInscribedTransactionDetailByAddress(user.walletAddress),
+        await getPendingInscribeTxsDetail(user.walletAddress),
+      ]);
+
       setPendingTxs(pendingTxs);
       const storageTxs = bitcoinStorage.getStorageTransactions(user.walletAddress);
 
@@ -125,19 +129,22 @@ const Transactions = React.memo(() => {
       });
 
       // map local history
-      const localFilter = storageTxs.filter(local => {
+      let localFilter = storageTxs.filter(local => {
         const hash = local.Hash.toLowerCase();
         return !pendingTxs.some(tx => tx.Hash.toLowerCase() === hash.toLowerCase());
       });
 
+      localFilter = uniqBy(
+        [...localFilter, ...inscribePending].filter(item => !!item),
+        item => item.Hash,
+      );
+
       const localTxs = [];
       for (const local of localFilter) {
         const hash = local.Hash;
-        let shouldUpdateStorage = local?.statusCode !== 2 && local?.statusCode !== 3;
-        const statusCode =
-          local?.statusCode === 2 || local?.statusCode === 3
-            ? local?.statusCode
-            : await getStatusCode(hash, user.walletAddress);
+        let shouldUpdateStorage = local?.statusCode !== 2;
+        const statusCode = local?.statusCode === 2 ? local?.statusCode : await getStatusCode(hash, user.walletAddress);
+
         let _isRBFable = false;
         let _currentRate = 0;
         let _minSat = 0;
@@ -165,10 +172,14 @@ const Transactions = React.memo(() => {
         };
 
         if ((statusCode === 2 || statusCode === 3) && shouldUpdateStorage) {
-          bitcoinStorage.updateStorageTransaction(user.walletAddress, {
-            ..._tx,
-            statusCode: statusCode,
-          });
+          bitcoinStorage.updateStorageTransaction(
+            user.walletAddress,
+            {
+              ..._tx,
+              statusCode: statusCode,
+            },
+            false,
+          );
         }
         localTxs.push(_tx);
       }
