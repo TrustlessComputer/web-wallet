@@ -40,8 +40,8 @@ const Header = ({ height }: { height: number }) => {
           <a href={'https://trustless.computer/'} target="_blank">
             Trustless
           </a>
-          <a href={'https://trustlessfaucet.io/'} target="_blank">
-            Faucet
+          <a href={'https://tcgasstation.com/'} target="_blank">
+            Get TC
           </a>
         </div>
         <button className="btnMenuMobile" onClick={() => setIsOpenMenu(true)}>
