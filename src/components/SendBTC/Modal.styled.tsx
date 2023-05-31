@@ -13,11 +13,26 @@ export const StyledSendBTCModal = styled(MainModal)`
     font-family: 'Bandeins Strange Variable' !important;
   }
 
+  .row-header {
+    display: flex;
+    justify-content: space-between;
+  }
+
   .label {
     font-size: ${px2rem(12)};
     font-weight: 500;
     margin-bottom: ${px2rem(6)};
     color: white;
+  }
+
+  .max {
+    border: 1px solid ${({ theme }) => theme.text1};
+    padding: 2px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    :hover {
+      opacity: 0.8;
+    }
   }
 
   .divider {

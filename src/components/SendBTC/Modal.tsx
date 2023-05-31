@@ -14,6 +14,8 @@ import { toast } from 'react-hot-toast';
 import { formatBTCPrice } from '@/utils/format';
 import * as TC_SDK from 'trustless-computer-sdk';
 import { getErrorMessage } from '@/utils/error';
+import BigNumber from 'bignumber.js';
+import format from '@/utils/amount';
 
 interface IProps {
   show: boolean;
@@ -26,9 +28,14 @@ type IFormValue = {
 };
 
 const SendBTCModal = React.memo(({ show, onHide }: IProps) => {
-  const { feeRate } = useContext(AssetsContext);
+  const { feeRate, assets, fetchFeeRate, btcBalance } = useContext(AssetsContext);
   const [submitting, setSubmitting] = React.useState(false);
   const { sendBTC } = useBitcoin();
+
+  const estimateFee = React.useMemo(() => {
+    const fee = TC_SDK.estimateTxFee((assets?.txrefs || []).length || 4, 2, Number(feeRate[FeeRateName.fastestFee]));
+    return fee;
+  }, [assets?.txrefs, feeRate]);
 
   const validateForm = (values: IFormValue): Record<string, string> => {
     const errors: Record<string, string> = {};
@@ -71,6 +78,14 @@ const SendBTCModal = React.memo(({ show, onHide }: IProps) => {
     }
   };
 
+  React.useEffect(() => {
+    fetchFeeRate();
+    const interval = setInterval(fetchFeeRate, 10000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
   return (
     <StyledSendBTCModal show={show} centered>
       <Modal.Header>
@@ -89,12 +104,31 @@ const SendBTCModal = React.memo(({ show, onHide }: IProps) => {
           validate={validateForm}
           onSubmit={handleSubmit}
         >
-          {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
+          {({ values, errors, touched, handleChange, handleBlur, handleSubmit, setFieldValue }) => (
             <form onSubmit={handleSubmit}>
               <WrapInput>
-                <label htmlFor="amount" className="label">
-                  AMOUNT
-                </label>
+                <div className="row-header">
+                  <label htmlFor="amount" className="label">
+                    AMOUNT
+                  </label>
+                  <label
+                    htmlFor="amount"
+                    className="label max"
+                    onClick={() => {
+                      const maxAmount = new BigNumber(btcBalance).minus(estimateFee).toNumber();
+                      const maxAmountText = new BigNumber(
+                        format.formatAmount({
+                          originalAmount: maxAmount,
+                          decimals: 8,
+                          maxDigits: 6,
+                        }),
+                      ).toNumber();
+                      setFieldValue('amount', maxAmountText <= 0 ? 0 : maxAmountText);
+                    }}
+                  >
+                    MAX
+                  </label>
+                </div>
                 <input
                   id="amount"
                   type="number"
@@ -125,10 +159,18 @@ const SendBTCModal = React.memo(({ show, onHide }: IProps) => {
               </WrapInput>
               <div className="row-bw">
                 <Text size="medium" fontWeight="semibold">
+                  Fee Rate
+                </Text>
+                <Text size="large" fontWeight="semibold">
+                  {feeRate[FeeRateName.fastestFee]}
+                </Text>
+              </div>
+              <div className="row-bw">
+                <Text size="medium" fontWeight="semibold">
                   Transaction Fee
                 </Text>
                 <Text size="large" fontWeight="semibold">
-                  ~{formatBTCPrice(TC_SDK.estimateTxFee(2, 2, Number(feeRate[FeeRateName.fastestFee])))} BTC
+                  ~{formatBTCPrice(estimateFee)} BTC
                 </Text>
               </div>
               <Button disabled={submitting} type="submit" className="transfer-btn">
