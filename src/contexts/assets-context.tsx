@@ -130,7 +130,6 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
 
   const btcBalance = React.useMemo(() => {
     if (currentAddress) {
-      console.log('SANG TEST: ', currentAssets?.availableBalance.toString());
       return currentAssets?.availableBalance?.toString() || '0';
     }
     return '0';
