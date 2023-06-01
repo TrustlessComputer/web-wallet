@@ -90,8 +90,8 @@ const Footer = ({ height }: { height: number }) => {
     <Wrapper style={{ height }}>
       <p className="text">Open-source software. Made with ❤️ on Bitcoin.</p>
       <div className="footer-right">
-        <StyledLink active={false} href="https://trustless.computer/faucet" target="_blank">
-          Faucet
+        <StyledLink active={false} href="https://tcgasstation.com/" target="_blank">
+          Get TC
           <img className="arrow-icon" src={`${CDN_URL}/icons/ic-arrow-outward.svg`} alt="" />
         </StyledLink>
         <StyledLink active={false} href="https://explorer.trustless.computer" target="_blank">
@@ -105,7 +105,7 @@ const Footer = ({ height }: { height: number }) => {
           <a href="https://generative.xyz/discord" target="_blank">
             <img alt="icon" className="icon" src={IcDiscord} />
           </a>
-          <a href="https://twitter.com/DappsOnBitcoin" target="_blank">
+          <a href="https://twitter.com/NewBitcoinCity" target="_blank">
             <img alt="icon" className="icon" src={IcTwitter} />
           </a>
         </div>
