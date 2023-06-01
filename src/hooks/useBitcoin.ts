@@ -101,7 +101,7 @@ const useBitcoin = () => {
 
     console.log('inside createInscribeTx', {
       senderPrivateKey: privateKey,
-      utxos: assets.txrefs,
+      utxos: assets.availableUTXOs,
       inscriptions: {},
       tcTxIDs,
       feeRatePerByte,
@@ -109,7 +109,7 @@ const useBitcoin = () => {
     });
     const { commitTxHex, commitTxID, revealTxHex, revealTxID } = await TC_SDK.createInscribeTx({
       senderPrivateKey: privateKey,
-      utxos: assets.txrefs,
+      utxos: assets.availableUTXOs,
       inscriptions: {},
       tcTxIDs,
       feeRatePerByte,
@@ -131,7 +131,7 @@ const useBitcoin = () => {
 
     console.log('inside createBatchInscribeTxs', {
       senderPrivateKey: privateKey,
-      utxos: assets.txrefs,
+      utxos: assets.availableUTXOs,
       inscriptions: {},
       tcTxDetails,
       feeRatePerByte,
@@ -140,7 +140,7 @@ const useBitcoin = () => {
 
     const res = await TC_SDK.createBatchInscribeTxs({
       senderPrivateKey: privateKey,
-      utxos: assets.txrefs,
+      utxos: assets.availableUTXOs,
       inscriptions: {},
       tcTxDetails,
       feeRatePerByte,
@@ -218,40 +218,18 @@ const useBitcoin = () => {
     });
   };
 
-  const formatUTXOs = (txrefs: TC_SDK.UTXO[]) => {
-    const utxos: TC_SDK.UTXO[] = (txrefs || []).map(utxo => ({
-      tx_hash: utxo.tx_hash,
-      tx_output_n: new BigNumber(utxo.tx_output_n).toNumber(),
-      value: new BigNumber(utxo.value),
-    }));
-    return utxos;
-  };
-  const formatInscriptions = (inscriptions: IInscriptionByOutput) => {
-    const _inscriptions: IInscriptionByOutput = {};
-    Object.keys(inscriptions).forEach(key => {
-      const utxos = inscriptions[key];
-      if (!!utxos && !!utxos.length) {
-        _inscriptions[key] = utxos?.map(utxo => ({
-          ...utxo,
-          offset: new BigNumber(utxo.offset),
-        }));
-      }
-    });
-    return _inscriptions;
-  };
-
   const sendBTC = async ({ receiver, amount, feeRate }: ISendBTCProps) => {
     const assets = await getAvailableAssetsCreateTx();
     if (!assets) throw new Error('Can not load assets');
     const { privateKey } = await signKey();
 
-    const utxos = formatUTXOs(assets.txrefs);
-    const inscriptions = formatInscriptions(assets.inscriptions_by_outputs);
+    // const utxos = formatUTXOs(assets.availableUTXOs);
+    // const inscriptions = formatInscriptions(assets.inscriptions_by_outputs);
 
     const { txHex } = await TC_SDK.createTx(
       privateKey,
-      utxos,
-      inscriptions,
+      assets.availableUTXOs,
+      {},
       '',
       receiver,
       new BigNumber(amount).multipliedBy(1e8),
@@ -269,8 +247,8 @@ const useBitcoin = () => {
     const { privateKey } = await signKey();
     const { revealTxID } = await TC_SDK.replaceByFeeInscribeTx({
       senderPrivateKey: privateKey,
-      utxos: assets.txrefs,
-      inscriptions: assets.inscriptions_by_outputs,
+      utxos: assets.availableUTXOs,
+      inscriptions: {},
       revealTxID: payload.btcHash,
       feeRatePerByte: payload.feeRate,
       tcClient,

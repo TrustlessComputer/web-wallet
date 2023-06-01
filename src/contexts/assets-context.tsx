@@ -1,10 +1,9 @@
 import React, { PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import { ICollectedUTXOResp, ITxHistory, IFeeRate } from '@/interfaces/api/bitcoin';
-import { getCollectedUTXO, getFeeRate, getPendingUTXOs, getTokenRate } from '@/services/bitcoin';
-import { comingAmountBuilder, currentAssetsBuilder } from '@/utils/utxo';
+import { getCollectedUTXO, getFeeRate, getTokenRate } from '@/services/bitcoin';
+// import { comingAmountBuilder, currentAssetsBuilder } from '@/utils/utxo';
 import debounce from 'lodash/debounce';
 import { useWeb3React } from '@web3-react/core';
-import * as TC_SDK from 'trustless-computer-sdk';
 import { useCurrentUser } from '@/state/user/hooks';
 
 export interface IAssetsContext {
@@ -93,21 +92,23 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
   };
 
   const fetchData = async () => {
-    const [assets] = await Promise.all([await fetchAssets()]);
+    const assets = await fetchAssets();
+    setAssets(assets);
+    setCurrentAssets(assets);
 
-    // Current assets
-    let _currentAssets = undefined;
-    if (assets) {
-      _currentAssets = currentAssetsBuilder({
-        current: assets,
-        pending: [],
-      });
-    }
-    setCurrentAssets(_currentAssets);
-
-    // Coming amount...
-    const _comingAmount = comingAmountBuilder(currentAddress, []);
-    setcomingAmount(_comingAmount);
+    // // Current assets
+    // let _currentAssets = undefined;
+    // if (assets) {
+    //   _currentAssets = currentAssetsBuilder({
+    //     current: assets,
+    //     pending: [],
+    //   });
+    // }
+    // setCurrentAssets(_currentAssets);
+    //
+    // // Coming amount...
+    // const _comingAmount = comingAmountBuilder(currentAddress, []);
+    // setcomingAmount(_comingAmount);
   };
 
   const debounceFetchData = React.useCallback(debounce(fetchData, 300), [currentAddress]);
@@ -129,13 +130,8 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
 
   const btcBalance = React.useMemo(() => {
     if (currentAddress) {
-      // const utxos = await getBtcBalance(currentAddress);
-      const balance = TC_SDK.getBTCBalance({
-        utxos: currentAssets?.txrefs || [],
-        inscriptions: currentAssets?.inscriptions_by_outputs || {},
-      });
-      // setBtcBalance(balance.toString());
-      return balance.toString();
+      console.log('SANG TEST: ', currentAssets?.availableBalance.toString());
+      return currentAssets?.availableBalance?.toString() || '0';
     }
     return '0';
   }, [currentAddress, currentAssets]);
@@ -148,19 +144,21 @@ export const AssetsProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
   };
 
   const getAvailableAssetsCreateTx = async () => {
-    const [assets, pendingUTXOs] = await Promise.all([await fetchAssets(), await getPendingUTXOs(currentAddress)]);
-
-    // Current assets
-    let _currentAssets = undefined;
-    if (assets) {
-      _currentAssets = currentAssetsBuilder({
-        current: assets,
-        pending: pendingUTXOs,
-      });
-    }
-    setCurrentAssets(_currentAssets);
-
-    return _currentAssets;
+    const assets = await fetchAssets();
+    setAssets(assets);
+    setCurrentAssets(assets);
+    return assets;
+    // // Current assets
+    // let _currentAssets = undefined;
+    // if (assets) {
+    //   // _currentAssets = currentAssetsBuilder({
+    //   //   current: assets,
+    //   //   pending: pendingUTXOs,
+    //   // });
+    // }
+    // setCurrentAssets(_currentAssets);
+    //
+    // return _currentAssets;
   };
 
   const getETH2BTCRate = async () => {

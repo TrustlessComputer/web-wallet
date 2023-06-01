@@ -33,9 +33,13 @@ const SendBTCModal = React.memo(({ show, onHide }: IProps) => {
   const { sendBTC } = useBitcoin();
 
   const estimateFee = React.useMemo(() => {
-    const fee = TC_SDK.estimateTxFee((assets?.txrefs || []).length || 4, 2, Number(feeRate[FeeRateName.fastestFee]));
+    const fee = TC_SDK.estimateTxFee(
+      (assets?.availableUTXOs || []).length || 4,
+      2,
+      Number(feeRate[FeeRateName.fastestFee]),
+    );
     return fee;
-  }, [assets?.txrefs, feeRate]);
+  }, [assets?.availableUTXOs, feeRate]);
 
   const validateForm = (values: IFormValue): Record<string, string> => {
     const errors: Record<string, string> = {};

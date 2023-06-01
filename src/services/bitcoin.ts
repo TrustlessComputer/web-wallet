@@ -1,4 +1,4 @@
-import { apiClient } from '@/services';
+// import { apiClient } from '@/services';
 import {
   BINANCE_PAIR,
   FeeRateName,
@@ -12,7 +12,7 @@ import { API_BLOCKSTREAM, TC_NETWORK_RPC } from '@/configs';
 import { BTC_NETWORK } from '@/utils/commons';
 
 // const BINANCE_API_URL = 'https://api.binance.com/api/v3';
-const WALLETS_API_PATH = '/wallets';
+// const WALLETS_API_PATH = '/wallets';
 
 // Collected UTXO
 export const getCollectedUTXO = async (
@@ -20,24 +20,17 @@ export const getCollectedUTXO = async (
   tcAddress: string,
 ): Promise<ICollectedUTXOResp | undefined> => {
   try {
-    const collected: any = await apiClient.get<ICollectedUTXOResp>(`${WALLETS_API_PATH}/${btcAddress}`);
-    const tempUTXOs = [...(collected?.txrefs || [])];
-    let utxos;
     try {
       const tcClient = new TC_SDK.TcClient(BTC_NETWORK, TC_NETWORK_RPC);
-      utxos = await TC_SDK.aggregateUTXOs({
-        tcAddress: tcAddress,
+      const utxos = TC_SDK.getUTXOs({
         btcAddress: btcAddress,
-        utxos: [...tempUTXOs],
+        tcAddress: tcAddress,
         tcClient,
       });
+      return utxos;
     } catch (e) {
-      utxos = [...tempUTXOs];
+      return undefined;
     }
-    return {
-      ...collected,
-      txrefs: utxos || [],
-    } as any;
   } catch (err) {
     console.log(err);
   }
