@@ -1,17 +1,16 @@
 import * as TC_SDK from 'trustless-computer-sdk';
+import BigNumber from 'bignumber.js';
+import { UTXO } from 'trustless-computer-sdk';
 
 export interface IInscriptionByOutput {
   [key: string]: TC_SDK.Inscription[];
 }
 
 export interface ICollectedUTXOResp {
-  address: string;
-  inscription_id: string;
-  balance: number;
-  unconfirmed_balance: number;
-  final_balance: number;
-  txrefs: TC_SDK.UTXO[];
-  inscriptions_by_outputs: IInscriptionByOutput;
+  availableUTXOs: UTXO[];
+  incomingUTXOs: UTXO[];
+  availableBalance: BigNumber;
+  incomingBalance: BigNumber;
 }
 
 export enum FeeRateName {
