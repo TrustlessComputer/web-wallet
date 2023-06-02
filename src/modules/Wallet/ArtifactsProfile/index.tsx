@@ -90,7 +90,7 @@ const ArtifactsProfile = () => {
                     contract={ARTIFACT_CONTRACT}
                     tokenId={item.tokenId}
                     contentType={item.contentType}
-                    title1={`${item.name} #${item.tokenId}`}
+                    title1={`Artifact #${item.tokenId}`}
                     title2={shortenAddress(item.owner, 4)}
                     title3={item.contentType}
                     owner={item.owner}
