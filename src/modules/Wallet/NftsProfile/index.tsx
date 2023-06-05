@@ -27,7 +27,7 @@ const NftsProfile = () => {
       setIsFetching(true);
       const data: Array<any> = (
         await getCollectionsByItemsOwned({
-          walletAddress: '0x68507e15edeE79646E331E67e3d65BF6edA46Be6',
+          walletAddress: profileWallet,
           limit: pageSize,
           page: page,
         })
