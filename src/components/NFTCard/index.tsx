@@ -56,7 +56,7 @@ const NFTCard = ({
             <NFTDisplayBox
               collectionID={contract}
               contentClass="image"
-              thumbnail={thumbnail}
+              thumbnail={thumbnail || image}
               src={image}
               tokenID={tokenId}
               type={contentType}
