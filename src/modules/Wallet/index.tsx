@@ -120,7 +120,7 @@ const Wallet = () => {
               <div className="tab-item">
                 <IconSVG maxWidth="28" maxHeight="28" src={IcFolderOpen} color="white" type="stroke" />
                 <Text className="tab-text" size="regular">
-                  Artifacts
+                  Smart Inscriptions
                 </Text>
               </div>
             }
