@@ -20,6 +20,12 @@ import Web3 from 'web3';
 import copy from 'copy-to-clipboard';
 import IcCopy from '@/assets/icons/ic-copy.svg';
 import { getErrorMessage } from '@/utils/error';
+import { initEccLib, networks } from 'bitcoinjs-lib';
+import * as ecc from '@bitcoinerlab/secp256k1';
+import { ECPairAPI, ECPairFactory } from 'ecpair';
+import * as TC_SDK from 'trustless-computer-sdk';
+import { BTC_NETWORK } from '@/utils/commons';
+import { TC_NETWORK_RPC } from '@/configs';
 
 interface IProps {
   show: boolean;
@@ -28,6 +34,9 @@ interface IProps {
   buttonText?: string;
   speedUpTx: ISpeedUpTx | undefined;
 }
+
+initEccLib(ecc);
+const ECPair: ECPairAPI = ECPairFactory(ecc);
 
 const ModalSpeedUp = React.memo(({ show, onHide, title = 'Speed up', buttonText = 'Confirm', speedUpTx }: IProps) => {
   const {
@@ -46,7 +55,7 @@ const ModalSpeedUp = React.memo(({ show, onHide, title = 'Speed up', buttonText 
   const [submitting, setSubmitting] = React.useState(false);
   const user = useCurrentUser();
 
-  const { createSpeedUpBTCTx, getTCTransactionByHash } = useBitcoin();
+  const { createSpeedUpBTCTx } = useBitcoin();
 
   const handleSubmit = async () => {
     try {
@@ -79,16 +88,15 @@ const ModalSpeedUp = React.memo(({ show, onHide, title = 'Speed up', buttonText 
   const onGetHexSize = async () => {
     try {
       setIsLoading(true);
-      const Hexs = await Promise.all(
-        (speedUpTx?.tcTxs || []).map(({ Hash }) => {
-          return getTCTransactionByHash(Hash);
-        }),
+      const hashLockKeyPair = ECPair.makeRandom({ network: networks.bitcoin });
+
+      const tcClient = new TC_SDK.TcClient(BTC_NETWORK, TC_NETWORK_RPC);
+      const { hashLockScriptHex } = await tcClient.getTapScriptInfo(
+        hashLockKeyPair.publicKey.toString('hex'),
+        (speedUpTx?.tcTxs || []).map(tx => tx.Hash),
       );
-      const sizeByte: number = Hexs.reduce((prev, curr) => {
-        const currSize = Web3.utils.hexToBytes(curr).length;
-        return currSize + prev;
-      }, 0);
-      setSizeByte(sizeByte);
+      setSizeByte(Web3.utils.hexToBytes(hashLockScriptHex).length);
+      // setSizeByte(sizeByte);
       setIsLoading(false);
     } catch (e) {
       // todo

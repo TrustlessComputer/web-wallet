@@ -166,7 +166,7 @@ const useBitcoin = () => {
     return unInscribedTxIDs;
   };
 
-  const getTCTransactionByHash = async (tcTxID: string): Promise<string> => {
+  const getTCTransactionByHex = async (tcTxID: string): Promise<string> => {
     if (!tcTxID) throw Error('Address not found');
     const { Hex } = (await tcClient.getTCTxByHash(tcTxID)) as any;
     return Hex;
@@ -198,7 +198,7 @@ const useBitcoin = () => {
     const uninscribes: ITCTxDetail[] = [];
     for (const uninscribe of unInscribedTxDetails) {
       try {
-        await getTCTransactionByHash(uninscribe.Hash);
+        await getTCTransactionByHex(uninscribe.Hash);
         uninscribes.push(uninscribe);
       } catch (e) {
         // todo handle error
@@ -287,7 +287,7 @@ const useBitcoin = () => {
     getNonceInscribeable,
     getUnInscribedTransactionByAddress,
     getUnInscribedTransactionDetailByAddress,
-    getTCTransactionByHash,
+    getTCTransactionByHex,
     createSpeedUpBTCTx,
     sendBTC,
     isRBFable,

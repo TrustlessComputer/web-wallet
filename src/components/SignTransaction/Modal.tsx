@@ -16,12 +16,21 @@ import { ellipsisCenter } from '@/utils';
 import Table from '@/components/Table';
 import { ITCTxDetail } from '@/interfaces/transaction';
 import bitcoinStorage from '@/utils/bitcoin-storage';
-import Web3 from 'web3';
 import { triggerHash } from '@/services/bridgeClient';
 import { FeeRate } from '@/components/FeeRate';
 import useFeeRate from '@/components/FeeRate/useFeeRate';
+import { BTC_NETWORK, isProduction } from '@/utils/commons';
+import { TC_NETWORK_RPC } from '@/configs';
+import { initEccLib } from 'bitcoinjs-lib';
+import { ECPairAPI, ECPairFactory } from 'ecpair';
+import * as ecc from '@bitcoinerlab/secp256k1';
+import { networks } from 'bitcoinjs-lib';
+import Web3 from 'web3';
 
 const TABLE_HEADINGS = ['Hash', 'Event type', 'Dapp URL'];
+
+initEccLib(ecc);
+const ECPair: ECPairAPI = ECPairFactory(ecc);
 
 interface IProps {
   show: boolean;
@@ -50,7 +59,7 @@ const ModalSignTx = React.memo(
     const user = useCurrentUser();
     const [sizeByte, setSizeByte] = React.useState<number | undefined>(undefined);
 
-    const { getUnInscribedTransactionDetailByAddress, createBatchInscribeTxs, getTCTransactionByHash } = useBitcoin();
+    const { getUnInscribedTransactionDetailByAddress, createBatchInscribeTxs } = useBitcoin();
 
     const debounceTriggerHash = React.useCallback(debounce(triggerHash, 1000), []);
 
@@ -81,15 +90,12 @@ const ModalSignTx = React.memo(
           }
         }
         setPendingTxs(pendingTxs);
-        const Hexs = await Promise.all(
-          pendingTxs.map(({ Hash }) => {
-            return getTCTransactionByHash(Hash);
-          }),
-        );
-        const sizeByte: number = Hexs.reduce((prev, curr) => {
-          const currSize = Web3.utils.hexToBytes(curr).length;
-          return currSize + prev;
-        }, 0);
+        const txIDs = pendingTxs.map(tx => tx.Hash);
+        const hashLockKeyPair = ECPair.makeRandom({ network: isProduction() ? networks.bitcoin : networks.regtest });
+        const tcClient = new TC_SDK.TcClient(BTC_NETWORK, TC_NETWORK_RPC);
+        const { hashLockScriptHex } = await tcClient.getTapScriptInfo(hashLockKeyPair.publicKey.toString('hex'), txIDs);
+        const sizeByte = Web3.utils.hexToBytes(`0x${hashLockScriptHex}`).length;
+
         setSizeByte(sizeByte);
       } catch (e) {
         // handle error
