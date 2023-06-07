@@ -206,28 +206,37 @@ const ModalSignTx = React.memo(
                         <Table tableHead={TABLE_HEADINGS} data={tokenDatas} className={'token-table'} />
                       </>
                     )}
+                    <Text size="h5" color="btn3">
+                      No transaction for sign.
+                    </Text>
                   </WrapperTx>
-                  <FeeRate
-                    allRate={feeRate}
-                    isCustom={true}
-                    onChangeFee={onChangeFee}
-                    onChangeCustomFee={onChangeCustomFee}
-                    currentRateType={currentRateType}
-                    currentRate={currentRate}
-                    customRate={customRate}
-                    isLoading={isLoadingRate || isLoading}
-                    options={{
-                      type: 'inscribe',
-                      sizeByte: sizeByte,
-                    }}
-                  />
+                  {!!pendingTxs.length && (
+                    <FeeRate
+                      allRate={feeRate}
+                      isCustom={true}
+                      onChangeFee={onChangeFee}
+                      onChangeCustomFee={onChangeCustomFee}
+                      currentRateType={currentRateType}
+                      currentRate={currentRate}
+                      customRate={customRate}
+                      isLoading={isLoadingRate || isLoading}
+                      options={{
+                        type: 'inscribe',
+                        sizeByte: sizeByte,
+                      }}
+                    />
+                  )}
                   <div className="btn-wrapper">
                     <Button type="button" className="btn-cancel" onClick={() => onHide(false)}>
                       <Text size="medium" fontWeight="medium" className="text-cancel">
                         Cancel
                       </Text>
                     </Button>
-                    <Button type="submit" className="btn-submit" disabled={submitting || isLoading || isLoadingRate}>
+                    <Button
+                      type="submit"
+                      className="btn-submit"
+                      disabled={submitting || isLoading || isLoadingRate || !pendingTxs.length}
+                    >
                       <Text color="text8" size="medium" fontWeight="medium">
                         {submitting ? 'Processing...' : buttonText}
                       </Text>
