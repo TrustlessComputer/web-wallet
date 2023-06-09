@@ -22,6 +22,7 @@ import { TransactorContext } from '@/contexts/transactor-context';
 import { ExportKeyModal } from '@/components/ExportKey';
 import { generateBitcoinTaprootKey } from '@/utils/derive-key';
 import * as TC_SDK from 'trustless-computer-sdk';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 type Props = {
   className?: string;
@@ -95,27 +96,39 @@ const UserInfo = ({ className }: Props) => {
               </div>
             </div>
             {profileBtcWallet && (
-              <div className="btc-address">
-                <IconSVG src={IcBitcoin} maxWidth="32" className="ic-token" />
-                <div>
-                  <Text size="medium" color="text1">
-                    Bitcoin address:
-                  </Text>
-                  <div className="wallet-address">
-                    <h5> {formatLongAddress(profileBtcWallet)}</h5>
-                    <div className="icCopy" onClick={() => onClickCopy(profileBtcWallet)}>
-                      <img alt="ic-copy" src={IcCopy} />
+              <OverlayTrigger
+                placement="right"
+                overlay={
+                  <Tooltip id="tooltip" style={{ minWidth: 300 }}>
+                    <p>
+                      This wallet is for Bitcoin network only. <strong style={{ fontWeight: 700 }}>DON’T</strong> send
+                      any other assets besides BTC to it.
+                    </p>
+                  </Tooltip>
+                }
+              >
+                <div className="btc-address">
+                  <IconSVG src={IcBitcoin} maxWidth="32" className="ic-token" />
+                  <div>
+                    <Text size="medium" color="text1">
+                      Bitcoin address:
+                    </Text>
+                    <div className="wallet-address">
+                      <h5> {formatLongAddress(profileBtcWallet)}</h5>
+                      <div className="icCopy" onClick={() => onClickCopy(profileBtcWallet)}>
+                        <img alt="ic-copy" src={IcCopy} />
+                      </div>
                     </div>
+                    <Text size="medium" color="text2">
+                      {format.shorterAmount({
+                        originalAmount: btcBalance,
+                        decimals: Token.BITCOIN.decimal,
+                      })}{' '}
+                      {Token.BITCOIN.symbol}
+                    </Text>
                   </div>
-                  <Text size="medium" color="text2">
-                    {format.shorterAmount({
-                      originalAmount: btcBalance,
-                      decimals: Token.BITCOIN.decimal,
-                    })}{' '}
-                    {Token.BITCOIN.symbol}
-                  </Text>
                 </div>
-              </div>
+              </OverlayTrigger>
             )}
           </div>
           <div className="divider mb-24" />

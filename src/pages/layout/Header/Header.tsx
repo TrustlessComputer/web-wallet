@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Wrapper } from './Header.styled';
 import MenuMobile from './MenuMobile';
-// import WalletHeader from './Wallet';
 
 const Header = ({ height }: { height: number }) => {
   const refMenu = useRef<HTMLDivElement | null>(null);
@@ -27,28 +26,38 @@ const Header = ({ height }: { height: number }) => {
   }, [isOpenMenu]);
 
   return (
-    <Wrapper style={{ height }}>
-      <div className="indicator" />
-      <Link className="logo" to={ROUTE_PATH.HOME}>
-        <img alt="logo" src={`${CDN_URL}/icons/wallet_logo.svg`} width={50} height={50} />
-      </Link>
-      <div className="rowLink" />
-      <MenuMobile ref={refMenu} onCloseMenu={() => setIsOpenMenu(false)} />
-      <div className="rightContainer">
-        {/* <WalletHeader /> */}
-        <div className="external-link">
-          <a href={'https://trustless.computer/'} target="_blank">
-            Trustless
-          </a>
-          <a href={'https://tcgasstation.com/'} target="_blank">
-            Get TC
-          </a>
+    <>
+      <Wrapper style={{ height }}>
+        <div className="indicator" />
+        <Link className="logo" to={ROUTE_PATH.HOME}>
+          <img alt="logo" src={`${CDN_URL}/icons/wallet_logo.svg`} width={50} height={50} />
+        </Link>
+        <div className="rowLink" />
+        <MenuMobile ref={refMenu} onCloseMenu={() => setIsOpenMenu(false)} />
+        <div className="rightContainer">
+          {/* <WalletHeader /> */}
+          <div className="external-link">
+            <a href={'https://trustless.computer/'} target="_blank">
+              Trustless
+            </a>
+            <a href={'https://tcgasstation.com/'} target="_blank">
+              Get TC
+            </a>
+          </div>
+          <button className="btnMenuMobile" onClick={() => setIsOpenMenu(true)}>
+            <img src={IcOpenMenu} alt="" />
+          </button>
         </div>
-        <button className="btnMenuMobile" onClick={() => setIsOpenMenu(true)}>
-          <img src={IcOpenMenu} alt="" />
-        </button>
-      </div>
-    </Wrapper>
+      </Wrapper>
+      {/*<Banner>*/}
+      {/*  <Text align="center" size="large">*/}
+      {/*    If you wish to move your Ordinals BRC-20 tokens to New Bitcoin DEX for trading, please follow the steps{' '}*/}
+      {/*    <a href="https://twitter.com/NewBitcoinCity/status/1666115112124698629" target="_blank">*/}
+      {/*      HERE*/}
+      {/*    </a>*/}
+      {/*  </Text>*/}
+      {/*</Banner>*/}
+    </>
   );
 };
 

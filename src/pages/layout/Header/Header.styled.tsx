@@ -229,4 +229,11 @@ const ConnectWalletButton = styled(Button)`
   }
 `;
 
-export { ConnectWalletButton, Wrapper, StyledLink, WalletBalance, WalletAdress, Anchor };
+const Banner = styled.div`
+  background: #4f43e2;
+  padding: 12px;
+  border-radius: 4px;
+  margin-top: 12px;
+`;
+
+export { ConnectWalletButton, Wrapper, StyledLink, WalletBalance, WalletAdress, Anchor, Banner };
