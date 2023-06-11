@@ -206,9 +206,11 @@ const ModalSignTx = React.memo(
                         <Table tableHead={TABLE_HEADINGS} data={tokenDatas} className={'token-table'} />
                       </>
                     )}
-                    <Text size="h5" color="btn3">
-                      No transaction for sign.
-                    </Text>
+                    {!isLoading && !!pendingTxs.length && (
+                      <Text size="h5" color="btn3">
+                        No transaction for sign.
+                      </Text>
+                    )}
                   </WrapperTx>
                   {!!pendingTxs.length && (
                     <FeeRate
