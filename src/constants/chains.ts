@@ -1,7 +1,8 @@
 import { TC_NETWORK_RPC } from '@/configs';
+import { isProduction } from '@/utils/commons';
 
 export enum SupportedChainId {
-  TRUSTLESS_COMPUTER = 22213,
+  TRUSTLESS_COMPUTER = isProduction() ? 22213 : 22215,
 }
 
 export const TRUSTLESS_COMPUTER_CHAIN_INFO = {
