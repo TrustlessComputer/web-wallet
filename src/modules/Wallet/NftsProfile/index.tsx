@@ -7,8 +7,7 @@ import { debounce } from 'lodash';
 import { useEffect, useState } from 'react';
 import { Spinner } from 'react-bootstrap';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
-import { Container } from './NftsProfile.styled';
+import { Container, Grid } from './NftsProfile.styled';
 import NFTCard from '@/components/NFTCard';
 
 const LIMIT_PAGE = 32;
@@ -83,32 +82,21 @@ const NftsProfile = () => {
         }
         next={debounceLoadMore}
       >
-        <ResponsiveMasonry
-          columnsCountBreakPoints={{
-            350: 1,
-            750: 2,
-            900: 3,
-            1240: 4,
-            2500: 5,
-            3000: 5,
-          }}
-        >
-          <Masonry gutter="24px">
-            {collections.length > 0 &&
-              collections.map((item: any, index: number) => {
-                return (
-                  <NFTCard
-                    key={index.toString()}
-                    href={`/collection?contract=${item.contract}&owner=${profileWallet}`}
-                    image={item.thumbnail}
-                    title1={item.name || shortenAddress(item.contract, 6)}
-                    title2={shortenAddress(item.creator, 4)}
-                    title3={`Collection #${item.index}`}
-                  />
-                );
-              })}
-          </Masonry>
-        </ResponsiveMasonry>
+        <Grid>
+          {collections.length > 0 &&
+            collections.map((item: any, index: number) => {
+              return (
+                <NFTCard
+                  key={index.toString()}
+                  href={`/collection?contract=${item.contract}&owner=${profileWallet}`}
+                  image={item.thumbnail}
+                  title1={item.name || shortenAddress(item.contract, 6)}
+                  title2={shortenAddress(item.creator, 4)}
+                  title3={`Collection #${item.index}`}
+                />
+              );
+            })}
+        </Grid>
       </InfiniteScroll>
     </Container>
   );
