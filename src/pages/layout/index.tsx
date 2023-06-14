@@ -6,7 +6,7 @@ import Header from './Header';
 import styled, { DefaultTheme } from 'styled-components';
 import px2rem from '@/utils/px2rem';
 
-const HEADER_HEIGHT = 80;
+const HEADER_HEIGHT = 96;
 const FO0TER_HEIGHT = 80;
 
 export const Container = styled.div`
@@ -18,6 +18,19 @@ export const Container = styled.div`
   flex-direction: column;
   padding: 0 ${px2rem(32)};
   background: ${({ theme }) => theme.bg1};
+
+  ${({ theme }: { theme: DefaultTheme }) => theme.deprecated_mediaWidth.deprecated_upToMedium`
+      padding-left: 7%;
+      padding-right: 7%;
+  `}
+`;
+
+export const HeaderContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  background: ${({ theme }) => theme.bg.secondary};
+  padding: 0 ${px2rem(32)};
 
   ${({ theme }: { theme: DefaultTheme }) => theme.deprecated_mediaWidth.deprecated_upToMedium`
       padding-left: 7%;
@@ -38,14 +51,18 @@ const ContentWrapper = styled.div`
 
 const Layout = () => {
   return (
-    <Container>
+    <div>
       <Meta />
-      <Header height={HEADER_HEIGHT} />
-      <ContentWrapper>
-        <Outlet />
-      </ContentWrapper>
-      <Footer height={FO0TER_HEIGHT} />
-    </Container>
+      <HeaderContainer>
+        <Header height={HEADER_HEIGHT} />
+      </HeaderContainer>
+      <Container>
+        <ContentWrapper>
+          <Outlet />
+        </ContentWrapper>
+        <Footer height={FO0TER_HEIGHT} />
+      </Container>
+    </div>
   );
 };
 

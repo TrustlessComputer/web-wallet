@@ -1,5 +1,5 @@
 import px2rem from '@/utils/px2rem';
-import styled, { DefaultTheme } from 'styled-components';
+import styled from 'styled-components';
 
 export const StyledTokenProfile = styled.div`
   .table {
@@ -38,7 +38,6 @@ export const StyledTokenProfile = styled.div`
   }
 
   .transfer-button {
-    background-color: ${({ theme }: { theme: DefaultTheme }) => theme.bg5};
     padding: ${px2rem(5)} ${px2rem(14)};
     display: flex;
     align-items: center;
@@ -46,9 +45,7 @@ export const StyledTokenProfile = styled.div`
     font-weight: 500;
     font-size: ${px2rem(14)};
     line-height: ${px2rem(24)};
-    color: ${({ theme }: { theme: DefaultTheme }) => theme.primary.brand};
     font-style: normal;
-    border-radius: 2px;
     margin-left: auto;
     /* margin-right: auto; */
   }

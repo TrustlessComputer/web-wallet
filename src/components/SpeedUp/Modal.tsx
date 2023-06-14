@@ -115,7 +115,12 @@ const ModalSpeedUp = React.memo(({ show, onHide, title = 'Speed up', buttonText 
   return (
     <Container show={show} centered>
       <Modal.Header>
-        <IconSVG className="cursor-pointer" onClick={() => onHide(false)} src={IcCloseModal} maxWidth="22px" />
+        <IconSVG
+          className="cursor-pointer scale-up-anim"
+          onClick={() => onHide(false)}
+          src={IcCloseModal}
+          maxWidth="22px"
+        />
       </Modal.Header>
       <Modal.Body>
         <Text style={{ textTransform: 'uppercase' }} size="h5" className="font-medium mb-24 header-title">

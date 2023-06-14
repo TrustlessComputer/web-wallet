@@ -69,7 +69,7 @@ export const StyledTransactionProfile = styled.div`
       text-decoration: underline;
     }
     &.pending {
-      color: ${({ theme }: { theme: DefaultTheme }) => theme.yellow.b};
+      color: ${({ theme }: { theme: DefaultTheme }) => theme.yellow.B};
     }
   }
 

@@ -32,6 +32,13 @@ const commonTheme = {
     '5b': '#5b5b5b',
     d9: '#d9d9d9',
     light: '#F7F9FB',
+    f2: '#f2f2f2',
+  },
+
+  yellow: {
+    A: '#FFE899',
+    B: '#F9D03F',
+    C: '#FFAA59',
   },
 
   green: {
@@ -40,12 +47,33 @@ const commonTheme = {
     c: '#24c087',
   },
 
-  yellow: {
-    a: '#FFE899',
-    b: '#F9D03F',
+  red: {
+    A: '#FF4747',
+    B: '#FF8B8B',
+    C: '#FF6666',
   },
 
-  red: '#FF4747',
+  dark: {
+    '120': '#010101',
+    '110': '#0F0F0F',
+    '100': '#1C1C1C',
+    '80': '#2E2E2E',
+    '60': '#5B5B5B',
+    '40': '#898989',
+    '20': '#B6B6B6',
+    '10': '#CECECE',
+    '5': '#ECECED',
+  },
+
+  light: {
+    '100': '#FFFFFF',
+    '80': '#FAFAFA',
+    '60': '#F4F4F4',
+    '40': '#EFEFEF',
+    '20': '#E9E9E9',
+    '10': '#E7E7E7',
+    '5': '#E5E5E5',
+  },
 };
 
 export const darkTheme = {
@@ -56,7 +84,7 @@ export const darkTheme = {
   bg3: '#404040',
   bg4: '#cecece',
   bg5: '#f2f2f2',
-  bg6: commonTheme.yellow.a,
+  bg6: commonTheme.yellow.A,
 
   // Text
   text1: '#F5F5F5',
@@ -64,7 +92,7 @@ export const darkTheme = {
   text3: '#e5e5e5',
   text4: commonTheme.purple.b,
   text5: '#4f43e2',
-  text6: commonTheme.red,
+  text6: commonTheme.red.A,
   text7: commonTheme.primary.brand,
   text8: commonTheme.primary.secondary,
 
@@ -76,7 +104,7 @@ export const darkTheme = {
   // Button
   btn1: '#1A73E8',
   btn2: '#404040',
-  btn3: commonTheme.yellow.a,
+  btn3: commonTheme.yellow.A,
 
   // Icons
   icon1: '#D9D9D9',
@@ -84,6 +112,43 @@ export const darkTheme = {
 
   // Hover1
   hover1: '#3b3a3a',
+
+  // text
+  'text-primary': commonTheme.light['100'],
+  'text-secondary': commonTheme.dark['10'],
+  'text-highlight': commonTheme.yellow['A'],
+  'text-parallel': commonTheme.dark['100'],
+  'text-third': commonTheme.dark['5'],
+  'text-four': commonTheme.dark['40'],
+  'text-five': commonTheme.dark['20'],
+  'text-tab-item': commonTheme.yellow['A'],
+  'text-error': commonTheme.red.A,
+
+  // button
+  'button-primary': commonTheme.yellow['A'],
+  'button-negative': commonTheme.red.A,
+
+  // border
+  'border-primary': commonTheme.dark['60'],
+  'border-secondary': commonTheme.yellow['A'],
+  'border-third': commonTheme.primary.d9,
+  'border-four': commonTheme.dark['5'],
+
+  bg: {
+    primary: commonTheme.dark['110'],
+    secondary: commonTheme.dark['80'],
+    third: commonTheme.dark['100'],
+    four: commonTheme.primary['f2'],
+    modal: commonTheme.dark['100'],
+    'tab-item': commonTheme.dark['80'],
+    'nft-item': 'transparent',
+  },
+
+  card: {
+    primary: commonTheme.dark['120'],
+    secondary: commonTheme.dark['110'],
+    bns: '#17171a',
+  },
 };
 
 export const lightTheme = {
@@ -115,7 +180,7 @@ export const lightTheme = {
   // Button
   btn1: '#282828',
   btn2: commonTheme.white,
-  btn3: commonTheme.yellow.a,
+  btn3: commonTheme.yellow.A,
 
   // Icons
   icon1: commonTheme.black,
@@ -123,4 +188,41 @@ export const lightTheme = {
 
   // Hover1
   hover1: '#D9D9D9',
+
+  // text
+  'text-primary': commonTheme.dark['100'],
+  'text-secondary': commonTheme.dark['60'],
+  'text-highlight': commonTheme.yellow['A'],
+  'text-parallel': commonTheme.white,
+  'text-third': commonTheme.dark['5'],
+  'text-four': commonTheme.dark['40'],
+  'text-five': commonTheme.dark['60'],
+  'text-tab-item': commonTheme.white,
+  'text-error': commonTheme.red.A,
+
+  // button
+  'button-primary': commonTheme.yellow['C'],
+  'button-negative': commonTheme.red.A,
+
+  // border
+  'border-primary': commonTheme.dark['10'],
+  'border-secondary': commonTheme.yellow['C'],
+  'border-third': commonTheme.primary.d9,
+  'border-four': commonTheme.dark['5'],
+
+  bg: {
+    primary: commonTheme.white,
+    secondary: commonTheme.light['80'],
+    third: commonTheme.light['100'],
+    four: commonTheme.primary['f2'],
+    modal: commonTheme.white,
+    'tab-item': commonTheme.yellow['C'],
+    'nft-item': commonTheme.light['80'],
+  },
+
+  card: {
+    primary: commonTheme.dark['120'],
+    secondary: commonTheme.light['80'],
+    bns: 'transparent',
+  },
 };

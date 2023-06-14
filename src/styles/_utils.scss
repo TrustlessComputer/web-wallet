@@ -23,3 +23,8 @@
 .font-ibm {
   font-family: 'IBMPlexMono', sans-serif !important;
 }
+
+.scale-up-anim:hover {
+  transform: scale(1.1);
+  transition: all 0.2s ease-in-out;
+}

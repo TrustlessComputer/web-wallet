@@ -45,13 +45,19 @@ const Container = styled.div`
   `}
 `;
 
-const Grid = styled.div<{ repeat: string }>`
+const Grid = styled.div`
   display: grid;
   justify-items: center;
-  margin-top: ${px2rem(24)};
-
   grid-gap: ${px2rem(24)};
-  grid-template-columns: ${({ repeat }) => repeat};
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  @media screen and (max-width: 1280px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @media screen and (max-width: 768px) {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
 `;
 
 export { Container, Grid };

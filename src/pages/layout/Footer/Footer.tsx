@@ -90,8 +90,8 @@ const Footer = ({ height }: { height: number }) => {
     <Wrapper style={{ height }}>
       <p className="text">Open-source software. Made with ❤️ on Bitcoin.</p>
       <div className="footer-right">
-        <StyledLink active={false} href="https://tcgasstation.com/" target="_blank">
-          Get TC
+        <StyledLink active={false} href="https://trustless.computer/" target="_blank">
+          Trustless
           <img className="arrow-icon" src={`${CDN_URL}/icons/ic-arrow-outward.svg`} alt="" />
         </StyledLink>
         <StyledLink active={false} href="https://explorer.trustless.computer" target="_blank">

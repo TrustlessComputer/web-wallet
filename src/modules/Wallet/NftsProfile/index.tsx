@@ -1,4 +1,5 @@
 import Empty from '@/components/Empty';
+import NFTCard from '@/components/NFTCard';
 import { ICollection } from '@/interfaces/api/collection';
 import { getCollectionsByItemsOwned } from '@/services/profile';
 import { shortenAddress } from '@/utils';
@@ -7,9 +8,8 @@ import { debounce } from 'lodash';
 import { useEffect, useState } from 'react';
 import { Spinner } from 'react-bootstrap';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
-import { Container } from './NftsProfile.styled';
-import NFTCard from '@/components/NFTCard';
+import { EMPTY_LINK } from '../constant';
+import { Container, Grid } from './NftsProfile.styled';
 
 const LIMIT_PAGE = 32;
 
@@ -64,7 +64,7 @@ const NftsProfile = () => {
   if (!collections || collections.length === 0)
     return (
       <Container>
-        <Empty />
+        <Empty infoText={EMPTY_LINK.NFT.label} link={EMPTY_LINK.NFT.link} />
       </Container>
     );
 
@@ -83,32 +83,21 @@ const NftsProfile = () => {
         }
         next={debounceLoadMore}
       >
-        <ResponsiveMasonry
-          columnsCountBreakPoints={{
-            350: 1,
-            750: 2,
-            900: 3,
-            1240: 4,
-            2500: 5,
-            3000: 5,
-          }}
-        >
-          <Masonry gutter="24px">
-            {collections.length > 0 &&
-              collections.map((item: any, index: number) => {
-                return (
-                  <NFTCard
-                    key={index.toString()}
-                    href={`/collection?contract=${item.contract}&owner=${profileWallet}`}
-                    image={item.thumbnail}
-                    title1={item.name || shortenAddress(item.contract, 6)}
-                    title2={shortenAddress(item.creator, 4)}
-                    title3={`Collection #${item.index}`}
-                  />
-                );
-              })}
-          </Masonry>
-        </ResponsiveMasonry>
+        <Grid>
+          {collections.length > 0 &&
+            collections.map((item: any, index: number) => {
+              return (
+                <NFTCard
+                  key={index.toString()}
+                  href={`/collection?contract=${item.contract}&owner=${profileWallet}`}
+                  image={item.thumbnail}
+                  title1={item.name || shortenAddress(item.contract, 6)}
+                  title2={shortenAddress(item.creator, 4)}
+                  title3={`Collection #${item.index}`}
+                />
+              );
+            })}
+        </Grid>
       </InfiniteScroll>
     </Container>
   );

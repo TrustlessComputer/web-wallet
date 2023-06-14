@@ -5,6 +5,7 @@ import { Modal } from 'react-bootstrap';
 export const StyledTransferModal = styled(Modal)`
   &.modal {
     --bs-modal-color: ${({ theme }) => theme.bg1};
+    --bs-modal-width: ${px2rem(600)};
   }
 
   .modal-header {
@@ -14,6 +15,11 @@ export const StyledTransferModal = styled(Modal)`
     justify-content: flex-end;
     padding-top: ${px2rem(18)};
     padding-right: ${px2rem(18)};
+  }
+
+  .modal-content {
+    border-radius: 2px;
+    padding: ${px2rem(16)};
   }
 
   * {

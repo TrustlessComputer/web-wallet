@@ -5,12 +5,12 @@ import { debounce } from 'lodash';
 import { useEffect, useState } from 'react';
 import { Spinner } from 'react-bootstrap';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Container } from './ArtifactsProfile.styled';
+import { Container, Grid } from './ArtifactsProfile.styled';
 import { ARTIFACT_CONTRACT } from '@/configs';
 import Empty from '@/components/Empty';
 import { IInscription } from '@/interfaces/api/inscription';
-import { Grid } from '@/components/Grid/Grid.styled';
 import NFTCard from '@/components/NFTCard';
+import { EMPTY_LINK } from '../constant';
 
 const LIMIT_PAGE = 32;
 
@@ -60,7 +60,8 @@ const ArtifactsProfile = () => {
     if (profileWallet) fetchInscriptions();
   }, [profileWallet]);
 
-  if (!inscriptions || inscriptions.length === 0) return <Empty />;
+  if (!inscriptions || inscriptions.length === 0)
+    return <Empty infoText={EMPTY_LINK.ARTIFACTS.label} link={EMPTY_LINK.ARTIFACTS.link} />;
 
   return (
     <Container>
@@ -78,7 +79,7 @@ const ArtifactsProfile = () => {
           }
           next={debounceLoadMore}
         >
-          <Grid repeat={`repeat(auto-fit, minmax(348px, ${inscriptions && inscriptions.length > 4 ? 1 : 0.25}fr))`}>
+          <Grid>
             {inscriptions &&
               inscriptions.length > 0 &&
               inscriptions.map((item, index) => {

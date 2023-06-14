@@ -93,7 +93,7 @@ const SendBTCModal = React.memo(({ show, onHide }: IProps) => {
   return (
     <StyledSendBTCModal show={show} centered>
       <Modal.Header>
-        <IconSVG className="cursor-pointer" onClick={onHide} src={IcCloseModal} maxWidth="22px" />
+        <IconSVG className="cursor-pointer scale-up-anim" onClick={onHide} src={IcCloseModal} maxWidth="22px" />
       </Modal.Header>
       <Modal.Body>
         <Text size="h5" className="font-medium mb-24 header-title">

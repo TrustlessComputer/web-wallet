@@ -19,6 +19,7 @@ import { BTC_NETWORK } from '@/utils/commons';
 import Button from '@/components/Button';
 import { ModalSignTx } from '@/components/SignTransaction';
 import ModalSpeedUp from '@/components/SpeedUp/Modal';
+import { EMPTY_LINK } from '../constant';
 
 const TABLE_HEADINGS = ['Event', 'Transaction ID', 'From', 'To', 'Time', 'Status'];
 
@@ -330,7 +331,13 @@ const Transactions = React.memo(() => {
         </div>
       )}
       {isLoading && <Spinner />}
-      <Table tableHead={TABLE_HEADINGS} data={transactionsData} className={'transaction-table'} />
+      <Table
+        tableHead={TABLE_HEADINGS}
+        data={transactionsData}
+        className={'transaction-table'}
+        emptyLabel={EMPTY_LINK.TRANSACTIONS.label}
+        emptyLink={EMPTY_LINK.TRANSACTIONS.link}
+      />
       <ModalSignTx show={isShow} onHide={onHide} title="Process pending transactions" buttonText="Process now" />
       <ModalSpeedUp show={isShowModalSpeedup && !!speedUpTx} speedUpTx={speedUpTx} onHide={onHideModalSpeedUp} />
     </StyledTransactionProfile>

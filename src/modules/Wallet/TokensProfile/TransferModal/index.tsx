@@ -75,7 +75,7 @@ const TransferModal = (props: Props) => {
   return (
     <StyledModalUpload show={show} onHide={handleClose} centered>
       <Modal.Header>
-        <IconSVG className="cursor-pointer" onClick={handleClose} src={IcCloseModal} maxWidth={'22px'} />
+        <IconSVG className="cursor-pointer scale-up-anim" onClick={handleClose} src={IcCloseModal} maxWidth={'22px'} />
       </Modal.Header>
       <Modal.Body>
         <Title>Transfer Token</Title>
