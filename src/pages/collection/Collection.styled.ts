@@ -59,5 +59,4 @@ const Grid = styled.div`
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }
 `;
-
 export { Container, Grid };
