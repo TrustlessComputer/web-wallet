@@ -5,6 +5,7 @@ import styled, { DefaultTheme } from 'styled-components';
 export const StyledModalUpload = styled(Modal)`
   &.modal {
     --bs-modal-color: ${({ theme }) => theme.bg1};
+    --bs-modal-width: ${px2rem(600)};
   }
 
   .modal-content {

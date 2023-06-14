@@ -153,17 +153,16 @@ const Wrapper = styled.div`
 
 const StyledLink = styled.a<{ active: boolean }>`
   cursor: pointer;
-  font-weight: 400;
-  font-size: ${px2rem(16)};
+  font-style: normal;
+  font-weight: 500;
+  font-size: ${px2rem(14)};
   line-height: ${px2rem(28)};
   text-decoration: none !important;
   color: ${({ theme, active }: { theme: DefaultTheme; active: boolean }) => (active ? theme.white : theme.text2)};
-  font-family: 'IBMPlexMono';
-  letter-spacing: -0.02em;
 
   :hover {
     color: ${({ theme }: { theme: DefaultTheme }) => theme.white};
-    opacity: 0.7;
+    opacity: 0.8;
   }
 `;
 
@@ -174,7 +173,6 @@ const Anchor = styled.a<{ active: boolean }>`
   line-height: ${px2rem(28)};
   text-decoration: none !important;
   color: ${({ theme, active }: { theme: DefaultTheme; active: boolean }) => (active ? theme.white : theme.text2)};
-  font-family: 'IBMPlexMono';
   letter-spacing: -0.02em;
 
   :hover {

@@ -6,7 +6,7 @@ import IconSVG from '../IconSVG';
 import { CDN_URL_ICONS } from '@/configs';
 
 export type ButtonProps = {
-  onClick?: () => void;
+  onClick?: (e: any) => void;
   className?: string;
   disabled?: boolean;
   props?: HTMLButtonElement;

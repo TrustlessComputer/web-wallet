@@ -30,17 +30,17 @@ export const ThemedGlobalStyle = createGlobalStyle`
 
 
     h3 {
-      font-family: 'IBMPlexMono' !important;
+      font-family: 'GoogleSans' !important;
       font-size: ${({ theme }: { theme: DefaultTheme }) => theme.fontSizes.h3};
       line-height: ${({ theme }: { theme: DefaultTheme }) => theme.lineHeight.h3};
     }
     h5 {
-      font-family: 'IBMPlexMono' !important;
+      font-family: 'GoogleSans' !important;
       font-size: ${({ theme }: { theme: DefaultTheme }) => theme.fontSizes.h5};
       line-height: ${({ theme }: { theme: DefaultTheme }) => theme.lineHeight.h5};
     }
     h6 {
-      font-family: 'IBMPlexMono' !important;
+      font-family: 'GoogleSans' !important;
       font-size: ${({ theme }: { theme: DefaultTheme }) => theme.fontSizes.h6};
       line-height: ${({ theme }: { theme: DefaultTheme }) => theme.lineHeight.h6};
     }
@@ -59,7 +59,7 @@ export const ThemedGlobalStyle = createGlobalStyle`
     }
 
     button {
-      font-family: 'IBMPlexMono';
+      font-family: 'GoogleSans';
     }
 
     ${ScreenMarginTop}

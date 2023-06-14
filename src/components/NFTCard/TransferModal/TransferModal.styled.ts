@@ -1,8 +1,8 @@
+import { MainModal } from '@/components/Modal/MainModal.styled';
 import px2rem from '@/utils/px2rem';
-import { Modal } from 'react-bootstrap';
 import styled, { DefaultTheme } from 'styled-components';
 
-export const StyledModalUpload = styled(Modal)`
+export const StyledModalUpload = styled(MainModal)`
   &.modal {
     --bs-modal-color: ${({ theme }) => theme.bg1};
     --bs-modal-width: ${px2rem(600)};
@@ -32,12 +32,6 @@ export const StyledModalUpload = styled(Modal)`
 
   .confirm-btn {
     width: 100%;
-    margin-top: ${px2rem(8)};
-
-    .confirm-text {
-      padding-top: ${px2rem(11)};
-      padding-bottom: ${px2rem(11)};
-    }
   }
 `;
 

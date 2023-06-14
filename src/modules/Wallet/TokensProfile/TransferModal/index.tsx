@@ -2,14 +2,15 @@ import IconSVG from '@/components/IconSVG';
 import Text from '@/components/Text';
 import { useState } from 'react';
 import { Modal } from 'react-bootstrap';
-import { StyledModalUpload, WrapInput, Title } from './TransferModal.styled';
+import { StyledModalUpload } from './TransferModal.styled';
 import IcCloseModal from '@/assets/icons/ic-close.svg';
-import Button from '@/components/Button';
+import Button2 from '@/components/Button2';
 import useContractOperation from '@/hooks/contract-operations/useContractOperation';
 import toast from 'react-hot-toast';
 import { Formik } from 'formik';
 import useTransferERC20Token from '@/hooks/contract-operations/token/useTransferERC20Token';
 import isNumber from 'lodash/isNumber';
+import { Input } from '@/components/Inputs';
 
 type Props = {
   show: boolean;
@@ -78,7 +79,9 @@ const TransferModal = (props: Props) => {
         <IconSVG className="cursor-pointer scale-up-anim" onClick={handleClose} src={IcCloseModal} maxWidth={'22px'} />
       </Modal.Header>
       <Modal.Body>
-        <Title>Transfer Token</Title>
+        <Text className="mb-16" size="h5">
+          Transfer Token
+        </Text>
 
         <Formik
           key="create"
@@ -91,45 +94,36 @@ const TransferModal = (props: Props) => {
         >
           {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
             <form onSubmit={handleSubmit}>
-              <WrapInput>
-                <label htmlFor="toAddress" className="title-input">
-                  TRANSFER TOKEN TO
-                </label>
-                <input
-                  id="toAddress"
-                  type="text"
-                  name="toAddress"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.toAddress}
-                  className="input"
-                  placeholder={`Paste TC wallet address here`}
-                />
-                {errors.toAddress && touched.toAddress && <p className="error">{errors.toAddress}</p>}
-              </WrapInput>
+              <Input
+                title="TRANSFER TOKEN TO"
+                id="address"
+                type="text"
+                name="address"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.toAddress}
+                className="input"
+                placeholder={`Paste TC wallet address here`}
+                errorMsg={errors.toAddress && touched.toAddress ? errors.toAddress : undefined}
+              />
 
-              <WrapInput>
-                <label htmlFor="amount" className="title-input">
-                  AMOUNT
-                </label>
-                <input
-                  id="amount"
-                  type="number"
-                  name="amount"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.amount}
-                  className="input"
-                  placeholder={`Enter the amount`}
-                />
-                {errors.amount && touched.amount && <p className="error">{errors.amount}</p>}
-              </WrapInput>
+              <Input
+                classContainer="mt-16"
+                title="AMOUNT"
+                id="amount"
+                type="number"
+                name="amount"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.amount}
+                className="input"
+                placeholder={`Enter the amount`}
+                errorMsg={errors.amount && touched.amount ? errors.amount : undefined}
+              />
 
-              <Button disabled={isProcessing} type="submit" className="confirm-btn">
-                <Text size="medium" fontWeight="medium" className="confirm-text">
-                  {isProcessing ? 'Processing...' : 'Transfer'}
-                </Text>
-              </Button>
+              <Button2 className="confirm-btn mt-24" disabled={isProcessing} type="submit">
+                {isProcessing ? 'Processing...' : 'Transfer'}
+              </Button2>
             </form>
           )}
         </Formik>

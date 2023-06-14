@@ -18,6 +18,7 @@ const Inscription = () => {
   const [inscription, setInscription] = useState<IInscription | undefined>();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     fetchInscriptionDetail();
   }, []);
 

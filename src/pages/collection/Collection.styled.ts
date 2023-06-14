@@ -39,7 +39,7 @@ const Container = styled.div`
     .content {
 
       .list {
-        margin-top: ${px2rem(264)};
+        margin-top: ${px2rem(304)};
       }
     }
   `}

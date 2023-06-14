@@ -23,9 +23,10 @@ const EXPLORER_URL = TRUSTLESS_COMPUTER_CHAIN_INFO.explorers[0].url;
 
 const LIMIT_PAGE = 50;
 
+const TABLE_HEADINGS = ['Token Number', 'Name', 'Symbol', 'Balance', 'Max Supply', ''];
+
 const TokensProfile = () => {
   const user = useCurrentUser();
-  // const {run : getTokenBalance} = useContractOperation
 
   const { run: getTokenBalance } = useContractOperation<IGetTokenBalance, string>({
     operation: useGetTokenBalance,
@@ -37,12 +38,6 @@ const TokensProfile = () => {
   const [showTransferModal, setShowTransferModal] = useState(false);
   const [selectedToken, setSelectedToken] = useState<IToken | null>(null);
   const [tokensList, setTokensList] = useState<IToken[]>([]);
-
-  const TABLE_HEADINGS = ['Token Number', 'Name', 'Symbol', 'Balance', 'Max Supply', ''];
-
-  // const { data, error, isLoading } = useSWR(getApiKey(getTokensByWallet, { key: profileWallet }), () =>
-  //   getTokensByWallet({ key: profileWallet }),
-  // );
 
   const fetchTokenBalances = async (tokenAddrs: string[]) => {
     try {

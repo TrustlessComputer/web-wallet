@@ -2,14 +2,14 @@ import { Modal } from 'react-bootstrap';
 import { StyledTransferModal } from './TransferModal.styled';
 import IconSVG from '@/components/IconSVG';
 import IcCloseModal from '@/assets/icons/ic-close.svg';
-import { WrapInput } from '@/pages/collection/ModalEdit/ModalMint.styled';
+import { Input } from '@/components/Inputs';
 import { Formik } from 'formik';
 import Text from '@/components/Text';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import useContractOperation from '@/hooks/contract-operations/useContractOperation';
 import useTransferName from '@/hooks/contract-operations/bns/useTransferName';
-import Button from '@/components/Button';
+import Button2 from '@/components/Button2';
 
 type Props = {
   show: boolean;
@@ -32,7 +32,7 @@ const BNSTransferModal = (props: Props) => {
     const errors: Record<string, string> = {};
 
     if (!values.address) {
-      errors.name = 'TC address is required.';
+      errors.address = 'Receiver wallet address is required.';
     }
 
     return errors;
@@ -62,7 +62,9 @@ const BNSTransferModal = (props: Props) => {
         <IconSVG className="cursor-pointer scale-up-anim" onClick={handleClose} src={IcCloseModal} maxWidth="22px" />
       </Modal.Header>
       <Modal.Body>
-        <h5 className="font-medium mb-24">Transfer Name</h5>
+        <Text className="mb-16" size="h5">
+          Transfer Name
+        </Text>
         <Formik
           key="transfer"
           initialValues={{
@@ -73,27 +75,21 @@ const BNSTransferModal = (props: Props) => {
         >
           {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
             <form onSubmit={handleSubmit}>
-              <WrapInput>
-                <label htmlFor="address" className="label">
-                  TRANSFER NAME TO
-                </label>
-                <input
-                  id="address"
-                  type="text"
-                  name="address"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.address}
-                  className="input"
-                  placeholder={`Paste TC wallet address here`}
-                />
-                {errors.address && touched.address && <p className="error">{errors.address}</p>}
-              </WrapInput>
-              <Button disabled={isProcessing} type="submit" className="transfer-btn">
-                <Text size="medium" fontWeight="medium" className="transfer-text">
-                  {isProcessing ? 'Processing...' : 'Transfer'}
-                </Text>
-              </Button>
+              <Input
+                title="TRANSFER NAME TO"
+                id="address"
+                type="text"
+                name="address"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.address}
+                className="input"
+                placeholder={`Paste TC wallet address here`}
+                errorMsg={errors.address && touched.address ? errors.address : undefined}
+              />
+              <Button2 disabled={isProcessing} type="submit" className="transfer-btn mt-24">
+                {isProcessing ? 'Processing...' : 'Transfer'}
+              </Button2>
             </form>
           )}
         </Formik>

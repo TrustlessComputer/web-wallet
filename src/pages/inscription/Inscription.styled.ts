@@ -15,7 +15,7 @@ const Container = styled.div`
   }
 
   .left-container {
-    width: 40%;
+    width: 35%;
 
     .thumbnail {
       width: 100%;
@@ -24,7 +24,7 @@ const Container = styled.div`
   }
 
   .right-container {
-    width: 60%;
+    width: 65%;
 
     .header {
       display: flex;
@@ -38,7 +38,6 @@ const Container = styled.div`
         font-size: 34px;
         line-height: 44px;
         color: #ffffff;
-        font-family: 'IBMPlexMono' !important;
       }
 
       .subTitle {
@@ -102,7 +101,7 @@ const Container = styled.div`
       font-size: 13px;
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      color: #1a73e8;
+      color: #ffe899;
       text-align: center;
     }
 

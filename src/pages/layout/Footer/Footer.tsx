@@ -22,7 +22,7 @@ const Wrapper = styled.div`
   .text {
     font-style: normal;
     font-weight: 500;
-    font-size: ${px2rem(16)};
+    font-size: ${px2rem(14)};
     line-height: ${px2rem(26)};
     margin-right: ${px2rem(16)};
     color: ${({ theme }: { theme: DefaultTheme }) => theme.white};
@@ -51,7 +51,6 @@ const Wrapper = styled.div`
       font-size: ${px2rem(16)};
       line-height: ${px2rem(28)};
       font-weight: 500;
-      font-family: 'IBMPlexMono';
 
       &:hover {
         opacity: 0.8;

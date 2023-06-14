@@ -88,7 +88,7 @@ export const Styled = styled(Link)`
     padding: ${px2rem(16)} ${px2rem(24)};
     padding-top: ${px2rem(4)};
     .transfer-button {
-      background-color: ${({ theme }: { theme: DefaultTheme }) => theme.bg5};
+      /* background-color: ${({ theme }: { theme: DefaultTheme }) => theme.bg5}; */
       padding: ${px2rem(6)} ${px2rem(14)};
       display: flex;
       align-items: center;
@@ -96,7 +96,7 @@ export const Styled = styled(Link)`
       font-weight: 500;
       font-size: ${px2rem(14)};
       line-height: ${px2rem(24)};
-      color: ${({ theme }: { theme: DefaultTheme }) => theme.primary.brand};
+      /* color: ${({ theme }: { theme: DefaultTheme }) => theme.primary.brand}; */
       width: 100%;
       font-style: normal;
       border-radius: 2px;
