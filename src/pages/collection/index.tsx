@@ -84,7 +84,7 @@ const Collection = () => {
             }
             next={debounceLoadMore}
           >
-            <Grid repeat={`repeat(auto-fit, minmax(348px, ${inscriptions && inscriptions.length > 4 ? 1 : 0.25}fr))`}>
+            <Grid>
               {inscriptions &&
                 inscriptions.length > 0 &&
                 inscriptions.map((item, index) => {
