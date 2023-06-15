@@ -3,6 +3,12 @@ import { Modal } from 'react-bootstrap';
 import styled from 'styled-components';
 
 export const MainModal = styled(Modal)`
+  svg {
+    path {
+      fill: ${({ theme }) => theme['button-primary']};
+    }
+  }
+
   &.modal {
     --bs-modal-color: ${({ theme }) => theme.bg1};
     --bs-modal-width: ${px2rem(800)};

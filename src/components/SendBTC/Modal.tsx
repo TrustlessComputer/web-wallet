@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
-import { StyledSendBTCModal, WrapInput } from '@/components/SendBTC/Modal.styled';
+import { StyledSendBTCModal } from '@/components/SendBTC/Modal.styled';
 import { Formik } from 'formik';
 import Text from '@/components/Text';
 import { Modal } from 'react-bootstrap';
 import { AssetsContext } from '@/contexts/assets-context';
-import Button from '@/components/Button';
+import Button2 from '@/components/Button2';
 import IconSVG from '@/components/IconSVG';
 import IcCloseModal from '@/assets/icons/ic-close.svg';
 import { validateBTCAddress } from '@/utils';
@@ -16,6 +16,7 @@ import * as TC_SDK from 'trustless-computer-sdk';
 import { getErrorMessage } from '@/utils/error';
 import BigNumber from 'bignumber.js';
 import format from '@/utils/amount';
+import { Input } from '@/components/Inputs';
 
 interface IProps {
   show: boolean;
@@ -110,57 +111,46 @@ const SendBTCModal = React.memo(({ show, onHide }: IProps) => {
         >
           {({ values, errors, touched, handleChange, handleBlur, handleSubmit, setFieldValue }) => (
             <form onSubmit={handleSubmit}>
-              <WrapInput>
-                <div className="row-header">
-                  <label htmlFor="amount" className="label">
-                    AMOUNT
-                  </label>
-                  <label
-                    htmlFor="amount"
-                    className="label max"
-                    onClick={() => {
-                      const maxAmount = new BigNumber(btcBalance).minus(estimateFee).toNumber();
-                      const maxAmountText = new BigNumber(
-                        format.formatAmount({
-                          originalAmount: maxAmount,
-                          decimals: 8,
-                          maxDigits: 6,
-                        }),
-                      ).toNumber();
-                      setFieldValue('amount', maxAmountText <= 0 ? 0 : maxAmountText);
-                    }}
-                  >
-                    MAX
-                  </label>
-                </div>
-                <input
-                  id="amount"
-                  type="number"
-                  name="amount"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.amount}
-                  className="input"
-                  placeholder="0.00"
-                />
-                {errors.amount && touched.amount && <p className="error">{errors.amount}</p>}
-              </WrapInput>
-              <WrapInput>
-                <label htmlFor="amount" className="label">
-                  ADDRESS
-                </label>
-                <input
-                  id="address"
-                  type="text"
-                  name="address"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.address}
-                  className="input"
-                  placeholder="Enter BTC address"
-                />
-                {errors.address && touched.address && <p className="error">{errors.address}</p>}
-              </WrapInput>
+              <Input
+                classContainer="mb-16"
+                title="AMOUNT"
+                id="amount"
+                type="number"
+                name="amount"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.amount}
+                className="input"
+                placeholder="0.00"
+                errorMsg={errors.amount && touched.amount ? errors.amount : undefined}
+                isMax
+                onMaxClick={() => {
+                  const maxAmount = new BigNumber(btcBalance).minus(estimateFee).toNumber();
+                  const maxAmountText = new BigNumber(
+                    format.formatAmount({
+                      originalAmount: maxAmount,
+                      decimals: 8,
+                      maxDigits: 6,
+                    }),
+                  ).toNumber();
+                  setFieldValue('amount', maxAmountText <= 0 ? 0 : maxAmountText);
+                }}
+              />
+
+              <Input
+                classContainer="mb-16"
+                title="ADDRESS"
+                id="address"
+                type="text"
+                name="address"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.address}
+                className="input"
+                placeholder="Enter BTC address"
+                errorMsg={errors.address && touched.address ? errors.address : undefined}
+              />
+
               <div className="row-bw">
                 <Text size="medium" fontWeight="semibold">
                   Fee Rate
@@ -177,11 +167,9 @@ const SendBTCModal = React.memo(({ show, onHide }: IProps) => {
                   ~{formatBTCPrice(estimateFee)} BTC
                 </Text>
               </div>
-              <Button disabled={submitting} type="submit" className="transfer-btn">
-                <Text size="medium" fontWeight="medium" className="transfer-text">
-                  {submitting ? 'Processing...' : 'Send'}
-                </Text>
-              </Button>
+              <Button2 disabled={submitting} type="submit" className="transfer-btn">
+                {submitting ? 'Processing...' : 'Send'}
+              </Button2>
             </form>
           )}
         </Formik>
