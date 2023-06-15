@@ -22,6 +22,10 @@ const Container = styled.div`
     :hover {
       opacity: 0.8;
     }
+
+    p {
+      margin-top: 2px;
+    }
   }
 `;
 
@@ -153,7 +157,7 @@ const Input = (props: InputProps) => {
         )}
         {isMax && (
           <div className="buttonMax cursor-pointer" onClick={onMaxClick}>
-            <Text fontWeight="semibold" size="regular">
+            <Text fontWeight="semibold" size="small">
               MAX
             </Text>
           </div>

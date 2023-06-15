@@ -35,11 +35,12 @@ export const StyledSendBTCModal = styled(MainModal)`
 
   .transfer-btn {
     width: 100%;
-    margin-top: ${px2rem(8)};
+    margin-top: ${px2rem(16)};
   }
   .row-bw {
     display: flex;
-    padding: 8px;
+    padding-bottom: 4px;
+    /* padding: 8px; */
     justify-content: space-between;
     .right {
     }

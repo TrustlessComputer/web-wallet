@@ -97,8 +97,8 @@ const SendBTCModal = React.memo(({ show, onHide }: IProps) => {
         <IconSVG className="cursor-pointer scale-up-anim" onClick={onHide} src={IcCloseModal} maxWidth="22px" />
       </Modal.Header>
       <Modal.Body>
-        <Text size="h5" className="font-medium mb-24 header-title">
-          SEND BTC
+        <Text size="h5" className="mb-16">
+          Send BTC
         </Text>
         <Formik
           key="sign"
@@ -152,20 +152,12 @@ const SendBTCModal = React.memo(({ show, onHide }: IProps) => {
               />
 
               <div className="row-bw">
-                <Text size="medium" fontWeight="semibold">
-                  Fee Rate
-                </Text>
-                <Text size="large" fontWeight="semibold">
-                  {feeRate[FeeRateName.fastestFee]}
-                </Text>
+                <Text size="medium">Fee Rate</Text>
+                <Text size="large">{feeRate[FeeRateName.fastestFee]}</Text>
               </div>
               <div className="row-bw">
-                <Text size="medium" fontWeight="semibold">
-                  Transaction Fee
-                </Text>
-                <Text size="large" fontWeight="semibold">
-                  ~{formatBTCPrice(estimateFee)} BTC
-                </Text>
+                <Text size="medium">Transaction Fee</Text>
+                <Text size="large">~{formatBTCPrice(estimateFee)} BTC</Text>
               </div>
               <Button2 disabled={submitting} type="submit" className="transfer-btn">
                 {submitting ? 'Processing...' : 'Send'}
