@@ -132,7 +132,8 @@ const ModalSignTx = React.memo(
         if (signData?.isRedirect && signData.dappURL) {
           setTimeout(() => {
             try {
-              window.open(signData.dappURL, '_self');
+              // window.open(signData.dappURL, '_self');
+              window.close();
             } catch (e) {
               // to do error
             }
