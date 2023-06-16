@@ -50,7 +50,7 @@ export const WalletProvider: React.FC<PropsWithChildren> = ({ children }: PropsW
     if (connector && connector.deactivate) {
       await connector.deactivate();
     }
-    await connector.resetState();
+    // await connector.resetState();
     dispatch(resetUser());
   }, [connector, dispatch, user]);
 
