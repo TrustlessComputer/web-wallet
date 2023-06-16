@@ -96,9 +96,9 @@ const TransferModal = (props: Props) => {
             <form onSubmit={handleSubmit}>
               <Input
                 title="TRANSFER TOKEN TO"
-                id="address"
+                id="toAddress"
                 type="text"
-                name="address"
+                name="toAddress"
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.toAddress}

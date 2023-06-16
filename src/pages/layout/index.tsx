@@ -9,6 +9,10 @@ import px2rem from '@/utils/px2rem';
 const HEADER_HEIGHT = 96;
 const FO0TER_HEIGHT = 80;
 
+export const Root = styled.div`
+  background: ${({ theme }) => theme.bg.primary};
+`;
+
 export const Container = styled.div`
   min-height: 100vh;
   max-width: 1920px;
@@ -51,7 +55,7 @@ const ContentWrapper = styled.div`
 
 const Layout = () => {
   return (
-    <div>
+    <Root>
       <Meta />
       <HeaderContainer>
         <Header height={HEADER_HEIGHT} />
@@ -62,7 +66,7 @@ const Layout = () => {
         </ContentWrapper>
         <Footer height={FO0TER_HEIGHT} />
       </Container>
-    </div>
+    </Root>
   );
 };
 
