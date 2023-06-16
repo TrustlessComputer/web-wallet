@@ -8,7 +8,7 @@ const getChainList = async (): Promise<Array<IResourceChain>> => {
   try {
     const res = await fetch(API_PATH);
     const data = await res.json();
-    return [...data, TRUSTLESS_COMPUTER_CHAIN_INFO] as Array<IResourceChain>;
+    return [TRUSTLESS_COMPUTER_CHAIN_INFO, ...data] as Array<IResourceChain>;
   } catch (err: unknown) {
     console.log('Failed to get chain list');
     console.log(err);
