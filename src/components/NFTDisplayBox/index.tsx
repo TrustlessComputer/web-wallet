@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import cs from 'classnames';
 import s from './styles.module.scss';
 import { IMAGE_TYPE } from './constant';
-import Skeleton from '../Skeleton';
+// import Skeleton from '../Skeleton';
 interface IProps {
   className?: string;
   contentClass?: string;
@@ -31,22 +31,22 @@ const NFTDisplayBox = ({
   controls = false,
 }: IProps) => {
   const [isError, setIsError] = React.useState(false);
-  const [isLoaded, serIsLoaded] = React.useState(false);
+  // const [isLoaded, serIsLoaded] = React.useState(false);
 
   const [isErrorLinkHttp, setIsErrorLinkHttp] = React.useState(false);
 
   const onError = () => {
     setIsError(true);
-    serIsLoaded(true);
+    // serIsLoaded(true);
   };
 
   const onLoaded = () => {
-    serIsLoaded(true);
+    // serIsLoaded(true);
   };
 
   const onErrorLinkHttp = () => {
     setIsErrorLinkHttp(true);
-    serIsLoaded(true);
+    // serIsLoaded(true);
   };
 
   const [HTMLContentRender, setHTMLContentRender] = useState<React.ReactNode>();
@@ -56,7 +56,7 @@ const NFTDisplayBox = ({
 
   const contentClassName = cs(s.wrapper_content, contentClass);
 
-  const renderLoading = () => <Skeleton className={s.absolute} fill isLoaded={isLoaded} />;
+  // const renderLoading = () => <Skeleton className={s.absolute} fill isLoaded={isLoaded} />;
 
   const renderIframe = (content: string) => {
     return (
@@ -106,7 +106,7 @@ const NFTDisplayBox = ({
     if (naturalWidth < 100 && imgRef.current) {
       imgRef.current.style.imageRendering = 'pixelated';
     }
-    serIsLoaded(true);
+    // serIsLoaded(true);
   };
 
   const renderImage = (content: string) => {
@@ -146,6 +146,10 @@ const NFTDisplayBox = ({
   };
 
   useEffect(() => {
+    if (isError) {
+      setHTMLContentRender(renderEmpty());
+      return;
+    }
     if (thumbnail) {
       setHTMLContentRender(renderImage(thumbnail));
     } else if (src && src.startsWith('https://') && isImage(src)) {
@@ -198,12 +202,12 @@ const NFTDisplayBox = ({
     } else {
       setHTMLContentRender(renderEmpty());
     }
-  }, [collectionID, tokenID, src, isErrorLinkHttp]);
+  }, [collectionID, tokenID, src, isErrorLinkHttp, isError]);
 
   return (
     <div className={cs(s.wrapper, className)}>
       {HTMLContentRender && HTMLContentRender}
-      {!isLoaded && !isError && renderLoading()}
+      {/* {!isLoaded && !isError && renderLoading()} */}
     </div>
   );
 };

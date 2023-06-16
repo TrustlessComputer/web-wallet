@@ -1,5 +1,5 @@
 import px2rem from '@/utils/px2rem';
-import styled from 'styled-components';
+import styled, { DefaultTheme } from 'styled-components';
 
 export const StyledBNSCard = styled.div`
   &.card {
@@ -10,53 +10,92 @@ export const StyledBNSCard = styled.div`
   }
 
   .card-content {
-    background: #2e2e2e;
-    border: 1px solid transparent;
-    :hover {
-      border: 1px solid #d9d9d9;
-    }
-  }
+    background: ${({ theme }: { theme: DefaultTheme }) => theme.card.bns};
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: ${px2rem(8)};
 
-  .card-image {
-    background: #5b5b5b;
-    .image {
-      min-height: 100px;
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      height: auto;
-      object-fit: cover;
-      padding: 32px;
+    :hover {
+      border: 1px solid ${({ theme }: { theme: DefaultTheme }) => theme['text-primary']};
     }
   }
 
   .card-info {
-    padding: 16px 24px;
-    .card-title {
-      font-style: normal;
-      font-weight: 500;
-      font-size: 20px;
-      line-height: 30px;
-      letter-spacing: -0.01em;
-      color: #ffffff;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
+    padding: ${px2rem(16)} ${px2rem(24)};
+
+    .title-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      .card-title {
+        font-style: normal;
+        font-weight: 500;
+        font-size: ${px2rem(20)};
+        line-height: ${px2rem(30)};
+        letter-spacing: -0.01em;
+        color: ${({ theme }: { theme: DefaultTheme }) => theme['text-primary']};
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
     }
 
-    .card-subTitle {
-      font-style: normal;
-      font-weight: 500;
-      font-size: 18px;
-      line-height: 28px;
-      color: #898989;
-    }
-  }
+    .card-transfer-btn {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: ${px2rem(6)};
+      cursor: pointer;
+      width: fit-content;
 
-  .transfer-btn {
-    margin-top: ${px2rem(24)};
-    width: 100%;
-    padding-top: ${px2rem(5)};
-    padding-bottom: ${px2rem(5)};
-    font-size: ${px2rem(14)};
+      :hover {
+        opacity: 0.8;
+      }
+
+      img {
+        width: ${px2rem(20)};
+        height: ${px2rem(20)};
+      }
+
+      p {
+        font-weight: 500;
+        font-size: ${px2rem(16)};
+        line-height: ${px2rem(26)};
+        letter-spacing: 0.01em;
+
+        color: ${({ theme }: { theme: DefaultTheme }) => theme['button-primary']};
+      }
+    }
+
+    .sub-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-top: ${px2rem(20)};
+
+      .sub-owner {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: ${px2rem(8)};
+
+        .sub-address {
+          font-style: normal;
+          font-weight: 500;
+          font-size: ${px2rem(16)};
+          line-height: ${px2rem(26)};
+          color: ${({ theme }: { theme: DefaultTheme }) => theme['text-primary']};
+        }
+      }
+
+      .card-name {
+        font-style: normal;
+        font-weight: 500;
+        font-size: ${px2rem(16)};
+        line-height: ${px2rem(26)};
+        color: ${({ theme }: { theme: DefaultTheme }) => theme['text-four']};
+      }
+    }
   }
 `;

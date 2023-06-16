@@ -1,4 +1,6 @@
 import Empty from '@/components/Empty';
+import NFTCard from '@/components/NFTCard';
+import { ARTIFACT_CONTRACT, BNS_CONTRACT } from '@/configs';
 import { ICollection } from '@/interfaces/api/collection';
 import { getCollectionsByItemsOwned } from '@/services/profile';
 import { shortenAddress } from '@/utils';
@@ -7,8 +9,8 @@ import { debounce } from 'lodash';
 import { useEffect, useState } from 'react';
 import { Spinner } from 'react-bootstrap';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { EMPTY_LINK } from '../constant';
 import { Container, Grid } from './NftsProfile.styled';
-import NFTCard from '@/components/NFTCard';
 
 const LIMIT_PAGE = 32;
 
@@ -24,7 +26,7 @@ const NftsProfile = () => {
   const fetchCollections = async (page = 1, isFetchMore = false) => {
     try {
       setIsFetching(true);
-      const data: Array<any> = (
+      const data: Array<ICollection> = (
         await getCollectionsByItemsOwned({
           walletAddress: profileWallet,
           limit: pageSize,
@@ -32,9 +34,7 @@ const NftsProfile = () => {
         })
       ).filter(
         (item: any) =>
-          !['0x8b46f89bba2b1c1f9ee196f43939476e79579798', '0x16efdc6d3f977e39dac0eb0e123feffed4320bc0'].includes(
-            item.contract.toLowerCase(),
-          ),
+          ![BNS_CONTRACT.toLowerCase(), ARTIFACT_CONTRACT.toLowerCase()].includes(item.contract.toLowerCase()),
       );
       if (isFetchMore) {
         setCollections(prev => [...prev, ...data]);
@@ -63,7 +63,7 @@ const NftsProfile = () => {
   if (!collections || collections.length === 0)
     return (
       <Container>
-        <Empty />
+        <Empty infoText={EMPTY_LINK.NFT.label} link={EMPTY_LINK.NFT.link} />
       </Container>
     );
 

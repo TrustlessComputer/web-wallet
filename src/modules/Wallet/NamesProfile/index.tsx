@@ -5,13 +5,13 @@ import { useEffect, useState } from 'react';
 import { Spinner } from 'react-bootstrap';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
-
 import { Container } from './NameProfile.styled';
 import Empty from '@/components/Empty';
 import { IBNS } from '@/interfaces/bns';
 import BNSCard from '@/components/BNS/Card';
+import { EMPTY_LINK } from '../constant';
 
-const LIMIT_PAGE = 12;
+const LIMIT_PAGE = 36;
 
 const NamesProfile = () => {
   const { account } = useWeb3React();
@@ -52,7 +52,8 @@ const NamesProfile = () => {
     }
   }, [account]);
 
-  if (!collections || collections.length === 0) return <Empty />;
+  if (!collections || collections.length === 0)
+    return <Empty infoText={EMPTY_LINK.NAMES.label} link={EMPTY_LINK.NAMES.link} />;
 
   return (
     <Container>
@@ -74,7 +75,7 @@ const NamesProfile = () => {
             columnsCountBreakPoints={{
               350: 1,
               750: 2,
-              900: 3,
+              1024: 3,
               1240: 4,
               2500: 5,
               3000: 5,

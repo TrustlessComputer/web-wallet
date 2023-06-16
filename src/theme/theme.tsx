@@ -1,6 +1,10 @@
 import React, { useMemo } from 'react';
 import { createGlobalStyle, DefaultTheme, ThemeProvider as StyledComponentsThemeProvider } from 'styled-components';
 import { getTheme } from '@/theme/index';
+import { ScreenMarginTop } from '@/theme/css/margin.top';
+import { ScreenMarginBottom } from '@/theme/css/margin.bottom';
+import { ScreenMarginLeft } from '@/theme/css/margin.left';
+import { ScreenMarginRight } from '@/theme/css/margin.right';
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
   const darkMode = true;
@@ -10,7 +14,7 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
 
 export const ThemedGlobalStyle = createGlobalStyle`
 
-  html{
+  html {
     font-size: 16px;
     color: ${({ theme }: { theme: DefaultTheme }) => theme.bg1};
     background-color: ${({ theme }) => theme.bg1};
@@ -26,17 +30,17 @@ export const ThemedGlobalStyle = createGlobalStyle`
 
 
     h3 {
-      font-family: 'IBMPlexMono' !important;
+      font-family: 'GoogleSans' !important;
       font-size: ${({ theme }: { theme: DefaultTheme }) => theme.fontSizes.h3};
       line-height: ${({ theme }: { theme: DefaultTheme }) => theme.lineHeight.h3};
     }
     h5 {
-      font-family: 'IBMPlexMono' !important;
+      font-family: 'GoogleSans' !important;
       font-size: ${({ theme }: { theme: DefaultTheme }) => theme.fontSizes.h5};
       line-height: ${({ theme }: { theme: DefaultTheme }) => theme.lineHeight.h5};
     }
     h6 {
-      font-family: 'IBMPlexMono' !important;
+      font-family: 'GoogleSans' !important;
       font-size: ${({ theme }: { theme: DefaultTheme }) => theme.fontSizes.h6};
       line-height: ${({ theme }: { theme: DefaultTheme }) => theme.lineHeight.h6};
     }
@@ -55,9 +59,14 @@ export const ThemedGlobalStyle = createGlobalStyle`
     }
 
     button {
-      font-family: 'IBMPlexMono';
+      font-family: 'GoogleSans';
     }
-}
+
+    ${ScreenMarginTop}
+    ${ScreenMarginBottom}
+    ${ScreenMarginLeft}
+    ${ScreenMarginRight}
+  }
 
   summary::-webkit-details-marker {
     display:none;

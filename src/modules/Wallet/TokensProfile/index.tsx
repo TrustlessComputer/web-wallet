@@ -16,14 +16,17 @@ import { useCurrentUser } from '@/state/user/hooks';
 import format from '@/utils/amount';
 import convert from '@/utils/convert';
 import BigNumber from 'bignumber.js';
+import { EMPTY_LINK } from '../constant';
+import Button2 from '@/components/Button2';
 
 const EXPLORER_URL = TRUSTLESS_COMPUTER_CHAIN_INFO.explorers[0].url;
 
 const LIMIT_PAGE = 50;
 
+const TABLE_HEADINGS = ['Token Number', 'Name', 'Symbol', 'Balance', 'Max Supply', ''];
+
 const TokensProfile = () => {
   const user = useCurrentUser();
-  // const {run : getTokenBalance} = useContractOperation
 
   const { run: getTokenBalance } = useContractOperation<IGetTokenBalance, string>({
     operation: useGetTokenBalance,
@@ -35,12 +38,6 @@ const TokensProfile = () => {
   const [showTransferModal, setShowTransferModal] = useState(false);
   const [selectedToken, setSelectedToken] = useState<IToken | null>(null);
   const [tokensList, setTokensList] = useState<IToken[]>([]);
-
-  const TABLE_HEADINGS = ['Token Number', 'Name', 'Symbol', 'Balance', 'Max Supply', ''];
-
-  // const { data, error, isLoading } = useSWR(getApiKey(getTokensByWallet, { key: profileWallet }), () =>
-  //   getTokensByWallet({ key: profileWallet }),
-  // );
 
   const fetchTokenBalances = async (tokenAddrs: string[]) => {
     try {
@@ -122,9 +119,14 @@ const TokensProfile = () => {
           <>
             {balanceNumb > 0 && (
               <div className="owner-actions">
-                <button onClick={() => hanldeOpenTransferModal(token)} className="transfer-button">
+                <Button2
+                  className="transfer-button"
+                  onClick={() => hanldeOpenTransferModal(token)}
+                  sizes="small"
+                  variants="outline"
+                >
                   Transfer
-                </button>
+                </Button2>
               </div>
             )}
           </>
@@ -152,7 +154,7 @@ const TokensProfile = () => {
   }, []);
 
   if (!tokensList || tokensList.length === 0 || !profileWallet) {
-    return <Empty />;
+    return <Empty infoText={EMPTY_LINK.TOKENS.label} link={EMPTY_LINK.TOKENS.link} />;
   }
 
   return (
@@ -175,7 +177,13 @@ const TokensProfile = () => {
           }
           next={debounceLoadMore}
         >
-          <Table tableHead={TABLE_HEADINGS} data={tokenDatas} className={'token-table'} />
+          <Table
+            tableHead={TABLE_HEADINGS}
+            data={tokenDatas}
+            className={'token-table'}
+            emptyLabel={EMPTY_LINK.TOKENS.label}
+            emptyLink={EMPTY_LINK.TOKENS.link}
+          />
         </InfiniteScroll>
       )}
       <TransferModal

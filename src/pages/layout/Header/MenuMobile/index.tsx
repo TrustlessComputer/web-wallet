@@ -1,14 +1,12 @@
 import IcAvatarDefault from '@/assets/icons/ic-avatar.svg';
 import IcMenuClose from '@/assets/icons/ic_close_menu.svg';
+import Button2 from '@/components/Button2';
 import { AssetsContext } from '@/contexts/assets-context';
+import { ConnectContext } from '@/contexts/connect-context';
 import { formatBTCPrice, formatEthPrice } from '@/utils/format';
-import React, { ForwardedRef, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { ForwardedRef, useContext, useState } from 'react';
 import { ConnectWalletButton, WalletBalance } from '../Header.styled';
 import { Wrapper } from './MenuMobile.styled';
-import { useSelector } from 'react-redux';
-import { getIsAuthenticatedSelector } from '@/state/user/selector';
-import { ROUTE_PATH } from '@/constants/route-path';
 
 interface IProp {
   onCloseMenu: () => void;
@@ -16,11 +14,18 @@ interface IProp {
 
 const MenuMobile = React.forwardRef(({ onCloseMenu }: IProp, ref: ForwardedRef<HTMLDivElement>) => {
   const { btcBalance, bvmBalance } = useContext(AssetsContext);
-  const isAuthenticated = useSelector(getIsAuthenticatedSelector);
-  const navigate = useNavigate();
+
+  const { onConnect } = useContext(ConnectContext);
+  const [isConnecting, setIsConnecting] = useState(false);
 
   const handleConnectWallet = async () => {
-    navigate(`${ROUTE_PATH.HOME}?next=${window.location.href}`);
+    try {
+      setIsConnecting(true);
+      await onConnect();
+    } catch (err) {
+    } finally {
+      setIsConnecting(false);
+    }
   };
 
   return (
@@ -29,7 +34,17 @@ const MenuMobile = React.forwardRef(({ onCloseMenu }: IProp, ref: ForwardedRef<H
         <button className="btnMenuMobile" onClick={onCloseMenu}>
           <img src={IcMenuClose} alt="" />
         </button>
-        {isAuthenticated ? (
+        <Button2 sizes="small" variants="ghost">
+          <a href="https://tcgasstation.com/" target="_blank">
+            Get TC
+          </a>
+        </Button2>
+        <Button2 sizes="small" variants="ghost">
+          <a href="https://trustless.computer/" target="_blank">
+            Explore Dapp Store
+          </a>
+        </Button2>
+        {btcBalance ? (
           <div className="wallet mobile">
             <WalletBalance>
               <div className="balance">
@@ -43,7 +58,9 @@ const MenuMobile = React.forwardRef(({ onCloseMenu }: IProp, ref: ForwardedRef<H
             </WalletBalance>
           </div>
         ) : (
-          <ConnectWalletButton onClick={handleConnectWallet}>Connect Wallet</ConnectWalletButton>
+          <ConnectWalletButton onClick={handleConnectWallet}>
+            {isConnecting ? 'Connecting...' : 'Connect wallet'}
+          </ConnectWalletButton>
         )}
       </div>
     </Wrapper>

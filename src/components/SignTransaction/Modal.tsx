@@ -7,7 +7,7 @@ import { Formik } from 'formik';
 import Text from '@/components/Text';
 import { Modal } from 'react-bootstrap';
 import { toast } from 'react-hot-toast';
-import Button from '@/components/Button';
+import Button2 from '@/components/Button2';
 import WError, { ERROR_CODE, getErrorMessage } from '@/utils/error';
 import * as TC_SDK from 'trustless-computer-sdk';
 import debounce from 'lodash/debounce';
@@ -230,20 +230,16 @@ const ModalSignTx = React.memo(
                     />
                   )}
                   <div className="btn-wrapper">
-                    <Button type="button" className="btn-cancel" onClick={() => onHide(false)}>
-                      <Text size="medium" fontWeight="medium" className="text-cancel">
-                        Cancel
-                      </Text>
-                    </Button>
-                    <Button
+                    <Button2 variants="outline" type="button" className="btn" onClick={() => onHide(false)}>
+                      Cancel
+                    </Button2>
+                    <Button2
                       type="submit"
-                      className="btn-submit"
+                      className="btn"
                       disabled={submitting || isLoading || isLoadingRate || !pendingTxs.length}
                     >
-                      <Text color="text8" size="medium" fontWeight="medium">
-                        {submitting ? 'Processing...' : buttonText}
-                      </Text>
-                    </Button>
+                      {submitting ? 'Processing...' : buttonText}
+                    </Button2>
                     <LoadingContainer loaded={!isLoading && !submitting} />
                   </div>
                 </div>

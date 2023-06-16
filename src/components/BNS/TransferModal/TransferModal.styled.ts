@@ -1,10 +1,11 @@
 import px2rem from '@/utils/px2rem';
 import styled from 'styled-components';
-import { Modal } from 'react-bootstrap';
+import { MainModal } from '@/components/Modal/MainModal.styled';
 
-export const StyledTransferModal = styled(Modal)`
+export const StyledTransferModal = styled(MainModal)`
   &.modal {
     --bs-modal-color: ${({ theme }) => theme.bg1};
+    --bs-modal-width: ${px2rem(600)};
   }
 
   .modal-header {
@@ -16,8 +17,9 @@ export const StyledTransferModal = styled(Modal)`
     padding-right: ${px2rem(18)};
   }
 
-  * {
-    font-family: 'Bandeins Strange Variable' !important;
+  .modal-content {
+    border-radius: 2px;
+    padding: ${px2rem(16)};
   }
 
   .label {
@@ -50,11 +52,5 @@ export const StyledTransferModal = styled(Modal)`
 
   .transfer-btn {
     width: 100%;
-    margin-top: ${px2rem(8)};
-
-    .transfer-text {
-      padding-top: ${px2rem(11)};
-      padding-bottom: ${px2rem(11)};
-    }
   }
 `;
