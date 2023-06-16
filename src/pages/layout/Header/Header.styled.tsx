@@ -187,9 +187,11 @@ const WalletBalance = styled.div`
   gap: ${px2rem(12)};
   padding: ${px2rem(4)};
   padding-left: ${px2rem(12)};
+  padding-right: ${px2rem(12)};
   border: 1px solid ${({ theme }: { theme: DefaultTheme }) => theme.primary['5b']};
   background-color: rgba(255, 255, 255, 0.05);
   border-radius: 40px;
+  margin-top: ${px2rem(8)};
   cursor: pointer;
   transition: all 0.2s ease;
 

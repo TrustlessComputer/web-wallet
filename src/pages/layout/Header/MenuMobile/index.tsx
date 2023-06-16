@@ -1,4 +1,3 @@
-import IcAvatarDefault from '@/assets/icons/ic-avatar.svg';
 import IcMenuClose from '@/assets/icons/ic_close_menu.svg';
 import Button2 from '@/components/Button2';
 import { AssetsContext } from '@/contexts/assets-context';
@@ -52,9 +51,9 @@ const MenuMobile = React.forwardRef(({ onCloseMenu }: IProp, ref: ForwardedRef<H
                 <span className="divider" />
                 <p>{formatEthPrice(bvmBalance)} TC</p>
               </div>
-              <div className="avatar">
+              {/* <div className="avatar">
                 <img src={IcAvatarDefault} alt="default avatar" />
-              </div>
+              </div> */}
             </WalletBalance>
           </div>
         ) : (
