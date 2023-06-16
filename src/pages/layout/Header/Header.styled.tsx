@@ -9,6 +9,8 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   position: relative;
+  width: 100%;
+  max-width: 1920px;
 
   .indicator {
     position: absolute;
@@ -38,10 +40,14 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
+    gap: ${px2rem(60)};
+  }
+
+  .assets {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     gap: ${px2rem(32)};
-    position: absolute;
-    left: 50%;
-    transform: translateX(-47%);
   }
 
   .rightContainer {
@@ -51,6 +57,13 @@ const Wrapper = styled.div`
     gap: ${px2rem(16)};
     position: relative;
     color: ${({ theme }: { theme: DefaultTheme }) => theme.white};
+
+    .buttons {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: ${px2rem(16)};
+    }
 
     .external-link {
       display: flex;
@@ -114,7 +127,7 @@ const Wrapper = styled.div`
 
   ${({ theme }: { theme: DefaultTheme }) => theme.deprecated_mediaWidth.deprecated_upToMedium`
     .rowLink {
-      display: none;
+      gap: 32px;
     }
 
     .wallet{
@@ -126,6 +139,11 @@ const Wrapper = styled.div`
     }
 
     .rightContainer {
+
+      .buttons { 
+        display: none;
+      }
+      
       .btnMenuMobile {
         display: flex;
       }
@@ -135,17 +153,16 @@ const Wrapper = styled.div`
 
 const StyledLink = styled.a<{ active: boolean }>`
   cursor: pointer;
-  font-weight: 400;
-  font-size: ${px2rem(16)};
+  font-style: normal;
+  font-weight: 500;
+  font-size: ${px2rem(14)};
   line-height: ${px2rem(28)};
   text-decoration: none !important;
   color: ${({ theme, active }: { theme: DefaultTheme; active: boolean }) => (active ? theme.white : theme.text2)};
-  font-family: 'IBMPlexMono';
-  letter-spacing: -0.02em;
 
   :hover {
     color: ${({ theme }: { theme: DefaultTheme }) => theme.white};
-    opacity: 0.7;
+    opacity: 0.8;
   }
 `;
 
@@ -156,7 +173,6 @@ const Anchor = styled.a<{ active: boolean }>`
   line-height: ${px2rem(28)};
   text-decoration: none !important;
   color: ${({ theme, active }: { theme: DefaultTheme; active: boolean }) => (active ? theme.white : theme.text2)};
-  font-family: 'IBMPlexMono';
   letter-spacing: -0.02em;
 
   :hover {

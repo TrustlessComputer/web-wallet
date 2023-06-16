@@ -2,7 +2,7 @@ import React from 'react';
 import { StyledSignModal } from '@/components/SignTransaction/Modal.styled';
 import Text from '@/components/Text';
 import { Modal } from 'react-bootstrap';
-import Button from '@/components/Button';
+import Button2 from '@/components/Button2';
 import * as TC_SDK from 'trustless-computer-sdk';
 import IconSVG from '@/components/IconSVG';
 import IcCloseModal from '@/assets/icons/ic-close.svg';
@@ -29,10 +29,10 @@ const ModalConfirmRequestDapp = React.memo(({ show, onHide, requestData }: IProp
   return (
     <StyledSignModal show={show} centered>
       <Modal.Header>
-        <IconSVG className="cursor-pointer" onClick={onHide} src={IcCloseModal} maxWidth={'22px'} />
+        <IconSVG className="cursor-pointer scale-up-anim" onClick={onHide} src={IcCloseModal} maxWidth={'22px'} />
       </Modal.Header>
       <Modal.Body>
-        <Text size="h5" className="font-medium mb-24">
+        <Text size="h5" fontWeight="medium" className="mb-24">
           CONNECT REQUEST
         </Text>
         <Text size="large" color="text1">
@@ -43,16 +43,12 @@ const ModalConfirmRequestDapp = React.memo(({ show, onHide, requestData }: IProp
           .
         </Text>
         <div className="btn-wrapper">
-          <Button type="button" className="btn-cancel" onClick={onHide}>
-            <Text size="medium" fontWeight="medium" className="text-cancel">
-              Cancel
-            </Text>
-          </Button>
-          <Button className="btn-submit" onClick={onConnect}>
-            <Text color="text8" size="medium" fontWeight="medium">
-              Connect
-            </Text>
-          </Button>
+          <Button2 className="btn" type="button" variants="outline" onClick={onHide}>
+            Cancel
+          </Button2>
+          <Button2 className="btn" onClick={onConnect}>
+            Connect
+          </Button2>
         </div>
       </Modal.Body>
     </StyledSignModal>

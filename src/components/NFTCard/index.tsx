@@ -4,6 +4,7 @@ import { Styled } from './NFTCard.styled';
 import React, { useMemo, useState } from 'react';
 import TransferModal from './TransferModal';
 import { useCurrentUser } from '@/state/user/hooks';
+import Button2 from '../Button2';
 
 export interface INFTCard {
   href: string;
@@ -70,9 +71,9 @@ const NFTCard = ({
           </div>
           {isOwner && (
             <div className="owner-actions">
-              <button onClick={handleOpenTransferModal} className="transfer-button">
+              <Button2 onClick={handleOpenTransferModal} className="transfer-button">
                 Transfer
-              </button>
+              </Button2>
             </div>
           )}
         </div>

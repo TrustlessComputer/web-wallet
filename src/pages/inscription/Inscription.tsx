@@ -18,6 +18,7 @@ const Inscription = () => {
   const [inscription, setInscription] = useState<IInscription | undefined>();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     fetchInscriptionDetail();
   }, []);
 
@@ -89,11 +90,13 @@ const Inscription = () => {
         </div>
         <div className="right-container">
           <div className="header">
-            <p className="title">
-              {contract.toLocaleLowerCase() === ARTIFACT_CONTRACT.toLocaleLowerCase()
-                ? `Inscription #${inscription?.tokenId}`
-                : inscription?.name}
-            </p>
+            {inscription && (
+              <p className="title">
+                {contract.toLocaleLowerCase() === ARTIFACT_CONTRACT.toLocaleLowerCase()
+                  ? `Inscription #${inscription?.tokenId}`
+                  : inscription?.name}
+              </p>
+            )}
             {/* <p className="subTitle">Inscriptions #number</p> */}
           </div>
 

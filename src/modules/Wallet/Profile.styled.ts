@@ -8,19 +8,25 @@ export const StyledProfile = styled.div`
 `;
 
 export const TabContainer = styled.div`
+  padding: 0;
   .nav-tabs {
     border: none;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     margin-bottom: ${px2rem(40)};
-    gap: ${px2rem(32)};
+    gap: ${px2rem(0)};
     flex-wrap: nowrap;
-    min-height: ${px2rem(60)};
+    min-height: ${px2rem(54)};
     overflow-x: scroll;
 
     -ms-overflow-style: none;
     scrollbar-width: none;
+    width: fit-content;
+
+    border: 1px solid ${({ theme }: { theme: DefaultTheme }) => theme['border-primary']};
+    border-radius: ${px2rem(40)};
+    padding: ${px2rem(4)} ${px2rem(8)};
 
     &::-webkit-scrollbar {
       display: none;
@@ -30,7 +36,13 @@ export const TabContainer = styled.div`
       opacity: 0.5;
       border: none;
       transition: 0.2s ease;
-      padding: 0;
+
+      padding-bottom: 0px;
+      padding-left: ${px2rem(32)};
+      padding-right: ${px2rem(32)};
+      margin-bottom: 1px;
+
+      border-radius: ${px2rem(100)};
 
       &:hover {
         opacity: 0.75;
@@ -40,10 +52,12 @@ export const TabContainer = styled.div`
     .nav-link.active {
       background-color: transparent;
       border: none;
-      color: ${({ theme }: { theme: DefaultTheme }) => theme.white};
+      color: ${({ theme }: { theme: DefaultTheme }) => theme['text-primary']};
       opacity: 1;
+      background: ${({ theme }: { theme: DefaultTheme }) => theme.bg['tab-item']};
+      border-radius: ${px2rem(100)};
 
-      .tab-item::after {
+      /* .tab-item::after {
         content: '';
         display: block;
         width: 100%;
@@ -51,7 +65,7 @@ export const TabContainer = styled.div`
         position: absolute;
         bottom: 0;
         background-color: ${({ theme }: { theme: DefaultTheme }) => theme.white};
-      }
+      } */
     }
   }
 
@@ -61,17 +75,16 @@ export const TabContainer = styled.div`
     align-items: center;
     gap: 8px;
     position: relative;
-    padding-bottom: ${px2rem(12)};
+    padding-bottom: ${px2rem(8)};
     /* max-height: ${px2rem(30)}; */
   }
 
   .tab-text {
-    font-family: 'IBMPlexMono' !important;
     font-size: ${px2rem(16)};
     font-weight: 500;
   }
 
-  .nav-item:last-of-type {
+  /* .nav-item:last-of-type {
     flex: 1;
 
     .nav-link {
@@ -81,7 +94,7 @@ export const TabContainer = styled.div`
     > button {
       margin-left: auto;
     }
-  }
+  } */
 
   .explore-btn {
     display: flex;
@@ -119,4 +132,10 @@ export const TabContainer = styled.div`
       transform: translate(-50%, -50%);
     }
   }
+
+  ${({ theme }: { theme: DefaultTheme }) => theme.deprecated_mediaWidth.deprecated_upToSmall`
+    .tab-text {
+      display: none;
+    }
+  `};
 `;

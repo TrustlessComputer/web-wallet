@@ -3,8 +3,15 @@ import { Modal } from 'react-bootstrap';
 import styled from 'styled-components';
 
 export const MainModal = styled(Modal)`
+  svg {
+    path {
+      fill: ${({ theme }) => theme['button-primary']};
+    }
+  }
+
   &.modal {
     --bs-modal-color: ${({ theme }) => theme.bg1};
+    --bs-modal-width: ${px2rem(800)};
   }
   .modal-dialog-centered {
     justify-content: center;
@@ -12,11 +19,8 @@ export const MainModal = styled(Modal)`
 
   .modal-content {
     border-radius: 2px;
-    width: ${px2rem(800)};
+    padding: ${px2rem(16)};
     background: ${({ theme }) => theme.bg1};
-    ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToMedium`
-      width: 90vw;
-    `}
   }
 
   .modal-header {
@@ -30,10 +34,6 @@ export const MainModal = styled(Modal)`
 
   .modal-body {
     padding-top: 0;
-    width: ${px2rem(800)};
-    ${({ theme }) => theme.deprecated_mediaWidth.deprecated_upToMedium`
-      width: 90vw;
-    `}
   }
 
   .modal-footer {

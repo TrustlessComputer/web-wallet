@@ -7,7 +7,7 @@ import { Formik } from 'formik';
 import Text from '@/components/Text';
 import { Modal, Row } from 'react-bootstrap';
 import { toast } from 'react-hot-toast';
-import Button from '@/components/Button';
+import Button2 from '@/components/Button2';
 import LoadingContainer from '@/components/Loader';
 import bitcoinStorage from '@/utils/bitcoin-storage';
 import { FeeRate } from '@/components/FeeRate';
@@ -115,7 +115,12 @@ const ModalSpeedUp = React.memo(({ show, onHide, title = 'Speed up', buttonText 
   return (
     <Container show={show} centered>
       <Modal.Header>
-        <IconSVG className="cursor-pointer" onClick={() => onHide(false)} src={IcCloseModal} maxWidth="22px" />
+        <IconSVG
+          className="cursor-pointer scale-up-anim"
+          onClick={() => onHide(false)}
+          src={IcCloseModal}
+          maxWidth="22px"
+        />
       </Modal.Header>
       <Modal.Body>
         <Text style={{ textTransform: 'uppercase' }} size="h5" className="font-medium mb-24 header-title">
@@ -200,20 +205,12 @@ const ModalSpeedUp = React.memo(({ show, onHide, title = 'Speed up', buttonText 
                   }}
                 />
                 <div className="btn-wrapper">
-                  <Button type="button" className="btn-cancel" onClick={() => onHide(false)}>
-                    <Text size="medium" fontWeight="medium" className="text-cancel">
-                      Cancel
-                    </Text>
-                  </Button>
-                  <Button
-                    type="submit"
-                    className="btn-submit"
-                    disabled={submitting || isLoading || isLoadingRate || !!error}
-                  >
-                    <Text color="text8" size="medium" fontWeight="medium">
-                      {submitting ? 'Processing...' : buttonText}
-                    </Text>
-                  </Button>
+                  <Button2 variants="outline" type="button" className="btn" onClick={() => onHide(false)}>
+                    Cancel
+                  </Button2>
+                  <Button2 type="submit" className="btn" disabled={submitting || isLoading || isLoadingRate || !!error}>
+                    {submitting ? 'Processing...' : buttonText}
+                  </Button2>
                   <LoadingContainer loaded={!isLoading && !submitting} />
                 </div>
               </div>

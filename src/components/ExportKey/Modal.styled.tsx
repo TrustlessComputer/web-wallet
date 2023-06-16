@@ -3,16 +3,6 @@ import px2rem from '@/utils/px2rem';
 import styled from 'styled-components';
 
 export const StyledSendBTCModal = styled(MainModal)`
-  svg {
-    path {
-      fill: white;
-    }
-  }
-
-  * {
-    font-family: 'Bandeins Strange Variable' !important;
-  }
-
   .label {
     font-size: ${px2rem(12)};
     font-weight: 500;

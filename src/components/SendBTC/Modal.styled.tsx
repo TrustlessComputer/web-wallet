@@ -3,16 +3,6 @@ import px2rem from '@/utils/px2rem';
 import styled from 'styled-components';
 
 export const StyledSendBTCModal = styled(MainModal)`
-  svg {
-    path {
-      fill: white;
-    }
-  }
-
-  * {
-    font-family: 'Bandeins Strange Variable' !important;
-  }
-
   .row-header {
     display: flex;
     justify-content: space-between;
@@ -45,17 +35,12 @@ export const StyledSendBTCModal = styled(MainModal)`
 
   .transfer-btn {
     width: 100%;
-    margin-top: ${px2rem(8)};
-    background-color: #ffaa59;
-
-    .transfer-text {
-      padding-top: ${px2rem(11)};
-      padding-bottom: ${px2rem(11)};
-    }
+    margin-top: ${px2rem(16)};
   }
   .row-bw {
     display: flex;
-    padding: 8px;
+    padding-bottom: 4px;
+    /* padding: 8px; */
     justify-content: space-between;
     .right {
     }

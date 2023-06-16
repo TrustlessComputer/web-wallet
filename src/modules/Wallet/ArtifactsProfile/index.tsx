@@ -10,6 +10,7 @@ import { ARTIFACT_CONTRACT } from '@/configs';
 import Empty from '@/components/Empty';
 import { IInscription } from '@/interfaces/api/inscription';
 import NFTCard from '@/components/NFTCard';
+import { EMPTY_LINK } from '../constant';
 
 const LIMIT_PAGE = 32;
 
@@ -59,7 +60,8 @@ const ArtifactsProfile = () => {
     if (profileWallet) fetchInscriptions();
   }, [profileWallet]);
 
-  if (!inscriptions || inscriptions.length === 0) return <Empty />;
+  if (!inscriptions || inscriptions.length === 0)
+    return <Empty infoText={EMPTY_LINK.ARTIFACTS.label} link={EMPTY_LINK.ARTIFACTS.link} />;
 
   return (
     <Container>

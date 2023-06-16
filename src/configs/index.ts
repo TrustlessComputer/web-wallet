@@ -8,6 +8,8 @@ export const CDN_URL: string = ENVS.VITE_CDN_URL;
 export const API_FAUCET: string = ENVS.VITE_API_FAUCET;
 export const API_BLOCKSTREAM: string = ENVS.VITE_BLOCKSTREAM;
 
+export const CDN_URL_ICONS: string = CDN_URL + '/wallet-icons';
+
 // Contract configs
 export const ARTIFACT_CONTRACT: string = ENVS.VITE_ARTIFACT_CONTRACT;
 export const BNS_CONTRACT: string = ENVS.VITE_BNS_CONTRACT;

@@ -15,14 +15,14 @@ const Content = styled(Row)`
 const ItemWrapper = styled(Col)<{ isActive: boolean }>`
   display: flex;
   flex-direction: column;
-  border: 1px solid ${({ theme, isActive }) => (isActive ? '#ffaa59' : theme.border2)};
+  border: 1px solid ${({ theme, isActive }) => (isActive ? theme['button-primary'] : theme.border2)};
   border-radius: 4px;
   padding-top: 12px;
   padding-bottom: 12px;
   cursor: pointer;
   position: relative;
   :hover {
-    border-color: #ffaa59;
+    border-color: ${({ theme }) => theme['button-primary']};
   }
   .price {
     margin-top: ${px2rem(16)};

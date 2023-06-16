@@ -22,7 +22,7 @@ const Wrapper = styled.div`
   .text {
     font-style: normal;
     font-weight: 500;
-    font-size: ${px2rem(16)};
+    font-size: ${px2rem(14)};
     line-height: ${px2rem(26)};
     margin-right: ${px2rem(16)};
     color: ${({ theme }: { theme: DefaultTheme }) => theme.white};
@@ -51,7 +51,6 @@ const Wrapper = styled.div`
       font-size: ${px2rem(16)};
       line-height: ${px2rem(28)};
       font-weight: 500;
-      font-family: 'IBMPlexMono';
 
       &:hover {
         opacity: 0.8;
@@ -90,8 +89,8 @@ const Footer = ({ height }: { height: number }) => {
     <Wrapper style={{ height }}>
       <p className="text">Open-source software. Made with ❤️ on Bitcoin.</p>
       <div className="footer-right">
-        <StyledLink active={false} href="https://tcgasstation.com/" target="_blank">
-          Get TC
+        <StyledLink active={false} href="https://trustless.computer/" target="_blank">
+          Trustless
           <img className="arrow-icon" src={`${CDN_URL}/icons/ic-arrow-outward.svg`} alt="" />
         </StyledLink>
         <StyledLink active={false} href="https://explorer.trustless.computer" target="_blank">
