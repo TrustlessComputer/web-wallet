@@ -6,14 +6,14 @@ export enum SupportedChainId {
 }
 
 export const TRUSTLESS_COMPUTER_CHAIN_INFO = {
-  name: 'Trustless Computer',
+  name: isProduction() ? 'Trustless Computer' : 'Trustless Computer Regtest',
   title: '',
   chain: 'TC',
   icon: '',
   rpc: [TC_NETWORK_RPC],
   faucets: [],
   nativeCurrency: {
-    name: 'JUICE',
+    name: 'TC',
     symbol: 'TC',
     decimals: 18,
   },
@@ -25,7 +25,7 @@ export const TRUSTLESS_COMPUTER_CHAIN_INFO = {
   explorers: [
     {
       name: 'Trustless computer explorer',
-      url: 'https://explorer.trustless.computer',
+      url: isProduction() ? 'https://explorer.trustless.computer' : 'https://explorer.regtest.trustless.computer',
       standard: 'EIP3091',
     },
   ],
