@@ -209,7 +209,8 @@ const ModalSignTx = React.memo(
                     )}
                     {!isLoading && !pendingTxs.length && (
                       <Text size="h5" color="btn3">
-                        No transaction for sign.
+                        There is no transaction to sign. Please make sure that you connect to the correct wallet
+                        address.
                       </Text>
                     )}
                   </WrapperTx>

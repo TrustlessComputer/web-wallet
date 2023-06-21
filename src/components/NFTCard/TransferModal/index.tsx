@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import toast from 'react-hot-toast';
 import { StyledModalUpload } from './TransferModal.styled';
+import { validateEVMAddress } from '@/utils';
 
 type Props = {
   show: boolean;
@@ -34,6 +35,8 @@ const TransferModal = (props: Props) => {
 
     if (!values.toAddress) {
       errors.toAddress = 'Receiver wallet address is required.';
+    } else if (!validateEVMAddress(values.toAddress)) {
+      errors.toAddress = 'Invalid receiver wallet address.';
     }
 
     return errors;
@@ -86,9 +89,9 @@ const TransferModal = (props: Props) => {
             <form onSubmit={handleSubmit}>
               <Input
                 title="TRANSFER NFT TO"
-                id="address"
+                id="toAddress"
                 type="text"
-                name="address"
+                name="toAddress"
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.toAddress}

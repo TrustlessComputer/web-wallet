@@ -10,6 +10,7 @@ import { toast } from 'react-hot-toast';
 import useContractOperation from '@/hooks/contract-operations/useContractOperation';
 import useTransferName from '@/hooks/contract-operations/bns/useTransferName';
 import Button2 from '@/components/Button2';
+import { validateEVMAddress } from '@/utils';
 
 type Props = {
   show: boolean;
@@ -33,6 +34,8 @@ const BNSTransferModal = (props: Props) => {
 
     if (!values.address) {
       errors.address = 'Receiver wallet address is required.';
+    } else if (!validateEVMAddress(values.address)) {
+      errors.address = 'Invalid receiver wallet address.';
     }
 
     return errors;

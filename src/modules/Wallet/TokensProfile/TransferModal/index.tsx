@@ -11,6 +11,7 @@ import { Formik } from 'formik';
 import useTransferERC20Token from '@/hooks/contract-operations/token/useTransferERC20Token';
 import isNumber from 'lodash/isNumber';
 import { Input } from '@/components/Inputs';
+import { validateEVMAddress } from '@/utils';
 
 type Props = {
   show: boolean;
@@ -35,6 +36,8 @@ const TransferModal = (props: Props) => {
 
     if (!values.toAddress) {
       errors.toAddress = 'Receiver wallet address is required.';
+    } else if (!validateEVMAddress(values.toAddress)) {
+      errors.toAddress = 'Invalid receiver wallet address.';
     }
 
     if (!values.amount) {
