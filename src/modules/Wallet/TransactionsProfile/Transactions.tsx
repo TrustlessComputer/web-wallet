@@ -20,7 +20,7 @@ import Button from '@/components/Button';
 import { ModalSignTx } from '@/components/SignTransaction';
 import ModalSpeedUp from '@/components/SpeedUp/Modal';
 import { EMPTY_LINK } from '../constant';
-import { TC_EXPLORER } from '@/constants/url';
+import { BTC_EXPLORER_TX, TC_EXPLORER } from '@/constants/url';
 
 const TABLE_HEADINGS = ['Event', 'Transaction ID', 'From', 'To', 'Time', 'Status'];
 
@@ -200,7 +200,7 @@ const Transactions = React.memo(() => {
 
   const transactionsData = transactions?.map(trans => {
     const method = trans.method ? trans.method.charAt(0).toUpperCase() + trans.method.slice(1) : '-';
-    const linkToMempool = `https://mempool.space/tx/${trans?.btcHash || ''}`;
+    const linkToMempool = `${BTC_EXPLORER_TX}/${trans?.btcHash || ''}`;
     const statusCode = trans.statusCode;
 
     let status = TransactionStatus.Processing;
@@ -226,7 +226,7 @@ const Transactions = React.memo(() => {
           className={`status ${status.toLowerCase()}`}
           target="_blank"
           style={{ textDecoration: trans.btcHash ? 'underline' : 'unset' }}
-          href={statusCode === 2 ? `${TC_EXPLORER}/tx/${trans.Hash}` : `https://mempool.space/tx/${trans.btcHash}`}
+          href={statusCode === 2 ? `${TC_EXPLORER}/tx/${trans.Hash}` : `${BTC_EXPLORER_TX}/${trans.btcHash}`}
         >
           {mesg}
         </a>
