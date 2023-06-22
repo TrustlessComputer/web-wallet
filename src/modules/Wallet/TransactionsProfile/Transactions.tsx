@@ -20,6 +20,7 @@ import Button from '@/components/Button';
 import { ModalSignTx } from '@/components/SignTransaction';
 import ModalSpeedUp from '@/components/SpeedUp/Modal';
 import { EMPTY_LINK } from '../constant';
+import { TC_EXPLORER } from '@/constants/url';
 
 const TABLE_HEADINGS = ['Event', 'Transaction ID', 'From', 'To', 'Time', 'Status'];
 
@@ -225,11 +226,7 @@ const Transactions = React.memo(() => {
           className={`status ${status.toLowerCase()}`}
           target="_blank"
           style={{ textDecoration: trans.btcHash ? 'underline' : 'unset' }}
-          href={
-            statusCode === 2
-              ? `https://explorer.trustless.computer/tx/${trans.Hash}`
-              : `https://mempool.space/tx/${trans.btcHash}`
-          }
+          href={statusCode === 2 ? `${TC_EXPLORER}/tx/${trans.Hash}` : `https://mempool.space/tx/${trans.btcHash}`}
         >
           {mesg}
         </a>
@@ -249,7 +246,9 @@ const Transactions = React.memo(() => {
         tx_id: (
           <div className="id-wrapper">
             <div className="tx-wrapper">
-              <div className={`tx-id`}>{formatLongAddress(trans.Hash)}</div>
+              <a className="tx-id" href={`${TC_EXPLORER}/tx/${trans.Hash}`} target="_blank">
+                {formatLongAddress(trans.Hash)}
+              </a>
               <div
                 className="icCopy"
                 onClick={() => {

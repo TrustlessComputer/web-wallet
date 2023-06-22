@@ -1,5 +1,6 @@
 import { TC_NETWORK_RPC } from '@/configs';
 import { isProduction } from '@/utils/commons';
+import { TC_EXPLORER } from '@/constants/url';
 
 export enum SupportedChainId {
   TRUSTLESS_COMPUTER = isProduction() ? 22213 : 22215,
@@ -25,7 +26,7 @@ export const TRUSTLESS_COMPUTER_CHAIN_INFO = {
   explorers: [
     {
       name: 'Trustless computer explorer',
-      url: isProduction() ? 'https://explorer.trustless.computer' : 'https://explorer.regtest.trustless.computer',
+      url: TC_EXPLORER,
       standard: 'EIP3091',
     },
   ],

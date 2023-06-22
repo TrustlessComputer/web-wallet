@@ -201,21 +201,13 @@ const CollectionHeader = (props: ICollectionHeader) => {
             </div>
             <div>
               <p className="owner">OWNER</p>
-              <a
-                href={`https://explorer.trustless.computer/address/${collection?.creator}`}
-                target="_blank"
-                className="link"
-              >
+              <a href={`${TC_EXPLORER}/address/${collection?.creator}`} target="_blank" className="link">
                 {collection?.creator}
               </a>
             </div>
             <div>
               <p className="owner">CONTRACT</p>
-              <a
-                href={`https://explorer.trustless.computer/address/${collection?.contract}`}
-                target="_blank"
-                className="link"
-              >
+              <a href={`${TC_EXPLORER}/address/${collection?.contract}`} target="_blank" className="link">
                 {collection?.contract}
               </a>
             </div>

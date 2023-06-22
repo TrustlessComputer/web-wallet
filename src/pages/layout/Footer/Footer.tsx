@@ -6,6 +6,7 @@ import IcTwitter from '@/assets/icons/ic_twitter.svg';
 import IcGithub from '@/assets/icons/ic_github.svg';
 import { StyledLink } from '../Header/Header.styled';
 import { CDN_URL } from '@/configs';
+import { TC_EXPLORER } from '@/constants/url';
 
 const Wrapper = styled.div`
   display: flex;
@@ -93,7 +94,7 @@ const Footer = ({ height }: { height: number }) => {
           Trustless
           <img className="arrow-icon" src={`${CDN_URL}/icons/ic-arrow-outward.svg`} alt="" />
         </StyledLink>
-        <StyledLink active={false} href="https://explorer.trustless.computer" target="_blank">
+        <StyledLink active={false} href={TC_EXPLORER} target="_blank">
           Explorer
           <img className="arrow-icon" src={`${CDN_URL}/icons/ic-arrow-outward.svg`} />
         </StyledLink>

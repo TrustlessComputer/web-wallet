@@ -26,6 +26,7 @@ import { ECPairAPI, ECPairFactory } from 'ecpair';
 import * as TC_SDK from 'trustless-computer-sdk';
 import { BTC_NETWORK } from '@/utils/commons';
 import { TC_NETWORK_RPC } from '@/configs';
+import { TC_EXPLORER } from '@/constants/url';
 
 interface IProps {
   show: boolean;
@@ -157,7 +158,7 @@ const ModalSpeedUp = React.memo(({ show, onHide, title = 'Speed up', buttonText 
                         {speedUpTx.tcTxs.map(tran => (
                           <Row style={{ display: 'flex', flexDirection: 'row' }}>
                             <Text size="large" key={tran.Hash} className="tc-hash">
-                              <a href={`https://explorer.trustless.computer/tx/${tran.Hash}`} target="_blank">
+                              <a href={`${TC_EXPLORER}/tx/${tran.Hash}`} target="_blank">
                                 {ellipsisCenter({ str: tran.Hash, limit: 6 })}
                               </a>
                             </Text>
