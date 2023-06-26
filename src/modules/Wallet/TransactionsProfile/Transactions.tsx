@@ -271,8 +271,20 @@ const Transactions = React.memo(() => {
             </Text>
           </div>
         ),
-        fromAddress: formatLongAddress(trans.From) || '-',
-        toAddress: formatLongAddress(trans.To) || '-',
+        fromAddress: trans.From ? (
+          <a className="tx-id" href={`${TC_EXPLORER}/address/${trans.From}`} target="_blank">
+            {formatLongAddress(trans.From)}
+          </a>
+        ) : (
+          '-'
+        ),
+        toAddress: trans.To ? (
+          <a className="tx-id" href={`${TC_EXPLORER}/address/${trans.To}`} target="_blank">
+            {formatLongAddress(trans.To)}
+          </a>
+        ) : (
+          '-'
+        ),
         time: (
           <>
             {localDateString}
