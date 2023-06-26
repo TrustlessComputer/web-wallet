@@ -16,8 +16,11 @@ import { ConnectProvider } from '@/contexts/connect-context';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
 import { TransactorProvider } from '@/contexts/transactor-context';
+import SDKConfigs from '@/lib/configs';
 
 let persistor = persistStore(store);
+SDKConfigs();
+
 const App: React.FC = (): React.ReactElement => {
   const element = useRoutes(routes);
   return (

@@ -8,11 +8,7 @@ import {
   IPendingUTXO,
 } from '@/interfaces/api/bitcoin';
 import * as TC_SDK from 'trustless-computer-sdk';
-import { API_BLOCKSTREAM, TC_NETWORK_RPC } from '@/configs';
-import { BTC_NETWORK } from '@/utils/commons';
-
-// const BINANCE_API_URL = 'https://api.binance.com/api/v3';
-// const WALLETS_API_PATH = '/wallets';
+import { API_BLOCKSTREAM } from '@/configs';
 
 // Collected UTXO
 export const getCollectedUTXO = async (
@@ -21,11 +17,9 @@ export const getCollectedUTXO = async (
 ): Promise<ICollectedUTXOResp | undefined> => {
   try {
     try {
-      const tcClient = new TC_SDK.TcClient(BTC_NETWORK, TC_NETWORK_RPC);
       const utxos = TC_SDK.getUTXOs({
         btcAddress: btcAddress,
         tcAddress: tcAddress,
-        tcClient,
       });
       return utxos;
     } catch (e) {
@@ -40,7 +34,6 @@ export const getPendingUTXOs = async (btcAddress: string): Promise<IPendingUTXO[
   let pendingUTXOs = [];
   if (!btcAddress) return [];
   try {
-    // https://blockstream.regtest.trustless.computer/regtest/api/address/bcrt1p7vs2w9cyeqpc7ktzuqnm9qxmtng5cethgh66ykjz9uhdaz0arpfq93cr3a/txs
     const res = await fetch(`${API_BLOCKSTREAM}/address/${btcAddress}/txs`).then(res => {
       return res.json();
     });

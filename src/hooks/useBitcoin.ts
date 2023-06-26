@@ -1,4 +1,3 @@
-import { TC_NETWORK_RPC } from '@/configs';
 import { ConnectionType, getConnection } from '@/connection';
 import { AssetsContext } from '@/contexts/assets-context';
 import { generateBitcoinTaprootKey } from '@/utils/derive-key';
@@ -10,13 +9,6 @@ import { Buffer } from 'buffer';
 import { useCurrentUser } from '@/state/user/hooks';
 import bitcoinStorage from '@/utils/bitcoin-storage';
 import { ITCTxDetail } from '@/interfaces/transaction';
-import { BTC_NETWORK } from '@/utils/commons';
-
-export interface ISendInsProps {
-  receiverAddress: string;
-  feeRate: number;
-  inscriptionNumber: number;
-}
 
 export interface ISendBTCProps {
   receiver: string;
@@ -47,10 +39,6 @@ export interface ICreateInscribeResponse {
   totalFee: BigNumber;
 }
 
-export interface IInscriptionByOutput {
-  [key: string]: TC_SDK.Inscription[];
-}
-
 export interface ICreateSpeedUpBTCParams {
   btcHash: string;
   feeRate: number;
@@ -66,8 +54,6 @@ export interface IIsSpeedUpBTCParams {
 
 const useBitcoin = () => {
   const user = useCurrentUser();
-  const tcClient = new TC_SDK.TcClient(BTC_NETWORK, TC_NETWORK_RPC);
-  console.log('tcClient: ', tcClient);
   const { getAvailableAssetsCreateTx } = useContext(AssetsContext);
   const { account: evmAddress, connector } = useWeb3React();
 
@@ -97,29 +83,16 @@ const useBitcoin = () => {
   const createInscribeTx = async ({ tcTxIDs, feeRatePerByte }: ICreateInscribeParams) => {
     const assets = await getAvailableAssetsCreateTx();
     if (!assets) throw new Error('Can not load assets');
-    const { privateKey } = await signKey();
-
-    console.log('inside createInscribeTx', {
-      senderPrivateKey: privateKey,
-      utxos: assets.availableUTXOs,
-      inscriptions: {},
-      tcTxIDs,
-      feeRatePerByte,
-      tcClient,
-    });
+    const { privateKey, walletAddressBtcTaproot } = await signKey();
     const { commitTxHex, commitTxID, revealTxHex, revealTxID } = await TC_SDK.createInscribeTx({
       senderPrivateKey: privateKey,
       utxos: assets.availableUTXOs,
+      senderAddress: walletAddressBtcTaproot,
+
       inscriptions: {},
       tcTxIDs,
       feeRatePerByte,
-      tcClient,
     });
-
-    console.log('commitTxID', commitTxID);
-    console.log('commitTxHex', commitTxHex);
-    console.log('revealTxID', revealTxID);
-    console.log('revealTxHex', revealTxHex);
 
     return { commitTxHex, commitTxID, revealTxHex, revealTxID };
   };
@@ -127,24 +100,15 @@ const useBitcoin = () => {
   const createBatchInscribeTxs = async ({ tcTxDetails, feeRatePerByte }: ICreateBatchInscribeParams) => {
     const assets = await getAvailableAssetsCreateTx();
     if (!assets) throw new Error('Can not load assets');
-    const { privateKey } = await signKey();
-
-    console.log('inside createBatchInscribeTxs', {
-      senderPrivateKey: privateKey,
-      utxos: assets.availableUTXOs,
-      inscriptions: {},
-      tcTxDetails,
-      feeRatePerByte,
-      tcClient,
-    });
+    const { privateKey, walletAddressBtcTaproot } = await signKey();
 
     const res = await TC_SDK.createBatchInscribeTxs({
       senderPrivateKey: privateKey,
+      senderAddress: walletAddressBtcTaproot,
       utxos: assets.availableUTXOs,
       inscriptions: {},
       tcTxDetails,
       feeRatePerByte,
-      tcClient,
     });
 
     return res;
@@ -156,26 +120,26 @@ const useBitcoin = () => {
     nonce: number;
   }> => {
     if (!tcAddress) throw Error('Address not found');
-    const nonce = await tcClient.getInscribeableNonce(tcAddress);
+    const nonce = await window.tcClient.getInscribeableNonce(tcAddress);
     return { nonce };
   };
 
   const getUnInscribedTransactionByAddress = async (tcAddress: string): Promise<Array<string>> => {
     if (!tcAddress) throw Error('Address not found');
-    const { unInscribedTxIDs } = await tcClient.getUnInscribedTransactionByAddress(tcAddress);
+    const { unInscribedTxIDs } = await window.tcClient.getUnInscribedTransactionByAddress(tcAddress);
     return unInscribedTxIDs;
   };
 
   const getTCTransactionByHex = async (tcTxID: string): Promise<string> => {
     if (!tcTxID) throw Error('Address not found');
-    const { Hex } = (await tcClient.getTCTxByHash(tcTxID)) as any;
+    const { Hex } = (await window.tcClient.getTCTxByHash(tcTxID)) as any;
     return Hex;
   };
 
   const getPendingInscribeTxsDetail = async (tcAddress: string): Promise<any[]> => {
     if (!tcAddress) throw Error('Address not found');
     try {
-      const pendingTxs = (await tcClient.getPendingInscribeTxsDetail(tcAddress)) || [];
+      const pendingTxs = (await window.tcClient.getPendingInscribeTxsDetail(tcAddress)) || [];
       const transactions = pendingTxs.map(tx => {
         const { TCHash, Reveal } = tx;
         const btcHash = Reveal.BTCHash;
@@ -193,7 +157,7 @@ const useBitcoin = () => {
 
   const getUnInscribedTransactionDetailByAddress = async (tcAddress: string): Promise<ITCTxDetail[]> => {
     if (!tcAddress) throw Error('Address not found');
-    const { unInscribedTxDetails } = await tcClient.getUnInscribedTransactionDetailByAddress(tcAddress);
+    const { unInscribedTxDetails } = await window.tcClient.getUnInscribedTransactionDetailByAddress(tcAddress);
 
     const uninscribes: ITCTxDetail[] = [];
     for (const uninscribe of unInscribedTxDetails) {
@@ -221,21 +185,18 @@ const useBitcoin = () => {
   const sendBTC = async ({ receiver, amount, feeRate }: ISendBTCProps) => {
     const assets = await getAvailableAssetsCreateTx();
     if (!assets) throw new Error('Can not load assets');
-    const { privateKey } = await signKey();
+    const { privateKey, walletAddressBtcTaproot } = await signKey();
 
-    // const utxos = formatUTXOs(assets.availableUTXOs);
-    // const inscriptions = formatInscriptions(assets.inscriptions_by_outputs);
-
-    const { txHex } = await TC_SDK.createTx(
-      privateKey,
-      assets.availableUTXOs,
-      {},
-      '',
-      receiver,
-      new BigNumber(amount).multipliedBy(1e8),
-      feeRate,
-      true,
-    );
+    const { txHex } = await TC_SDK.createTx({
+      feeRatePerByte: feeRate,
+      inscriptions: {},
+      receiverInsAddress: receiver,
+      sendInscriptionID: '',
+      sendAmount: new BigNumber(amount).multipliedBy(1e8),
+      senderAddress: walletAddressBtcTaproot,
+      senderPrivateKey: privateKey,
+      utxos: assets.availableUTXOs,
+    });
 
     // broadcast tx
     await TC_SDK.broadcastTx(txHex);
@@ -251,7 +212,6 @@ const useBitcoin = () => {
       inscriptions: {},
       revealTxID: payload.btcHash,
       feeRatePerByte: payload.feeRate,
-      tcClient,
       tcAddress: payload.tcAddress,
       btcAddress: payload.btcAddress,
     });
@@ -262,7 +222,6 @@ const useBitcoin = () => {
     try {
       const { isRBFable, oldFeeRate, minSat } = await TC_SDK.isRBFable({
         revealTxID: payload.btcHash,
-        tcClient,
         tcAddress: payload.tcAddress,
         btcAddress: payload.btcAddress,
       });
