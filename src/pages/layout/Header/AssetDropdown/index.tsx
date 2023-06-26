@@ -28,7 +28,13 @@ const AssetDropdown = React.memo(() => {
   const dropdownRef = React.useRef<IDropdownRef>({
     onToggle: () => undefined,
   });
-  const [privateKey, setPrivateKey] = React.useState<string | null>(null);
+  const [exported, setExported] = React.useState<{
+    privateKey: string | undefined;
+    address: string | undefined;
+  }>({
+    privateKey: undefined,
+    address: undefined,
+  });
 
   const { btcBalance, bvmBalance: tcBalance } = useContext(AssetsContext);
   const { onDisconnect } = useContext(WalletContext);
@@ -37,10 +43,13 @@ const AssetDropdown = React.memo(() => {
   const formatBtcBalance = format.shorterAmount({ originalAmount: btcBalance, decimals: Token.BITCOIN.decimal });
 
   const onClickExportBtcKey = async () => {
-    const { taprootChild } = await generateBitcoinTaprootKey(user?.walletAddress || '');
+    const { taprootChild, address } = await generateBitcoinTaprootKey(user?.walletAddress || '');
     const privateKeyBuffer = taprootChild.privateKey;
     if (privateKeyBuffer) {
-      setPrivateKey(TC_SDK.convertPrivateKey(privateKeyBuffer));
+      setExported({
+        privateKey: TC_SDK.convertPrivateKey(privateKeyBuffer),
+        address,
+      });
     }
   };
 
@@ -224,7 +233,16 @@ const AssetDropdown = React.memo(() => {
           </DropdownList>
         )}
       </Dropdown>
-      <ExportKeyModal privateKey={privateKey} onHide={() => setPrivateKey(null)} />
+      <ExportKeyModal
+        privateKey={exported.privateKey}
+        address={exported.address}
+        onHide={() =>
+          setExported({
+            privateKey: undefined,
+            address: undefined,
+          })
+        }
+      />
     </>
   );
 });

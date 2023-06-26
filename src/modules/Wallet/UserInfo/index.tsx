@@ -35,7 +35,13 @@ const UserInfo = ({ className }: Props) => {
   const { onDisconnect } = useContext(WalletContext);
   const { onShowSendBTCModal } = useContext(TransactorContext);
   const navigate = useNavigate();
-  const [privateKey, setPrivateKey] = React.useState<string | null>(null);
+  const [exported, setExported] = React.useState<{
+    privateKey: string | undefined;
+    address: string | undefined;
+  }>({
+    privateKey: undefined,
+    address: undefined,
+  });
 
   if (!user) return null;
 
@@ -55,10 +61,13 @@ const UserInfo = ({ className }: Props) => {
   };
 
   const onClickExport = async () => {
-    const { taprootChild } = await generateBitcoinTaprootKey(user.walletAddress || '');
+    const { taprootChild, address } = await generateBitcoinTaprootKey(user.walletAddress || '');
     const privateKeyBuffer = taprootChild.privateKey;
     if (privateKeyBuffer) {
-      setPrivateKey(TC_SDK.convertPrivateKey(privateKeyBuffer));
+      setExported({
+        privateKey: TC_SDK.convertPrivateKey(privateKeyBuffer),
+        address,
+      });
     }
   };
 
@@ -153,7 +162,16 @@ const UserInfo = ({ className }: Props) => {
         </div>
         <div className="options" />
       </StyledUserInfo>
-      <ExportKeyModal privateKey={privateKey} onHide={() => setPrivateKey(null)} />
+      <ExportKeyModal
+        privateKey={exported.privateKey}
+        address={exported.address}
+        onHide={() =>
+          setExported({
+            privateKey: undefined,
+            address: undefined,
+          })
+        }
+      />
     </>
   );
 };
