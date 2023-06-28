@@ -301,18 +301,22 @@ const Transactions = React.memo(() => {
           ) : (
             <>
               <div className={`status ${status.toLowerCase()}`}>{statusComp ? statusComp : status}</div>
-              {!!trans.btcHash && !!trans.isRBFable && !!trans.feeRate && (
-                <Button
-                  bg="bg6"
-                  className="speedup-btn"
-                  type="button"
-                  onClick={() => {
-                    handleSpeedUp(trans.btcHash!);
-                  }}
-                >
-                  Speed up
-                </Button>
-              )}
+              {!!trans.btcHash &&
+                !!trans.isRBFable &&
+                !!trans.feeRate &&
+                statusCode !== 2 &&
+                status !== TransactionStatus.Confirmed && (
+                  <Button
+                    bg="bg6"
+                    className="speedup-btn"
+                    type="button"
+                    onClick={() => {
+                      handleSpeedUp(trans.btcHash!);
+                    }}
+                  >
+                    Speed up
+                  </Button>
+                )}
             </>
           ),
       },
