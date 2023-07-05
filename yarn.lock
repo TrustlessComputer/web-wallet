@@ -11324,9 +11324,9 @@ trim-newlines@^3.0.0:
   resolved "https://registry.yarnpkg.com/trim-newlines/-/trim-newlines-3.0.1.tgz#260a5d962d8b752425b32f3a7db0dcacd176c144"
   integrity sha512-c1PTsA3tYrIsLGkJkzHF+w9F2EyxfXGo4UyJc4pFL++FMjnq0HJS69T3M7d//gKrFKwy429bouPescbjecU+Zw==
 
-"trustless-computer-sdk@https://github.com/TrustlessComputer/tc-sdk#v0.1.42":
+"trustless-computer-sdk@https://github.com/TrustlessComputer/tc-sdk#v0.1.43":
   version "0.0.1"
-  resolved "https://github.com/TrustlessComputer/tc-sdk#94b8c89e5ae6ece58039c1a071050fc00c79ebb5"
+  resolved "https://github.com/TrustlessComputer/tc-sdk#247944cb43cbbdbe1a323b1c07fc720e407a2bfa"
   dependencies:
     "@bitcoinerlab/secp256k1" "^1.0.2"
     "@types/lodash" "^4.14.194"

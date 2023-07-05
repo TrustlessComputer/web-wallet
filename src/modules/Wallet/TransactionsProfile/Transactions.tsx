@@ -11,11 +11,8 @@ import copy from 'copy-to-clipboard';
 import { toast } from 'react-hot-toast';
 import IcCopy from '@/assets/icons/ic-copy.svg';
 import Text from '@/components/Text';
-import * as TC_SDK from 'trustless-computer-sdk';
-import { TC_NETWORK_RPC } from '@/configs';
 import Spinner from '@/components/Spinner';
 import { formatUnixDateTime } from '@/utils/time';
-import { BTC_NETWORK } from '@/utils/commons';
 import Button from '@/components/Button';
 import { ModalSignTx } from '@/components/SignTransaction';
 import ModalSpeedUp from '@/components/SpeedUp/Modal';
@@ -91,8 +88,7 @@ const Transactions = React.memo(() => {
   const getStatusCode = async (txHash: string, tcAddress: string): Promise<IStatusCode> => {
     if (tcAddress) {
       try {
-        const tcClient = new TC_SDK.TcClient(BTC_NETWORK, TC_NETWORK_RPC);
-        const res = await tcClient.getTCTxByHash(txHash);
+        const res = await window.tcClient.getTCTxByHash(txHash);
         if (res && res.blockHash) {
           if (res.status === '0x0') {
             return 3;

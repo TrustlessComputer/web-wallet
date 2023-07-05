@@ -19,8 +19,7 @@ import bitcoinStorage from '@/utils/bitcoin-storage';
 import { triggerHash } from '@/services/bridgeClient';
 import { FeeRate } from '@/components/FeeRate';
 import useFeeRate from '@/components/FeeRate/useFeeRate';
-import { BTC_NETWORK, isProduction } from '@/utils/commons';
-import { TC_NETWORK_RPC } from '@/configs';
+import { isProduction } from '@/utils/commons';
 import { initEccLib } from 'bitcoinjs-lib';
 import { ECPairAPI, ECPairFactory } from 'ecpair';
 import * as ecc from '@bitcoinerlab/secp256k1';
@@ -92,8 +91,10 @@ const ModalSignTx = React.memo(
         setPendingTxs(pendingTxs);
         const txIDs = pendingTxs.map(tx => tx.Hash);
         const hashLockKeyPair = ECPair.makeRandom({ network: isProduction() ? networks.bitcoin : networks.regtest });
-        const tcClient = new TC_SDK.TcClient(BTC_NETWORK, TC_NETWORK_RPC);
-        const { hashLockScriptHex } = await tcClient.getTapScriptInfo(hashLockKeyPair.publicKey.toString('hex'), txIDs);
+        const { hashLockScriptHex } = await window.tcClient.getTapScriptInfo(
+          hashLockKeyPair.publicKey.toString('hex'),
+          txIDs,
+        );
         const sizeByte = Web3.utils.hexToBytes(`0x${hashLockScriptHex}`).length;
 
         setSizeByte(sizeByte);

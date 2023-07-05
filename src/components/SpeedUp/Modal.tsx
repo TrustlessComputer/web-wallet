@@ -23,9 +23,6 @@ import { getErrorMessage } from '@/utils/error';
 import { initEccLib, networks } from 'bitcoinjs-lib';
 import * as ecc from '@bitcoinerlab/secp256k1';
 import { ECPairAPI, ECPairFactory } from 'ecpair';
-import * as TC_SDK from 'trustless-computer-sdk';
-import { BTC_NETWORK } from '@/utils/commons';
-import { TC_NETWORK_RPC } from '@/configs';
 import { BTC_EXPLORER_TX, TC_EXPLORER } from '@/constants/url';
 
 interface IProps {
@@ -91,8 +88,7 @@ const ModalSpeedUp = React.memo(({ show, onHide, title = 'Speed up', buttonText 
       setIsLoading(true);
       const hashLockKeyPair = ECPair.makeRandom({ network: networks.bitcoin });
 
-      const tcClient = new TC_SDK.TcClient(BTC_NETWORK, TC_NETWORK_RPC);
-      const { hashLockScriptHex } = await tcClient.getTapScriptInfo(
+      const { hashLockScriptHex } = await window.tcClient.getTapScriptInfo(
         hashLockKeyPair.publicKey.toString('hex'),
         (speedUpTx?.tcTxs || []).map(tx => tx.Hash),
       );
