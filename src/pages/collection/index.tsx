@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Grid } from './Collection.styled';
 import CollectionHeader from './CollectionHeader';
 import ModalEdit from './ModalEdit';
+import { CDN_URL } from '@/configs';
 
 const LIMIT = 32;
 
@@ -101,6 +102,7 @@ const Collection = () => {
                       }
                       title2={shortenAddress(item.owner, 4)}
                       owner={item.owner}
+                      placeholderImg={`${CDN_URL}/images/nft_placehoder.gif`}
                     />
                   );
                 })}
