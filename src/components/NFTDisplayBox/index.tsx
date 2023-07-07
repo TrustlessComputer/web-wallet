@@ -65,7 +65,7 @@ const NFTDisplayBox = ({
       <iframe
         className={contentClassName}
         loading="lazy"
-        sandbox="allow-scripts allow-pointer-lock allow-downloads"
+        // sandbox="allow-scripts allow-pointer-lock allow-downloads"
         scrolling="no"
         src={content}
         onError={onError}

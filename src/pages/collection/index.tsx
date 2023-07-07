@@ -30,6 +30,7 @@ const Collection = () => {
   const [showModalEdit, setShowModalEdit] = useState(false);
 
   useEffect(() => {
+    setInscriptions([]);
     fetchCollectionDetail();
     fetchInscriptions();
   }, [contract]);
