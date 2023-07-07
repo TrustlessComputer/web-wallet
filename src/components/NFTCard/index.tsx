@@ -17,6 +17,7 @@ export interface INFTCard {
   title2?: string;
   title3?: string;
   owner?: string;
+  placeholderImg?: string;
 }
 
 const NFTCard = ({
@@ -30,6 +31,7 @@ const NFTCard = ({
   title2,
   title3,
   owner,
+  placeholderImg,
 }: INFTCard) => {
   const user = useCurrentUser();
   const [showTransferModal, setShowTransferModal] = useState(false);
@@ -61,6 +63,7 @@ const NFTCard = ({
               src={image}
               tokenID={tokenId}
               type={contentType}
+              placeholderImg={placeholderImg}
             />
             <a className="overlay" href={href} />
           </div>

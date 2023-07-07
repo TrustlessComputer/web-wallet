@@ -16,6 +16,7 @@ interface IProps {
   autoPlay?: boolean;
   loop?: boolean;
   controls?: boolean;
+  placeholderImg?: string;
 }
 
 const NFTDisplayBox = ({
@@ -29,6 +30,7 @@ const NFTDisplayBox = ({
   autoPlay = false,
   loop = false,
   controls = false,
+  placeholderImg,
 }: IProps) => {
   const [isError, setIsError] = React.useState(false);
   // const [isLoaded, serIsLoaded] = React.useState(false);
@@ -52,7 +54,7 @@ const NFTDisplayBox = ({
   const [HTMLContentRender, setHTMLContentRender] = useState<React.ReactNode>();
   const imgRef = useRef<HTMLImageElement>(null);
 
-  const defaultImage = CDN_URL + '/images/default_thumbnail.png';
+  const defaultImage = placeholderImg || CDN_URL + '/images/default_thumbnail.png';
 
   const contentClassName = cs(s.wrapper_content, contentClass);
 
