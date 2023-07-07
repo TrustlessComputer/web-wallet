@@ -5,6 +5,7 @@ import React, { useMemo, useState } from 'react';
 import TransferModal from './TransferModal';
 import { useCurrentUser } from '@/state/user/hooks';
 import Button2 from '../Button2';
+import { SOULS_CONTRACT } from '@/configs';
 
 export interface INFTCard {
   href: string;
@@ -48,8 +49,11 @@ const NFTCard = ({
   };
 
   const isOwner = useMemo(() => {
+    if (contract && contract.toLowerCase() === SOULS_CONTRACT.toLowerCase()) {
+      return false;
+    }
     return user?.walletAddress && user?.walletAddress?.toLowerCase() === owner?.toLowerCase();
-  }, [owner, user]);
+  }, [owner, user, contract]);
 
   return (
     <>

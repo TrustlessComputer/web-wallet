@@ -14,6 +14,7 @@ export const CDN_URL_ICONS: string = CDN_URL + '/wallet-icons';
 export const ARTIFACT_CONTRACT: string = ENVS.VITE_ARTIFACT_CONTRACT;
 export const BNS_CONTRACT: string = ENVS.VITE_BNS_CONTRACT;
 export const BFS_ADDRESS: string = ENVS.VITE_BFS_CONTRACT;
+export const SOULS_CONTRACT: string = '0xab566c459f0e8067c842e4c74bd47e7a7ca8fb2d';
 
 export const TC_URL: string = ENVS.VITE_TC_URL;
 export const TRANSFER_TX_SIZE = 1000;

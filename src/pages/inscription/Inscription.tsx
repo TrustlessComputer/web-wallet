@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Container, Information } from './Inscription.styled';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
-import { ARTIFACT_CONTRACT } from '@/configs';
+import { ARTIFACT_CONTRACT, CDN_URL } from '@/configs';
 import { formatTimeStamp } from '@/utils/time';
 
 const Inscription = () => {
@@ -82,9 +82,10 @@ const Inscription = () => {
             <NFTDisplayBox
               collectionID={inscription?.collectionAddress}
               contentClass="thumbnail"
-              src={inscription.image}
+              src={inscription.imageCapture || inscription.image}
               tokenID={inscription?.tokenId}
               type={inscription?.contentType}
+              placeholderImg={`${CDN_URL}/images/nft_placehoder.gif`}
             />
           )}
         </div>
