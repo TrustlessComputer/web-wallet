@@ -350,7 +350,9 @@ const Transactions = React.memo(() => {
         emptyLink={EMPTY_LINK.TRANSACTIONS.link}
       />
       <ModalSignTx show={isShow} onHide={onHide} title="Process pending transactions" buttonText="Process now" />
-      <ModalSpeedUp show={isShowModalSpeedup && !!speedUpTx} speedUpTx={speedUpTx} onHide={onHideModalSpeedUp} />
+      {isShowModalSpeedup && !!speedUpTx && (
+        <ModalSpeedUp show={isShowModalSpeedup && !!speedUpTx} speedUpTx={speedUpTx} onHide={onHideModalSpeedUp} />
+      )}
     </StyledTransactionProfile>
   );
 });

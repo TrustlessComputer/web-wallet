@@ -92,7 +92,13 @@ const ModalSpeedUp = React.memo(({ show, onHide, title = 'Speed up', buttonText 
         hashLockKeyPair.publicKey.toString('hex'),
         (speedUpTx?.tcTxs || []).map(tx => tx.Hash),
       );
-      setSizeByte(Web3.utils.hexToBytes(hashLockScriptHex).length);
+
+      let _hashLockScriptHex = hashLockScriptHex;
+      if (!hashLockScriptHex.startsWith('0x')) {
+        _hashLockScriptHex = '0x' + hashLockScriptHex;
+      }
+
+      setSizeByte(Web3.utils.hexToBytes(_hashLockScriptHex).length);
       // setSizeByte(sizeByte);
       setIsLoading(false);
     } catch (e) {
@@ -107,7 +113,7 @@ const ModalSpeedUp = React.memo(({ show, onHide, title = 'Speed up', buttonText 
       onFetchFee();
       onGetHexSize();
     }
-  }, [show]);
+  }, [show, speedUpTx]);
 
   return (
     <Container show={show} centered>
